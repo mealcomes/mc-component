@@ -13,10 +13,10 @@
   "license": "ISC",
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
-    "typescript": "^5.8.3",
-    "vue": "^3.5.17",
     "@mealcomes/components": "workspace:*",
     "@mealcomes/theme-chalk": "workspace:*",
-    "@mealcomes/utils": "workspace:*"
+    "@mealcomes/utils": "workspace:*",
+    "typescript": "^5.8.3",
+    "vue": "^3.5.17"
   }
 }

@@ -1,8 +1,12 @@
 <script setup lang="ts">
-</script>
 
+console.log();
+
+</script>
 <template>
-  测试
+  <m-icon :color="'red'" :size="20">
+    hello vue3
+  </m-icon>
 </template>
 
 <style scoped>
