@@ -18,5 +18,8 @@
     "@mealcomes/utils": "workspace:*",
     "typescript": "^5.8.3",
     "vue": "^3.5.17"
+  },
+  "devDependencies": {
+    "sass": "^1.89.2"
   }
 }

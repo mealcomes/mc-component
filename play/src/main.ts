@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
-import './style.css'
 import App from './App.vue'
 
 import Icon from '@mealcomes/components/icon'
+import '@mealcomes/theme-chalk/src/index.scss'
 
 const plugins = [
     Icon

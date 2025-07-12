@@ -1,0 +1,42 @@
+@use 'config' as *;
+@forward 'config';
+
+// .m-button {}
+// @include b(button) {
+//      color: red;
+// }
+// 会得到
+// .m-button { color: red; }
+@mixin b($block) {
+    $B: $namespace + '-' + $block;
+    .#{$B} {
+        @content;
+    }
+}
+
+// .m-button.is-xxx
+@mixin when($state) {
+    @at-root {
+        &.#{$state-prefix + $state} {
+            @content;
+        }
+    }
+}
+
+// &--primary => .m-button--primary
+@mixin m($modifier) {
+    @at-root {
+        #{& + $modifier-separator + $modifier} {
+            @content;
+        }
+    }
+}
+
+// &__header => .z-button__header
+@mixin e($element) {
+    @at-root {
+        #{& + $element-separator + $element} {
+            @content;
+        }
+    }
+}
