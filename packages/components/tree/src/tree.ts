@@ -26,6 +26,11 @@ export const treeProps = {
         type: Array as PropType<TreeOption[]>,
         default: () => []
     },
+    defaultExpandedKeys: {
+        // 默认展开的 key
+        type: Array as PropType<Key[]>,
+        default: () => []
+    },
     labelField: {
         // data 属性中 label 字段名
         type: String,

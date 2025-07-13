@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { TreeNode, TreeOption, treeProps } from './tree';
 
 defineOptions({
@@ -74,5 +74,54 @@ watch(
     {
         immediate: true
     });
+
+// 需要将树展开，点击实现展开操作
+// 会有默认展开项
+
+// 需要展开的 key
+const expandedKeySet = ref(new Set(props.defaultExpandedKeys));
+
+/**
+ *  根据 expandedKeySet 对树进行展开
+ *  例如: expandedKeySet 是 40(代表需要将 key 为 40 的子树展开), 
+ *  - 40
+ *      - 4010
+ *      - 4020
+ *      - 4030
+ *          - 403010
+ *          - 403020
+ *  - 50
+ *  展开结果如下:
+ *  [40, 4010, 4020, 4030, 50]
+ */
+const flattenTree = computed(() => {
+    let expandedKeys = expandedKeySet.value; // 所有要展开的 key
+    let flattenNodes: TreeNode[] = [];  // 拍平后的结果
+    const nodes = tree.value || [];  // 被格式化后的节点
+
+    const stack: TreeNode[] = [];  // 用于遍历树的栈
+    // 将 nodes 倒序插入到栈中(因为最外层的节点肯定是拍平的)
+    for (let i = nodes.length - 1; i >= 0; i--) {
+        stack.push(nodes[i]);
+    }
+
+    // 深度遍历栈, 将所有需要展开的 key 全部展开
+    while (stack.length) {
+        const node = stack.pop();
+        if (!node) continue;
+        flattenNodes.push(node);
+        if (expandedKeys.has(node.key)) {
+            const children = node.children;
+            if (children) {
+                for (let i = children.length - 1; i > 0; i--) {
+                    stack.push(children[i]);
+                }
+            }
+        }
+    }
+
+    return flattenNodes;
+});
+console.log(flattenTree.value);
 
 </script>
