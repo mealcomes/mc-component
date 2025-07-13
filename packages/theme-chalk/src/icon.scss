@@ -4,5 +4,14 @@
     display: inline-flex;
     height: 1em;
     width: 1em;
+    line-height: 1em;
     vertical-align: middle;
+    justify-content: center;
+    position: relative;
+    fill: currentColor;
+
+    svg {
+        height: 1em;
+        width: 1em;
+    }
 }
