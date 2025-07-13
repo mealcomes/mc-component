@@ -6,5 +6,5 @@ module.exports = {
     arrowParens: 'avoid', // 箭头函数括号
     endOfLine: 'auto', // 结尾自动换行
     tabWidth: 4, // 缩进空格
-    useTabs: false // 缩进使用空格而不是 tab
+    useTabs: false, // 缩进使用空格而不是 tab
 };

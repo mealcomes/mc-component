@@ -10,7 +10,7 @@ import type { ExtractPropTypes, PropType } from 'vue';
 export const iconProps = {
     color: String,
     size: [Number, String] as PropType<number | string>
-} as const;
+} as const;   // 转为 const ，只读
 
 // 组件 props 的类型
 export type IconProps = ExtractPropTypes<typeof iconProps>;
