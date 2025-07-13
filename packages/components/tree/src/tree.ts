@@ -9,7 +9,9 @@ export interface TreeNode extends Required<TreeOption> {
     isLeaf: boolean; // 是否为叶子节点
 }
 
-// 用户传入的 data 类型
+/**
+ * 用户传入的 data 类型
+ */
 export interface TreeOption {
     label?: Key;
     key?: Key;
@@ -49,6 +51,32 @@ export const treeProps = {
 } as const;
 
 /**
+ * treeNode 组件 props
+ */
+export const treeNodeProps = {
+    node: {
+        type: Object as PropType<TreeNode>,
+        required: true
+    },
+    expanded: {
+        type: Boolean,
+        required: true
+    }
+} as const;
+
+/**
+ * treeNode 组件 emit
+ */
+export const treeNodeEmits = {
+    toggle: (node: TreeNode) => node
+};
+
+/**
  * tree 组件 props 的类型
  */
 export type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>;
+
+/**
+ * treeNode 组件 props 的类型
+ */
+export type TreeNodeProps = Partial<ExtractPropTypes<typeof treeNodeProps>>;

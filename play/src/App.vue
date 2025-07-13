@@ -43,5 +43,5 @@ const data = ref<TreeOption[]>(createData());
 
     <!-- 在使用树组件的时候，会传递一个树形的结构 -->
     <m-tree :data="data" label-field="xx" key-field="key" children-field="children"
-        :default-expanded-keys="['41']"></m-tree>
+        :default-expanded-keys="['40', '41']"></m-tree>
 </template>

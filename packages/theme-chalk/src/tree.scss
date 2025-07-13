@@ -1,0 +1,33 @@
+@use 'mixins/mixins.scss' as *;
+
+@include b(tree) {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    cursor: default;
+}
+
+@include b(tree-node) {
+    padding: 5px 0;
+    white-space: nowrap;
+    outline: none;
+
+    @include e('expand-icon') {
+        display: inline-block;
+        vertical-align: middle;
+
+        transform: rotate(0);
+        transition: transform 0.3s ease-in-out;
+        cursor: pointer;
+
+        &.expanded {
+            transform: rotate(90deg);
+        }
+
+        &.is-leaf {
+            color: transparent;
+            cursor: default;
+            visibility: hidden;
+        }
+    }
+}

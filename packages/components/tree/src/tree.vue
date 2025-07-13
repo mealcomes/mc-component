@@ -1,10 +1,18 @@
 <template>
-    tree
+    <div :class="bem.b()">
+        <m-tree-node v-for="node in flattenTree" :key="node.key" :node="node" :expanded="isExpanded(node)"
+            @toggle="toggleExpand">
+        </m-tree-node>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { TreeNode, TreeOption, treeProps } from './tree';
+import { createNamespace } from '@mealcomes/utils';
+import MTreeNode from './treeNode.vue'
+
+const bem = createNamespace('tree');
 
 defineOptions({
     name: 'm-tree'
@@ -69,7 +77,6 @@ watch(
     (data: TreeOption[]) => {
         tree.value = createTree(data);
         console.log(tree.value);
-
     },
     {
         immediate: true
@@ -79,7 +86,7 @@ watch(
 // 会有默认展开项
 
 // 需要展开的 key
-const expandedKeySet = ref(new Set(props.defaultExpandedKeys));
+const expandedKeysSet = ref(new Set(props.defaultExpandedKeys));
 
 /**
  *  根据 expandedKeySet 对树进行展开
@@ -95,7 +102,7 @@ const expandedKeySet = ref(new Set(props.defaultExpandedKeys));
  *  [40, 4010, 4020, 4030, 50]
  */
 const flattenTree = computed(() => {
-    let expandedKeys = expandedKeySet.value; // 所有要展开的 key
+    let expandedKeys = expandedKeysSet.value; // 所有要展开的 key
     let flattenNodes: TreeNode[] = [];  // 拍平后的结果
     const nodes = tree.value || [];  // 被格式化后的节点
 
@@ -110,10 +117,11 @@ const flattenTree = computed(() => {
         const node = stack.pop();
         if (!node) continue;
         flattenNodes.push(node);
+
         if (expandedKeys.has(node.key)) {
             const children = node.children;
             if (children) {
-                for (let i = children.length - 1; i > 0; i--) {
+                for (let i = children.length - 1; i >= 0; i--) {
                     stack.push(children[i]);
                 }
             }
@@ -122,6 +130,36 @@ const flattenTree = computed(() => {
 
     return flattenNodes;
 });
-console.log(flattenTree.value);
+
+
+function isExpanded(node: TreeNode): boolean {
+    return expandedKeysSet.value.has(node.key);
+}
+
+/** 
+ * 折叠子树
+ */
+function collapse(node: TreeNode) {
+    expandedKeysSet.value.delete(node.key);
+}
+
+/**
+ * 展开子树
+ */
+function expand(node: TreeNode) {
+    expandedKeysSet.value.add(node.key);
+}
+
+/**
+ * 切换展开状态
+ */
+function toggleExpand(node: TreeNode) {
+    const expandKeys = expandedKeysSet.value;
+    if (expandKeys.has(node.key)) {
+        collapse(node);
+    } else {
+        expand(node);
+    }
+}
 
 </script>
