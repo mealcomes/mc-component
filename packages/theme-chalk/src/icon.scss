@@ -1,5 +1,18 @@
 @use 'mixins/mixins.scss' as *;
 
+.#{$namespace}-icon-loading {
+    animation: rotating 1s linear infinite;
+}
+
+@keyframes rotating {
+    from {
+        transform: rotate(0);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 @include b(icon) {
     display: inline-flex;
     height: 1em;

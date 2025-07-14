@@ -1,14 +1,14 @@
 <template>
     <div :class="bem.b()">
         <m-tree-node v-for="node in flattenTree" :key="node.key" :node="node" :expanded="isExpanded(node)"
-            @toggle="toggleExpand">
+            @toggle="toggleExpand" :loadingKeys="loadingKeysRef">
         </m-tree-node>
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { TreeNode, TreeOption, treeProps } from './tree';
+import { Key, TreeNode, TreeOption, treeProps } from './tree';
 import { createNamespace } from '@mealcomes/utils';
 import MTreeNode from './treeNode.vue'
 
@@ -44,7 +44,7 @@ const treeOptions = createOptions(
     props.childrenField
 );
 
-function createTree(data: TreeOption[]): TreeNode[] {
+function createTree(data: TreeOption[], parent: TreeNode | null = null): TreeNode[] {
     function traversal(data: TreeOption[], parent: TreeNode | null = null): TreeNode[] {
         return data.map((node: TreeOption) => {
             const children = treeOptions.getChildren(node) || [];
@@ -66,7 +66,7 @@ function createTree(data: TreeOption[]): TreeNode[] {
         })
     }
 
-    const result: TreeNode[] = traversal(data);
+    const result: TreeNode[] = traversal(data, parent);
 
     return result;
 }
@@ -142,11 +142,46 @@ function isExpanded(node: TreeNode): boolean {
 function collapse(node: TreeNode) {
     expandedKeysSet.value.delete(node.key);
 }
+/**
+ * 正处于加载中的 key, 用于防止用户多次点击同一个 key
+ */
+const loadingKeysRef = ref(new Set<Key>());
+
+/**
+ * 触发 children 加载
+ */
+function triggerLoading(node: TreeNode) {
+    // 不是叶子节点但孩子长度为 0, 则说明需要异步加载
+    if (!node.children.length && !node.isLeaf) {
+        const loadingKeys = loadingKeysRef.value;
+        if (!loadingKeys.has(node.key)) {
+            loadingKeys.add(node.key);
+            const onLoad = props.onLoad;
+            if (onLoad) {
+                onLoad(node.rawNode)
+                    .then(children => {
+                        // 修改节点的原始 children(即用户传入的 children)
+                        node.rawNode.children = children;
+                        // 对 children 进行规范化
+                        node.children = createTree(children, node);
+                        loadingKeys.delete(node.key);
+                    })
+                    .catch(e => {
+                        console.log(e);
+                        node.isLeaf = true;
+                    })
+            }
+        }
+    }
+}
 
 /**
  * 展开子树
  */
 function expand(node: TreeNode) {
+
+    // 触发懒加载
+    triggerLoading(node);
     expandedKeysSet.value.add(node.key);
 }
 
@@ -155,7 +190,9 @@ function expand(node: TreeNode) {
  */
 function toggleExpand(node: TreeNode) {
     const expandKeys = expandedKeysSet.value;
-    if (expandKeys.has(node.key)) {
+    if (expandKeys.has(node.key)
+        && !loadingKeysRef.value.has(node.key)  // 如果当前节点正处于加载中, 则不能收起
+    ) {
         collapse(node);
     } else {
         expand(node);
