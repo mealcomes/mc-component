@@ -52,7 +52,7 @@ function createTree(data: TreeOption[]): TreeNode[] {
                 key: treeOptions.getKey(node),
                 label: treeOptions.getLabel(node),
                 children: [],   // 默认为空
-                rowNode: node,
+                rawNode: node,
                 level: parent ? parent.level + 1 : 0,
                 // 以 node 属性 isLeaf 为准，其次是判断孩子是否为空
                 // ?? 是对 || 的增强, 即只有 node.isLeaf 不存在的时候, 才会走到后面, 而不是为 false 时

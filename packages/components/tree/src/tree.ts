@@ -4,7 +4,7 @@ type Key = string | number;
 
 export interface TreeNode extends Required<TreeOption> {
     level: number;
-    rowNode: TreeOption;
+    rawNode: TreeOption;
     children: TreeNode[];
     isLeaf: boolean; // 是否为叶子节点
 }
