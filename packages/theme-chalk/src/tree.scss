@@ -9,26 +9,35 @@
 }
 
 @include b(tree-node) {
-    position: relative;
-    padding-bottom: 5px;
-    height: 24px;
     display: flex;
-    outline: none;
+    padding-bottom: 4px;
+    height: 24px;
+    background-clip: content-box;
+    transition: background-color 0.1s ease-in;
+
+    @include when(selected) {
+        background-color: #1677ff;
+    }
 
     @include e('expand-icon') {
         display: inline-block;
         width: 24px;
         text-align: center;
+        position: relative;
         cursor: pointer;
 
         &.expanded {
             .#{$namespace}-tree-node__switcher {
-                transform: rotate(90deg);
+                transform: translate(-50%, -50%) rotate(90deg);
             }
         }
 
         .#{$namespace}-tree-node__switcher {
+            position: absolute;
+            top: 50%;
+            left: 50%;
             transition: transform 0.3s ease-in-out;
+            transform: translate(-50%, -50%);
         }
 
         &.is-leaf {
@@ -41,10 +50,12 @@
     @include e('content') {
         padding: 0 5px;
         border-radius: 5px;
+        width: 100%;
         cursor: pointer;
-
-        &:hover {
-            background-color: #f5f5f5;
+        .#{$namespace}-tree-node:not(.is-selected) & {
+            &:hover {
+                background-color: #f5f5f5;
+            }
         }
     }
 }

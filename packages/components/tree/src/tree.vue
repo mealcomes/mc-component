@@ -1,14 +1,14 @@
 <template>
     <div :class="bem.b()">
         <m-tree-node v-for="node in flattenTree" :key="node.key" :node="node" :expanded="isExpanded(node)"
-            @toggle="toggleExpand" :loadingKeys="loadingKeysRef">
+            @toggle="toggleExpand" :loadingKeys="loadingKeysRef" :selectedKeys="selectKeysRef" @select="handleSelect">
         </m-tree-node>
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { Key, TreeNode, TreeOption, treeProps } from './tree';
+import { Key, treeEmits, TreeNode, TreeOption, treeProps } from './tree';
 import { createNamespace } from '@mealcomes/utils';
 import MTreeNode from './treeNode.vue'
 
@@ -18,6 +18,7 @@ defineOptions({
     name: 'm-tree'
 })
 const props = defineProps(treeProps);
+const emit = defineEmits(treeEmits);
 
 // 需要对用户传入的 props 进行格式化
 
@@ -199,4 +200,44 @@ function toggleExpand(node: TreeNode) {
     }
 }
 
+const selectKeysRef = ref<Key[]>([]);
+watch(
+    () => props.selectedKeys,
+    value => {
+        if (value) {
+            selectKeysRef.value = value;
+        }
+    },
+    {
+        immediate: true
+    }
+)
+
+/**
+ * 处理选中的节点
+ */
+function handleSelect(node: TreeNode, canMulti: boolean | undefined) {
+    let keys = Array.from(selectKeysRef.value);
+
+    // 不能选择
+    if (!props.selectable) return;
+
+    if (props.multiple && canMulti) {
+        let index = keys.findIndex(key => key === node.key);
+        if (index > -1) {
+            // 已选中则删除
+            keys.splice(index, 1);
+        } else {
+            // 未选中则添加
+            keys.push(node.key);
+        }
+    } else {
+        if (keys.includes(node.key)) {
+            keys = [];
+        } else {
+            keys = [node.key];
+        }
+    }
+    emit('update:selectedKeys', keys);
+}
 </script>

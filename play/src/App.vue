@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import type { TreeOption } from '@mealcomes/components/tree';
+import type { Key, TreeOption } from '@mealcomes/components/tree';
 import { AddCircle } from '@vicons/ionicons5'
 import { ref } from 'vue';
 
+/**
+ * 同步创建数据 
+ */
 // function createData(level = 4, parentKey = ''): TreeOption[] {
 //     if (!level) return [];
 //     const arr = new Array(6 - level).fill(0);
@@ -31,6 +34,9 @@ import { ref } from 'vue';
 //     }
 // }
 
+/**
+ * 异步创建数据
+ */
 function createDataAsync(): TreeOption[] {
     return [
         {
@@ -79,6 +85,8 @@ const handleLoad = (node: TreeOption) => {
     });
 }
 
+const value = ref<Key[]>([])
+
 </script>
 <template>
     <m-icon :color="'red'" :size="20">
@@ -89,5 +97,13 @@ const handleLoad = (node: TreeOption) => {
     </m-icon>
 
     <!-- 在使用树组件的时候，会传递一个树形的结构 -->
-    <m-tree :data="data" label-field="label" :on-load="handleLoad" :default-expanded-keys="['40', '41']"></m-tree>
+    <m-tree :data="data" label-field="label" :on-load="handleLoad" :default-expanded-keys="['40', '41']"
+        v-model:selected-keys="value" selectable multiple>
+        <!-- 
+            selectable - 可选节点
+            multiple - 节点可多选
+            selected-keys - 选中后的节点
+        -->
+    </m-tree>
+    {{ value }}
 </template>

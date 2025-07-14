@@ -1,5 +1,5 @@
 <template>
-    <div :class="bem.b()">
+    <div :class="[bem.b(), bem.is('selected', selected)]">
         <span :class="bem.b('indent')" :style="{ width: `${node.level * 24}px` }"></span>
         <span :class="[bem.e('expand-icon'), { expanded: expanded && !node.isLeaf }, bem.is('leaf', node.isLeaf)]"
             @click="handleExpand">
@@ -8,7 +8,7 @@
                 <Loading v-else />
             </z-icon>
         </span>
-        <span :class="bem.e('content')">
+        <span :class="bem.e('content')" @click="handleSelected">
             {{ node?.label }}
         </span>
     </div>
@@ -33,4 +33,9 @@ function handleExpand() {
 
 const loading = computed(() => props.loadingKeys.has(props.node.key));
 
+const selected = computed(() => props.selectedKeys.includes(props.node.key));
+
+function handleSelected(e: MouseEvent) {
+    emit('select', props.node, e.ctrlKey);
+}
 </script>
