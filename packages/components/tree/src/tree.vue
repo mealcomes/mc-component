@@ -1,8 +1,13 @@
 <template>
     <div :class="bem.b()">
-        <m-tree-node v-for="node in flattenTree" :key="node.key" :node="node" :expanded="isExpanded(node)"
-            @toggle="toggleExpand" :loadingKeys="loadingKeysRef" :selectedKeys="selectKeysRef" @select="handleSelect">
-        </m-tree-node>
+        <!-- 展示8条, 每一条高度为35px -->
+        <m-virtual-list :items="flattenTree" :remain="8" :size="27">
+            <template #default="{ node }">
+                <m-tree-node :key="node.key" :node="node" :expanded="isExpanded(node)" @toggle="toggleExpand"
+                    :loadingKeys="loadingKeysRef" :selectedKeys="selectKeysRef" @select="handleSelect">
+                </m-tree-node>
+            </template>
+        </m-virtual-list>
     </div>
 </template>
 
@@ -11,6 +16,7 @@ import { computed, provide, ref, useSlots, watch } from 'vue';
 import { Key, treeEmits, treeInjectKey, TreeNode, TreeOption, treeProps } from './tree';
 import { createNamespace } from '@mealcomes/utils';
 import MTreeNode from './treeNode.vue'
+import MVirtualList from '@mealcomes/components/virtual-list'
 
 const bem = createNamespace('tree');
 
@@ -78,7 +84,6 @@ watch(
     () => props.data,
     (data: TreeOption[]) => {
         tree.value = createTree(data);
-        console.log(tree.value);
     },
     {
         immediate: true

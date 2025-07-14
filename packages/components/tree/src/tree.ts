@@ -179,4 +179,4 @@ export const treeNodeContentProps = {
         type: Object as PropType<TreeNode>,
         required: true
     }
-};
+} as const;

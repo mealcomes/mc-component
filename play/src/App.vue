@@ -8,7 +8,7 @@ import { ref } from 'vue';
  */
 function createData(level = 4, parentKey = ''): TreeOption[] {
     if (!level) return [];
-    const arr = new Array(6 - level).fill(0);
+    const arr = new Array(34 - level).fill(0);
     return arr.map((_, idx: number) => {
         const key = parentKey + level + idx;
         return {
@@ -124,8 +124,10 @@ const value = ref<Key[]>([])
     </m-icon>
 
     <!-- 在使用树组件的时候，会传递一个树形的结构 -->
-    <m-tree :data="data" label-field="label" :on-load="handleLoad" :default-expanded-keys="['40', '41']"
-        v-model:selected-keys="value" selectable multiple>
+    <m-tree :data="data" label-field="label" :on-load="handleLoad"
+        :default-expanded-keys="new Array(30).fill('4').map((v, k) => v + k)" 
+        v-model:selected-keys="value" selectable
+        multiple>
         <!-- 
             selectable - 可选节点
             multiple - 节点可多选

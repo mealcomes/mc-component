@@ -6,11 +6,17 @@
  */
 import type { ExtractPropTypes, PropType } from 'vue';
 
-// 组件 props
+/**
+ * icon 组件 props
+ */
 export const iconProps = {
     color: String,
     size: [Number, String] as PropType<number | string>
-} as const;   // 转为 const ，只读
+} as const; // 转为 const ，只读
 
-// 组件 props 的类型
+/**
+ * icon 组件 props 的类型
+ * ExtractPropTypes<> 所有的都是必须的
+ * Partial<ExtractPropTypes<>> 所有的都是可选的 (可以为 undefined)
+ */
 export type IconProps = ExtractPropTypes<typeof iconProps>;
