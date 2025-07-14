@@ -15,10 +15,6 @@
     background-clip: content-box;
     transition: background-color 0.1s ease-in;
 
-    @include when(selected) {
-        background-color: #1677ff;
-    }
-
     @include e('expand-icon') {
         display: inline-block;
         width: 24px;
@@ -45,16 +41,40 @@
             cursor: default;
             visibility: hidden;
         }
+
+        .#{$namespace}-tree-node:not(.is-selected) & {
+            &:hover {
+                background-color: #f5f5f5;
+            }
+        }
     }
 
     @include e('content') {
         padding: 0 5px;
         border-radius: 5px;
         width: 100%;
-        cursor: pointer;
+        cursor: not-allowed;
+
+        .#{$namespace}-tree-node:not(.is-disabled) & {
+            cursor: pointer;
+        }
+
         .#{$namespace}-tree-node:not(.is-selected) & {
             &:hover {
                 background-color: #f5f5f5;
+            }
+        }
+    }
+
+    @include when(selected) {
+        background-color: #1677ff;
+    }
+
+    @include when(disabled) {
+        .#{$namespace}-tree-node__content {
+            color: gray;
+            &:hover {
+                background: none;
             }
         }
     }

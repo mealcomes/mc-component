@@ -1,5 +1,5 @@
 <template>
-    <div :class="[bem.b(), bem.is('selected', selected)]">
+    <div :class="[bem.b(), bem.is('selected', selected), bem.is('disabled', node.disabled)]">
         <span :class="bem.b('indent')" :style="{ width: `${node.level * 24}px` }"></span>
         <span :class="[bem.e('expand-icon'), { expanded: expanded && !node.isLeaf }, bem.is('leaf', node.isLeaf)]"
             @click="handleExpand">
@@ -36,6 +36,7 @@ const loading = computed(() => props.loadingKeys.has(props.node.key));
 const selected = computed(() => props.selectedKeys.includes(props.node.key));
 
 function handleSelected(e: MouseEvent) {
+    if (props.node.disabled) return;
     emit('select', props.node, e.ctrlKey);
 }
 </script>

@@ -37,20 +37,20 @@ import { ref } from 'vue';
 /**
  * 异步创建数据
  */
-function createDataAsync(): TreeOption[] {
-    return [
-        {
-            label: nextLabel(),
-            key: 1,
-            isLeaf: false,  // isLeaf 为 false, 但没有 children, 表示是动态加载节点
-        },
-        {
-            label: nextLabel(),
-            key: 2,
-            isLeaf: false,
-        }
-    ]
-}
+// function createDataAsync(): TreeOption[] {
+//     return [
+//         {
+//             label: nextLabel(),
+//             key: 1,
+//             isLeaf: false,  // isLeaf 为 false, 但没有 children, 表示是动态加载节点
+//         },
+//         {
+//             label: nextLabel(),
+//             key: 2,
+//             isLeaf: false,
+//         }
+//     ]
+// }
 
 function nextLabel(currentLabel?: string | number | undefined): string {
     if (!currentLabel) return 'Out of Tao, One is bore';
@@ -63,7 +63,34 @@ function nextLabel(currentLabel?: string | number | undefined): string {
     return '';
 }
 
-const data = ref<TreeOption[]>(createDataAsync());
+// const data = ref<TreeOption[]>(createData());
+const data = ref<TreeOption[]>([
+    {
+        key: '0',
+        label: '0',
+        children: [
+            {
+                key: '0-0',
+                label: '0-0'
+            },
+            {
+                disabled: true,
+                key: '0-1',
+                label: '0-1',
+                children: [
+                    {
+                        label: '0-1-0',
+                        key: '0-1-0',
+                    },
+                    {
+                        label: '0-1-1',
+                        key: '0-1-1',
+                    },
+                ]
+            }
+        ]
+    }
+])
 
 let cnt = 4;
 /**

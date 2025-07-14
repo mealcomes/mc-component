@@ -17,6 +17,7 @@ export interface TreeOption {
     key?: Key;
     children?: TreeOption[];
     isLeaf?: boolean;
+    disabled?: boolean;
     [key: string]: unknown; // 除了上面的属性，也可以传其他的
 }
 

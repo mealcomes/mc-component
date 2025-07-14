@@ -55,6 +55,7 @@ function createTree(data: TreeOption[], parent: TreeNode | null = null): TreeNod
                 children: [],   // 默认为空
                 rawNode: node,
                 level: parent ? parent.level + 1 : 0,
+                disabled: !!node.disabled,
                 // 以 node 属性 isLeaf 为准，其次是判断孩子是否为空
                 // ?? 是对 || 的增强, 即只有 node.isLeaf 不存在的时候, 才会走到后面, 而不是为 false 时
                 isLeaf: node.isLeaf ?? children.length == 0,
