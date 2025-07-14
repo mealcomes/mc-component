@@ -47,7 +47,7 @@ const treeOptions = createOptions(
 function createTree(data: TreeOption[]): TreeNode[] {
     function traversal(data: TreeOption[], parent: TreeNode | null = null): TreeNode[] {
         return data.map((node: TreeOption) => {
-            const children = treeOptions.getChildren(node);
+            const children = treeOptions.getChildren(node) || [];
             const treeNode: TreeNode = {
                 key: treeOptions.getKey(node),
                 label: treeOptions.getLabel(node),
