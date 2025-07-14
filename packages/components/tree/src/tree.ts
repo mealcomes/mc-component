@@ -1,4 +1,4 @@
-import { ExtractPropTypes, PropType } from 'vue';
+import { ExtractPropTypes, InjectionKey, PropType, SetupContext } from 'vue';
 
 export type Key = string | number;
 
@@ -91,6 +91,21 @@ export const treeProps = {
 } as const;
 
 /**
+ * tree 组件 emit
+ */
+export const treeEmits = {
+    /**
+     * 选择了的 key 更新
+     */
+    'update:selectedKeys': (keys: Key[]) => keys
+};
+
+/**
+ * tree 组件 props 的类型
+ */
+export type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>;
+
+/**
  * treeNode 组件 props
  */
 export const treeNodeProps = {
@@ -125,16 +140,6 @@ export const treeNodeProps = {
 } as const;
 
 /**
- * tree 组件 emit
- */
-export const treeEmits = {
-    /**
-     * 选择了的 key 更新
-     */
-    'update:selectedKeys': (keys: Key[]) => keys
-};
-
-/**
  * treeNode 组件 emit
  */
 export const treeNodeEmits = {
@@ -149,11 +154,29 @@ export const treeNodeEmits = {
 };
 
 /**
- * tree 组件 props 的类型
- */
-export type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>;
-
-/**
  * treeNode 组件 props 的类型
  */
 export type TreeNodeProps = Partial<ExtractPropTypes<typeof treeNodeProps>>;
+
+/**
+ * tree 组件上下文
+ */
+export interface TreeContext {
+    slots: SetupContext['slots'];
+    // emit: SetupContext<typeof treeEmits>['emit'];
+}
+
+/**
+ * provide/inject key
+ */
+export const treeInjectKey: InjectionKey<TreeContext> = Symbol();
+
+/**
+ * treeNodeContent 组件 props
+ */
+export const treeNodeContentProps = {
+    node: {
+        type: Object as PropType<TreeNode>,
+        required: true
+    }
+};

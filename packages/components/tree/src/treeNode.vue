@@ -3,13 +3,13 @@
         <span :class="bem.b('indent')" :style="{ width: `${node.level * 24}px` }"></span>
         <span :class="[bem.e('expand-icon'), { expanded: expanded && !node.isLeaf }, bem.is('leaf', node.isLeaf)]"
             @click="handleExpand">
-            <z-icon :class="bem.e('switcher')" size="16" color="#1F1F1F">
+            <m-icon :class="bem.e('switcher')" size="16" color="#1F1F1F">
                 <Switcher v-if="!loading" />
                 <Loading v-else />
-            </z-icon>
+            </m-icon>
         </span>
         <span :class="bem.e('content')" @click="handleSelected">
-            {{ node?.label }}
+            <MTreeNodeContent :node="node"></MTreeNodeContent>
         </span>
     </div>
 </template>
@@ -17,9 +17,10 @@
 <script lang="ts" setup>
 import { createNamespace } from '@mealcomes/utils';
 import { treeNodeEmits, treeNodeProps } from './tree';
-import ZIcon from '@mealcomes/components/icon'
+import MIcon from '@mealcomes/components/icon'
 import Switcher from './icon/switcher'
 import Loading from './icon/loading'
+import MTreeNodeContent from './tree-node-content'
 import { computed } from 'vue';
 
 const bem = createNamespace('tree-node')

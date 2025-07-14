@@ -7,8 +7,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
-import { Key, treeEmits, TreeNode, TreeOption, treeProps } from './tree';
+import { computed, provide, ref, useSlots, watch } from 'vue';
+import { Key, treeEmits, treeInjectKey, TreeNode, TreeOption, treeProps } from './tree';
 import { createNamespace } from '@mealcomes/utils';
 import MTreeNode from './treeNode.vue'
 
@@ -241,4 +241,9 @@ function handleSelect(node: TreeNode, canMulti: boolean | undefined) {
     }
     emit('update:selectedKeys', keys);
 }
+
+provide(treeInjectKey, {
+    slots: useSlots()
+})
+
 </script>

@@ -6,33 +6,33 @@ import { ref } from 'vue';
 /**
  * 同步创建数据 
  */
-// function createData(level = 4, parentKey = ''): TreeOption[] {
-//     if (!level) return [];
-//     const arr = new Array(6 - level).fill(0);
-//     return arr.map((_, idx: number) => {
-//         const key = parentKey + level + idx;
-//         return {
-//             label: createLabel(level), // 显示的内容
-//             key,                       // 为了唯一性
-//             children: createData(level - 1, key) // 孩子
-//         } as unknown as TreeOption;
-//     })
-// }
+function createData(level = 4, parentKey = ''): TreeOption[] {
+    if (!level) return [];
+    const arr = new Array(6 - level).fill(0);
+    return arr.map((_, idx: number) => {
+        const key = parentKey + level + idx;
+        return {
+            label: createLabel(level), // 显示的内容
+            key,                       // 为了唯一性
+            children: createData(level - 1, key) // 孩子
+        } as unknown as TreeOption;
+    })
+}
 
-// function createLabel(level: number): string {
-//     switch (level) {
-//         case 4:
-//             return '道生一';
-//         case 3:
-//             return '一生二';
-//         case 2:
-//             return '二生三';
-//         case 1:
-//             return '三生万物';
-//         default:
-//             return '';
-//     }
-// }
+function createLabel(level: number): string {
+    switch (level) {
+        case 4:
+            return '道生一';
+        case 3:
+            return '一生二';
+        case 2:
+            return '二生三';
+        case 1:
+            return '三生万物';
+        default:
+            return '';
+    }
+}
 
 /**
  * 异步创建数据
@@ -63,34 +63,34 @@ function nextLabel(currentLabel?: string | number | undefined): string {
     return '';
 }
 
-// const data = ref<TreeOption[]>(createData());
-const data = ref<TreeOption[]>([
-    {
-        key: '0',
-        label: '0',
-        children: [
-            {
-                key: '0-0',
-                label: '0-0'
-            },
-            {
-                disabled: true,
-                key: '0-1',
-                label: '0-1',
-                children: [
-                    {
-                        label: '0-1-0',
-                        key: '0-1-0',
-                    },
-                    {
-                        label: '0-1-1',
-                        key: '0-1-1',
-                    },
-                ]
-            }
-        ]
-    }
-])
+const data = ref<TreeOption[]>(createData());
+// const data = ref<TreeOption[]>([
+//     {
+//         key: '0',
+//         label: '0',
+//         children: [
+//             {
+//                 key: '0-0',
+//                 label: '0-0'
+//             },
+//             {
+//                 disabled: true,
+//                 key: '0-1',
+//                 label: '0-1',
+//                 children: [
+//                     {
+//                         label: '0-1-0',
+//                         key: '0-1-0',
+//                     },
+//                     {
+//                         label: '0-1-1',
+//                         key: '0-1-1',
+//                     },
+//                 ]
+//             }
+//         ]
+//     }
+// ])
 
 let cnt = 4;
 /**
@@ -131,6 +131,16 @@ const value = ref<Key[]>([])
             multiple - 节点可多选
             selected-keys - 选中后的节点
         -->
+        <template #default="{ node }">
+            <div class="content" style="display: flex;">
+                <div class="label" style="color: aqua; border-radius: 5px; margin-right: 20px;">
+                    {{ node.label }}
+                </div>
+                <div class="key" style="color: red; border-radius: 5px;">
+                    {{ node.key }}
+                </div>
+            </div>
+        </template>
     </m-tree>
     {{ value }}
 </template>
