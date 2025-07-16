@@ -8,7 +8,7 @@ import { ref } from 'vue';
  */
 function createData(level = 4, parentKey = ''): TreeOption[] {
     if (!level) return [];
-    const arr = new Array(34 - level).fill(0);
+    const arr = new Array(6 - level).fill(0);
     return arr.map((_, idx: number) => {
         const key = parentKey + level + idx;
         return {
@@ -114,6 +114,11 @@ const handleLoad = (node: TreeOption) => {
 
 const value = ref<Key[]>([])
 
+const check = ref(true);
+const disabled = ref(false);
+const handleChange = (val: boolean) => {
+    console.log(val);
+}
 </script>
 <template>
     <mc-icon :color="'red'" :size="20">
@@ -144,4 +149,10 @@ const value = ref<Key[]>([])
         </template>
     </mc-tree>
     {{ value }}
+    <mc-checkbox v-model="check" :disabled="disabled" :indeterminate="false" @change="handleChange">
+        Checkbox - {{ check }}
+        <button @click="disabled = !disabled">
+            {{ disabled ? `启用` : `禁用` }}
+        </button>
+    </mc-checkbox>
 </template>

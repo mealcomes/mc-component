@@ -4,8 +4,9 @@ import App from './App.vue';
 import '@mealcomes/theme-chalk/src/index.scss';
 import Icon from '@mealcomes/components/icon';
 import Tree from '@mealcomes/components/tree';
+import CheckBox from '@mealcomes/components/checkbox';
 
-const plugins = [Icon, Tree];
+const plugins = [Icon, Tree, CheckBox];
 
 const app = createApp(App);
 
