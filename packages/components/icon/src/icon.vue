@@ -12,7 +12,7 @@ import { iconProps } from './icon';
 const bem = createNamespace('icon');
 
 defineOptions({
-    name: 'm-icon'
+    name: 'mc-icon'
 });
 
 const props = defineProps(iconProps);

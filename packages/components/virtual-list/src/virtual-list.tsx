@@ -44,7 +44,7 @@ export const virtualProps = {
 export type VirtualProps = ExtractPropTypes<typeof virtualProps>;
 
 export default defineComponent({
-    name: 'm-virtual-list',
+    name: 'mc-virtual-list',
     props: virtualProps,
     setup(props: VirtualProps, { slots }) {
         const bem = createNamespace('virtual-list');

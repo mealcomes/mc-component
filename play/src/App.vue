@@ -116,17 +116,16 @@ const value = ref<Key[]>([])
 
 </script>
 <template>
-    <m-icon :color="'red'" :size="20">
+    <mc-icon :color="'red'" :size="20">
         <AddCircle> </AddCircle>
-    </m-icon>
-    <m-icon :color="'yellow'" :size="20">
+    </mc-icon>
+    <mc-icon :color="'yellow'" :size="20">
         <AddCircle> </AddCircle>
-    </m-icon>
+    </mc-icon>
 
     <!-- 在使用树组件的时候，会传递一个树形的结构 -->
-    <m-tree :data="data" label-field="label" :on-load="handleLoad"
-        :default-expanded-keys="new Array(30).fill('4').map((v, k) => v + k)" 
-        v-model:selected-keys="value" selectable
+    <mc-tree :data="data" label-field="label" :on-load="handleLoad"
+        :default-expanded-keys="new Array(30).fill('4').map((v, k) => v + k)" v-model:selected-keys="value" selectable
         multiple>
         <!-- 
             selectable - 可选节点
@@ -143,6 +142,6 @@ const value = ref<Key[]>([])
                 </div>
             </div>
         </template>
-    </m-tree>
+    </mc-tree>
     {{ value }}
 </template>

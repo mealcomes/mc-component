@@ -22,23 +22,34 @@ function _bem(
 }
 
 function createBEM(prefixName: string) {
-    const b = (blockSuffix: string = '') => _bem(prefixName, blockSuffix, '', '')
-    const e = (element: string = '') => element ? _bem(prefixName, '', element, '') : '';
-    const m = (modifier: string = '') => modifier ? _bem(prefixName, '', '', modifier) : '';
+    const b = (blockSuffix: string = '') =>
+        _bem(prefixName, blockSuffix, '', '');
+    const e = (element: string = '') =>
+        element ? _bem(prefixName, '', element, '') : '';
+    const m = (modifier: string = '') =>
+        modifier ? _bem(prefixName, '', '', modifier) : '';
 
     const be = (blockSuffix: string = '', element: string = '') =>
-        blockSuffix && element ? _bem(prefixName, blockSuffix, element, '') : '';
+        blockSuffix && element
+            ? _bem(prefixName, blockSuffix, element, '')
+            : '';
     const bm = (blockSuffix: string = '', modifier: string = '') =>
-        blockSuffix && modifier ? _bem(prefixName, blockSuffix, '', modifier) : '';
+        blockSuffix && modifier
+            ? _bem(prefixName, blockSuffix, '', modifier)
+            : '';
     const em = (element: string = '', modifier: string = '') =>
         element && modifier ? _bem(prefixName, '', element, modifier) : '';
 
-    const bem = (blockSuffix: string = '', element: string = '', modifier: string = '') =>
+    const bem = (
+        blockSuffix: string = '',
+        element: string = '',
+        modifier: string = ''
+    ) =>
         blockSuffix && element && modifier
             ? _bem(prefixName, blockSuffix, element, modifier)
             : '';
 
-    const is = (name: string, state: boolean) => state ? `is-${name}` : '';
+    const is = (name: string, state: boolean) => (state ? `is-${name}` : '');
 
     return {
         b,
@@ -49,14 +60,14 @@ function createBEM(prefixName: string) {
         em,
         bem,
         is
-    }
+    };
 }
 
 /**
  * 创建指定命名空间的 BEM(标签类名)
  */
 export function createNamespace(name: string) {
-    const prefixName = `m-${name}`;
+    const prefixName = `mc-${name}`;
     return createBEM(prefixName);
 }
 
@@ -69,4 +80,3 @@ export function createNamespace(name: string) {
 // console.log(bem.em('element', 'modifier'));
 // console.log(bem.bem('box', 'element', 'modifier'));
 // console.log(bem.is('checked', true));
-

@@ -2,7 +2,7 @@ import { defineComponent, inject, toRef } from 'vue';
 import { treeInjectKey, treeNodeContentProps } from './tree';
 
 export default defineComponent({
-    name: 'MTreeNodeContent',
+    name: 'MCTreeNodeContent',
     props: treeNodeContentProps,
     setup(props) {
         const treeContext = inject(treeInjectKey);

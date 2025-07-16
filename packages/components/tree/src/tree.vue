@@ -21,7 +21,7 @@ import MVirtualList from '@mealcomes/components/virtual-list'
 const bem = createNamespace('tree');
 
 defineOptions({
-    name: 'm-tree'
+    name: 'mc-tree'
 })
 const props = defineProps(treeProps);
 const emit = defineEmits(treeEmits);
