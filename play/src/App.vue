@@ -63,34 +63,34 @@ function nextLabel(currentLabel?: string | number | undefined): string {
     return '';
 }
 
-const data = ref<TreeOption[]>(createData());
-// const data = ref<TreeOption[]>([
-//     {
-//         key: '0',
-//         label: '0',
-//         children: [
-//             {
-//                 key: '0-0',
-//                 label: '0-0'
-//             },
-//             {
-//                 disabled: true,
-//                 key: '0-1',
-//                 label: '0-1',
-//                 children: [
-//                     {
-//                         label: '0-1-0',
-//                         key: '0-1-0',
-//                     },
-//                     {
-//                         label: '0-1-1',
-//                         key: '0-1-1',
-//                     },
-//                 ]
-//             }
-//         ]
-//     }
-// ])
+// const data = ref<TreeOption[]>(createData());
+const data = ref<TreeOption[]>([
+    {
+        key: '0',
+        label: '0',
+        children: [
+            {
+                key: '0-0',
+                label: '0-0'
+            },
+            {
+                disabled: true,
+                key: '0-1',
+                label: '0-1',
+                children: [
+                    {
+                        label: '0-1-0',
+                        key: '0-1-0',
+                    },
+                    {
+                        label: '0-1-1',
+                        key: '0-1-1',
+                    },
+                ]
+            }
+        ]
+    }
+])
 
 let cnt = 4;
 /**
@@ -131,7 +131,7 @@ const handleChange = (val: boolean) => {
     <!-- 在使用树组件的时候，会传递一个树形的结构 -->
     <mc-tree :data="data" label-field="label" :on-load="handleLoad"
         :default-expanded-keys="new Array(30).fill('4').map((v, k) => v + k)" v-model:selected-keys="value" selectable
-        multiple>
+        multiple show-checkbox :default-checked-keys="['40']">
         <!-- 
             selectable - 可选节点
             multiple - 节点可多选

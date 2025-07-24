@@ -1,22 +1,24 @@
 <template>
     <div :class="bem.b()">
         <!-- 展示8条, 每一条高度为35px -->
-        <m-virtual-list :items="flattenTree" :remain="8" :size="27">
+        <MCVirtualList :items="flattenTree" :remain="8" :size="27">
             <template #default="{ node }">
-                <m-tree-node :key="node.key" :node="node" :expanded="isExpanded(node)" @toggle="toggleExpand"
-                    :loadingKeys="loadingKeysRef" :selectedKeys="selectKeysRef" @select="handleSelect">
-                </m-tree-node>
+                <MCTreeNode :key="node.key" :node="node" :expanded="isExpanded(node)" @toggle="toggleExpand"
+                    :loadingKeys="loadingKeysRef" :selectedKeys="selectKeysRef" @select="handleSelect"
+                    :show-checkbox="showCheckbox" :checked="isChecked(node)" :disabled="isDisabled(node)"
+                    :indeterminate="isIndeterminate(node)" @check="toggleCheck">
+                </MCTreeNode>
             </template>
-        </m-virtual-list>
+        </MCVirtualList>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, provide, ref, useSlots, watch } from 'vue';
+import { computed, onMounted, provide, ref, useSlots, watch } from 'vue';
 import { Key, treeEmits, treeInjectKey, TreeNode, TreeOption, treeProps } from './tree';
 import { createNamespace } from '@mealcomes/utils';
-import MTreeNode from './treeNode.vue'
-import MVirtualList from '@mealcomes/components/virtual-list'
+import MCTreeNode from './treeNode.vue'
+import MCVirtualList from '@mealcomes/components/virtual-list'
 
 const bem = createNamespace('tree');
 
@@ -65,6 +67,7 @@ function createTree(data: TreeOption[], parent: TreeNode | null = null): TreeNod
                 // 以 node 属性 isLeaf 为准，其次是判断孩子是否为空
                 // ?? 是对 || 的增强, 即只有 node.isLeaf 不存在的时候, 才会走到后面, 而不是为 false 时
                 isLeaf: node.isLeaf ?? children.length == 0,
+                parentKey: parent?.key
             }
             if (children.length > 0) {
                 // 有孩子则递归孩子，将孩子也格式化成 treeNode 类型
@@ -138,6 +141,12 @@ const flattenTree = computed(() => {
     return flattenNodes;
 });
 
+/**
+ * 从 flattenTree 中找到指定 key 的 node
+ */
+function findNode(key: Key) {
+    return flattenTree.value.find(node => node.key === key)
+}
 
 function isExpanded(node: TreeNode): boolean {
     return expandedKeysSet.value.has(node.key);
@@ -173,8 +182,7 @@ function triggerLoading(node: TreeNode) {
                         node.children = createTree(children, node);
                         loadingKeys.delete(node.key);
                     })
-                    .catch(e => {
-                        console.log(e);
+                    .catch(() => {
                         node.isLeaf = true;
                     })
             }
@@ -251,4 +259,94 @@ provide(treeInjectKey, {
     slots: useSlots()
 })
 
+const checkedKeysRef = ref(new Set(props.defaultCheckedKeys));
+
+function isChecked(node: TreeNode) {
+    return checkedKeysRef.value.has(node.key);
+}
+
+function isDisabled(node: TreeNode) {
+    return !!node.disabled;
+}
+
+const indeterminateRefs = ref<Set<Key>>(new Set());
+
+function isIndeterminate(node: TreeNode) {
+    return indeterminateRefs.value.has(node.key);
+}
+
+/**
+ * 自上而下的更新选中
+ */
+function updateCheckToBottom(node: TreeNode, checked: boolean) {
+    if (!node) return;
+    const checkedKeys = checkedKeysRef.value;
+
+    if (checked) { // 选中的时候去掉半选状态
+        indeterminateRefs.value.delete(node.key);
+    }
+
+    checkedKeys[checked ? 'add' : 'delete'](node.key);
+
+    const children = node.children;
+    if (children) {
+        children.forEach(child => {
+            if (!child.disabled) {
+                updateCheckToBottom(child, checked)
+            }
+        })
+    }
+}
+
+/**
+ * 自下而上的更新选中 
+ */
+function updateCheckToTop(node: TreeNode) {
+    const parent = node.parentKey;
+    if (parent) {
+        const parenNode = findNode(node.parentKey!);
+        if (parenNode) {
+            let allChecked = true, hasChecked = false;
+            const children = parenNode.children;
+            for (let child of children) {
+                if (checkedKeysRef.value.has(child.key)) {
+                    // 儿子有被选中的
+                    hasChecked = true;
+                } else if (indeterminateRefs.value.has(child.key)) {
+                    // 儿子有半选的
+                    allChecked = false;
+                    hasChecked = true;
+                } else {
+                    // 儿子没有被选中的
+                    allChecked = false;
+                }
+            }
+            if (allChecked) {
+                checkedKeysRef.value.add(parenNode.key);
+                indeterminateRefs.value.delete(parenNode.key);
+            } else if (hasChecked) {
+                checkedKeysRef.value.delete(parenNode.key);
+                indeterminateRefs.value.add(parenNode.key);
+            } else {
+                checkedKeysRef.value.delete(parenNode.key);
+                indeterminateRefs.value.delete(parenNode.key);
+            }
+            updateCheckToTop(parenNode);
+        }
+    }
+}
+
+function toggleCheck(node: TreeNode, checked: boolean) {
+    updateCheckToBottom(node, checked);
+    updateCheckToTop(node);
+}
+
+onMounted(() => {
+    checkedKeysRef.value.forEach(key => {
+        const node = findNode(key) as TreeNode;
+        if (node) {
+            toggleCheck(node, true);
+        }
+    })
+})
 </script>

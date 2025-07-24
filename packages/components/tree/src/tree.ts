@@ -7,6 +7,7 @@ export interface TreeNode extends Required<TreeOption> {
     rawNode: TreeOption;
     children: TreeNode[];
     isLeaf: boolean; // 是否为叶子节点
+    parentKey: Key | undefined;
 }
 
 /**
@@ -87,6 +88,20 @@ export const treeProps = {
     multiple: {
         type: Boolean,
         default: false
+    },
+    /**
+     * 默认选中的选项
+     */
+    defaultCheckedKeys: {
+        type: Array as PropType<Key[]>,
+        default: () => []
+    },
+    /**
+     * 是否展示 checkbox
+     */
+    showCheckbox: {
+        type: Boolean,
+        default: false
     }
 } as const;
 
@@ -136,7 +151,26 @@ export const treeNodeProps = {
     selectedKeys: {
         type: Array as PropType<Key[]>,
         default: () => []
-    }
+    },
+    /**
+     * 是否展示 checkbox
+     */
+    showCheckbox: {
+        type: Boolean,
+        default: false
+    },
+    /**
+     * 是否选中
+     */
+    checked: Boolean,
+    /**
+     * 是否禁用
+     */
+    disabled: Boolean,
+    /**
+     * 是否半选
+     */
+    indeterminate: Boolean
 } as const;
 
 /**
@@ -150,7 +184,8 @@ export const treeNodeEmits = {
     /**
      * 节点选择
      */
-    select: (node: TreeNode, canMulti: boolean = false) => node || canMulti
+    select: (node: TreeNode, canMulti: boolean = false) => node || canMulti,
+    check: (node: TreeNode, val: boolean) => typeof val === 'boolean'
 };
 
 /**
