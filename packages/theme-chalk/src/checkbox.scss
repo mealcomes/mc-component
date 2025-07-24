@@ -38,19 +38,6 @@
         height: 1em;
         border-radius: getCssVar('checkbox-border-radius');
         border: getCssVar('border');
-        transition: getCssVar('transition-all');
-
-        &::before {
-            content: '';
-            position: absolute;
-            width: calc(1em + 2 * getCssVar('border-width'));
-            height: calc(1em + 2 * getCssVar('border-width'));
-            left: calc(0px - getCssVar('border-width'));
-            top: calc(0px - getCssVar('border-width'));
-            border-radius: 3px;
-            opacity: 0;
-            background-color: currentColor;
-        }
 
         @include m(inner) {
             position: absolute;
@@ -59,55 +46,84 @@
             height: 1em;
             border-radius: getCssVar('checkbox-border-radius');
             opacity: 0;
-
-            &::before {
-                content: '';
-                position: absolute;
-                width: calc(5em / 8);
-                height: calc(3em / 8);
-                left: calc(50% - 5em / 16);
-                top: calc(50% - 4em / 16);
-                box-sizing: border-box;
-                border-style: getCssVar('border-style');
-                border-color: transparent transparent
-                    getCssVar('checkbox-checked-icon-color')
-                    getCssVar('checkbox-checked-icon-color');
-                border-width: 0 0 2px 2px;
-                transform: rotate(-45deg);
-                transition: getCssVar('transition-all');
-            }
         }
 
         @include when(checked) {
             border-color: getCssVar('color-primary');
             background-color: getCssVar('checkbox-checked-bg-color');
             &::before {
+                content: '';
+                position: absolute;
+                width: calc(1em + 2 * getCssVar('border-width'));
+                height: calc(1em + 2 * getCssVar('border-width'));
+                left: calc(0px - getCssVar('border-width'));
+                top: calc(0px - getCssVar('border-width'));
+                border-radius: 3px;
+                opacity: 0;
+                background-color: getCssVar('checkbox-checked-bg-color');
                 animation: border-appear 0.2s ease-in both;
             }
             .#{$namespace}-checkbox#{$modifier-separator}inner {
                 opacity: 1;
                 &::before {
+                    content: '';
+                    position: absolute;
+                    width: calc(5em / 8);
+                    height: calc(3em / 8);
+                    left: calc(50% - 5em / 16);
+                    top: calc(50% - 4em / 16);
+                    box-sizing: border-box;
+                    border-style: getCssVar('border-style');
+                    border-color: transparent transparent
+                        getCssVar('checkbox-checked-icon-color')
+                        getCssVar('checkbox-checked-icon-color');
+                    border-width: 0 0 2px 2px;
+                    transform: rotate(-45deg);
                     animation: point-appear 0.1s ease-in 0.1s backwards;
                 }
             }
+        }
 
-            @include when(disabled) {
-                border-color: getCssVar('checkbox-disabled-border-color');
-                background-color: getCssVar('disabled-bg-color');
-                .#{$namespace}-checkbox#{$modifier-separator}inner {
-                    &::before {
-                        border-color: transparent transparent
-                            getCssVar('checkbox-disabled-checked-icon-color')
-                            getCssVar('checkbox-disabled-checked-icon-color');
-                    }
+        @include when(indeterminate) {
+            background-color: getCssVar('checkbox-indeterminate-bg-color');
+            border: getCssVar('border');
+            .#{$namespace}-checkbox#{$modifier-separator}inner {
+                opacity: 1;
+                &::after {
+                    content: '';
+                    position: absolute;
+                    width: calc(5em / 8);
+                    height: calc(5em / 8);
+                    left: calc(50% - 5em / 16);
+                    top: calc(50% - 5em / 16);
+                    box-sizing: border-box;
+                    background-color: getCssVar(
+                        'checkbox-indeterminate-icon-color'
+                    );
+                    animation: square-appear 0.1s ease-in 0.1s backwards;
                 }
             }
         }
 
         @include when(disabled) {
             pointer-events: none;
-            border-color: getCssVar('checkbox-disabled-border-color');
+            border-color: getCssVar('disabled-border-color');
             background-color: getCssVar('disabled-bg-color');
+            .#{$namespace}-checkbox#{$modifier-separator}inner {
+                &::before {
+                    border-color: transparent transparent
+                        getCssVar('checkbox-disabled-checked-icon-color')
+                        getCssVar('checkbox-disabled-checked-icon-color');
+                }
+                &::after {
+                    background-color: getCssVar(
+                        'checkbox-disabled-indeterminate-icon-color'
+                    );
+                }
+            }
+            &::before {
+                animation: none;
+            }
         }
     }
 

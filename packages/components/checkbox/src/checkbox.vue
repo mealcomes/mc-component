@@ -2,7 +2,7 @@
     <label :class="[bem.b('wrapper'), bem.is('checked', model as boolean), bem.is('disabled', disabled)]">
         <span :class="[
             bem.b(), bem.is('checked', model as boolean),
-            bem.is('disabled', disabled)]">
+            bem.is('disabled', disabled), bem.is('indeterminate', indeterminate)]">
             <input type="checkbox" v-model="model" ref="inputRef" :disabled="disabled" :value="label"
                 @change="handleChange">
             <span :class="bem.m('inner')"></span>
@@ -17,7 +17,7 @@
 <script lang="ts" setup>
 import { createNamespace } from '@mealcomes/utils';
 import { checkboxEmits, checkboxProps } from './checkbox';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed } from 'vue';
 
 const bem = createNamespace('checkbox');
 const props = defineProps(checkboxProps);
@@ -37,16 +37,6 @@ const model = computed({
         }
         emit('update:modelValue', val);
     }
-})
-
-const inputRef = ref<HTMLInputElement>()
-function indeterminate(val: boolean) {
-    inputRef.value!.indeterminate = val;
-}
-watch(() => props.indeterminate, indeterminate);
-
-onMounted(() => {
-    indeterminate(props.indeterminate);
 })
 
 function handleChange(e: Event) {
