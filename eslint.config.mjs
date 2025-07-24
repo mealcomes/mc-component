@@ -10,6 +10,9 @@ import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
     {
+        ignores: ['node_modules', '*.css', '*.jpg', '*.jpeg', '*.png', '*.gif']
+    },
+    {
         files: ['**/*.{js,mjs,cjs,ts,mts,cts,vue}'],
         plugins: { js },
         extends: ['js/recommended']
@@ -23,11 +26,13 @@ export default defineConfig([
     {
         files: ['**/*.vue'],
         languageOptions: { parserOptions: { parser: tseslint.parser } },
-        'vue/multi-word-component-names': [
-            'error',
-            {
-                ignores: []
-            }
-        ]
+        rules: {
+            'vue/multi-word-component-names': [
+                'error',
+                {
+                    ignores: []
+                }
+            ]
+        }
     }
 ]);
