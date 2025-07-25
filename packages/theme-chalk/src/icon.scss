@@ -14,6 +14,7 @@
 }
 
 @include b(icon) {
+    --color: inherit;
     display: inline-flex;
     height: 1em;
     width: 1em;
@@ -21,7 +22,12 @@
     vertical-align: middle;
     justify-content: center;
     position: relative;
+    color: var(--color);
     fill: currentColor;
+
+    @include when(loading) {
+        animation: rotating 1s linear infinite;
+    }
 
     svg {
         height: 1em;
