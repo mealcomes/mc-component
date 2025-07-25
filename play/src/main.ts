@@ -5,8 +5,9 @@ import '@mealcomes/theme-chalk/src/index.scss';
 import Icon from '@mealcomes/components/icon';
 import Tree from '@mealcomes/components/tree';
 import CheckBox from '@mealcomes/components/checkbox';
+import Button from '@mealcomes/components/button';
 
-const plugins = [Icon, Tree, CheckBox];
+const plugins = [Icon, Tree, CheckBox, Button];
 
 const app = createApp(App);
 

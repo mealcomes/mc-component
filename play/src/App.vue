@@ -63,34 +63,34 @@ function nextLabel(currentLabel?: string | number | undefined): string {
     return '';
 }
 
-// const data = ref<TreeOption[]>(createData());
-const data = ref<TreeOption[]>([
-    {
-        key: '0',
-        label: '0',
-        children: [
-            {
-                key: '0-0',
-                label: '0-0'
-            },
-            {
-                disabled: true,
-                key: '0-1',
-                label: '0-1',
-                children: [
-                    {
-                        label: '0-1-0',
-                        key: '0-1-0',
-                    },
-                    {
-                        label: '0-1-1',
-                        key: '0-1-1',
-                    },
-                ]
-            }
-        ]
-    }
-])
+const data = ref<TreeOption[]>(createData());
+// const data = ref<TreeOption[]>([
+//     {
+//         key: '0',
+//         label: '0',
+//         children: [
+//             {
+//                 key: '0-0',
+//                 label: '0-0'
+//             },
+//             {
+//                 disabled: true,
+//                 key: '0-1',
+//                 label: '0-1',
+//                 children: [
+//                     {
+//                         label: '0-1-0',
+//                         key: '0-1-0',
+//                     },
+//                     {
+//                         label: '0-1-1',
+//                         key: '0-1-1',
+//                     },
+//                 ]
+//             }
+//         ]
+//     }
+// ])
 
 let cnt = 4;
 /**
@@ -119,6 +119,12 @@ const disabled = ref(false);
 const handleChange = (val: boolean) => {
     console.log(val);
 }
+
+const handleClick = () => {
+    console.log('click');
+
+}
+
 </script>
 <template>
     <mc-icon :color="'red'" :size="20">
@@ -155,4 +161,11 @@ const handleChange = (val: boolean) => {
             {{ disabled ? `启用` : `禁用` }}
         </button>
     </mc-checkbox>
+    <mc-button size="default" type="success" :disabled="false" round :loading="false" iconPlacement="right"
+        @click="handleClick">
+        <template #icon>
+            <AddCircle> </AddCircle>
+        </template>
+        开始
+    </mc-button>
 </template>

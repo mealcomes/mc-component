@@ -60,6 +60,9 @@
     // Disable base
     @include set-component-css-var('disabled', $disabled);
 
+    // Mask
+    @include set-component-css-var('mask-color', $mask-color);
+
     // Border
     @include set-css-var-value('border-width', $border-width);
     @include set-css-var-value('border-style', $border-style);

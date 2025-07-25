@@ -230,6 +230,17 @@ $fill-color: map.merge(
     $fill-color
 );
 
+// mask
+$mask-color: () !default;
+$mask-color: map.merge(
+    (
+        '': rgba(255, 255, 255, 0.9),
+        'extra-light': rgba(255, 255, 255, 0.3)
+    ),
+    $mask-color
+);
+
+// checkbox 样式
 $checkbox: () !default;
 $checkbox: map.merge(
     (
@@ -243,18 +254,103 @@ $checkbox: map.merge(
         'indeterminate-icon-color': getCssVar('color-primary'),
         'indeterminate-bg-color': getCssVar('color', 'white'),
         'disabled-checked-icon-color': getCssVar('text-color-placeholder'),
-        'disabled-indeterminate-icon-color': getCssVar('text-color-placeholder'),
-        // 'input-border': getCssVar('border'),
-        // 'disabled-input-fill': getCssVar('fill-color', 'light'),
-        // 'disabled-checked-input-fill': getCssVar('border-color-extra-light'),
-        // 'disabled-checked-input-border-color': getCssVar('border-color'),
-        // 'checked-text-color': getCssVar('color-primary'),
-        // 'checked-input-border-color': getCssVar('color-primary'),
-        // 'checked-bg-color': getCssVar('color-primary'),
-        // 'input-border-color-hover': getCssVar('color-primary')
+        'disabled-indeterminate-icon-color': getCssVar('text-color-placeholder')
     ),
     $checkbox
 );
+
+// button 样式
+$button: () !default;
+$button: map.merge(
+    (
+        'font-weight': getCssVar('font-weight-primary'),
+        'border-color': getCssVar('border-color'),
+        'bg-color': getCssVar('fill-color', 'blank'),
+        'text-color': getCssVar('text-color', 'regular'),
+        'disabled-text-color': getCssVar('disabled-text-color'),
+        'disabled-bg-color': getCssVar('fill-color', 'blank'),
+        'disabled-border-color': getCssVar('border-color-light'),
+        'divide-border-color': rgba($color-white, 0.5),
+        'hover-text-color': getCssVar('color-primary'),
+        'hover-bg-color': getCssVar('color-primary', 'light-9'),
+        'hover-border-color': getCssVar('color-primary-light-7'),
+        'active-text-color': getCssVar('button-hover-text-color'),
+        'active-border-color': getCssVar('color-primary'),
+        'active-bg-color': getCssVar('button', 'hover-bg-color'),
+        'outline-color': getCssVar('color-primary', 'light-5'),
+        'hover-link-text-color': getCssVar('text-color', 'secondary'),
+        'active-color': getCssVar('text-color', 'primary')
+    ),
+    $button
+);
+
+$button-border-width: $border-width !default;
+
+$button-hover-tint-percent: 20%;
+$button-active-shade-percent: 10%;
+
+$button-border-color: () !default;
+$button-bg-color: () !default;
+$button-text-color: () !default;
+
+@each $type in $types {
+    $button-border-color: map.merge(
+        (
+            $type: map.get($colors, $type, 'base')
+        ),
+        $button-border-color
+    ) !global;
+
+    $button-bg-color: map.merge(
+        (
+            $type: map.get($colors, $type, 'base')
+        ),
+        $button-bg-color
+    ) !global;
+}
+
+$button-font-size: () !default;
+$button-font-size: map.merge(
+    (
+        'large': getCssVar('font-size', 'base'),
+        'default': getCssVar('font-size', 'base'),
+        'small': 12px
+    ),
+    $button-font-size
+);
+
+$button-border-radius: () !default;
+$button-border-radius: map.merge(
+    (
+        'large': getCssVar('border-radius', 'base'),
+        'default': getCssVar('border-radius', 'base'),
+        'small': calc(#{getCssVar('border-radius', 'base')} - 1px)
+    ),
+    $button-border-radius
+);
+
+$button-padding-vertical: () !default;
+$button-padding-vertical: map.merge(
+    (
+        'large': 13px,
+        'default': 9px,
+        'small': 6px
+    ),
+    $button-padding-vertical
+);
+
+$button-padding-horizontal: () !default;
+$button-padding-horizontal: map.merge(
+    (
+        'large': 20px,
+        'default': 16px,
+        'small': 12px
+    ),
+    $button-padding-horizontal
+);
+
+$input-height: () !default;
+$input-height: map.merge($common-component-size, $input-height);
 
 // transition
 $transition: () !default;
