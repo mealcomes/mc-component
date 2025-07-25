@@ -8,6 +8,6 @@ export * from './src/tree'
 
 declare module 'vue' {
     export interface GlobalComponents {
-        MTree: typeof Tree;
+        MCTree: typeof Tree;
     }
 }
