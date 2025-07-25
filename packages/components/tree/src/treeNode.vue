@@ -20,8 +20,8 @@
 import { createNamespace } from '@mealcomes/utils';
 import { treeNodeEmits, treeNodeProps } from './tree';
 import MCIcon from '@mealcomes/components/icon'
-import Switcher from './icon/switcher'
-import Loading from './icon/loading'
+import Switcher from '@mealcomes/components/internal-icon/switcher'
+import Loading from '@mealcomes/components/internal-icon/loading'
 import MCTreeNodeContent from './tree-node-content'
 import McCheckbox from '@mealcomes/components/checkbox'
 import { computed } from 'vue';
