@@ -259,7 +259,7 @@ $checkbox: map.merge(
     $checkbox
 );
 
-// button 样式
+// button 默认样式(区别于 button.css 内部定义的样式)
 $button: () !default;
 $button: map.merge(
     (

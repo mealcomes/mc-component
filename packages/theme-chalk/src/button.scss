@@ -133,6 +133,7 @@ $button-icon-span-gap: map.merge(
         border-radius: getCssVar('border-radius', 'round');
     }
 
+    // button 指定类型的样式(区别于theme-chalk)
     @each $type in (primary, success, warning, danger, info) {
         @include m($type) {
             @include button-variant($type);

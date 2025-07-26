@@ -31,6 +31,7 @@
             <component :is="$slots.icon" v-if="$slots.icon" />
             <slot v-else name="icon" />
         </mc-icon>
+        <mc-wave ref="waveRef" v-if="waving"></mc-wave>
     </button>
 </template>
 
@@ -39,6 +40,9 @@ import { createNamespace } from '@mealcomes/utils';
 import { buttonEmits, buttonProps } from './button';
 import Loading from '../../internal-icon/loading';
 import McIcon from '@mealcomes/components/icon'
+import McWave from '@mealcomes/components/_util/wave/wave.vue';
+import { WaveExpose } from '@mealcomes/components/_util/wave/wave'
+import { nextTick, ref } from 'vue';
 
 defineOptions({
     name: 'mc-button',
@@ -49,8 +53,30 @@ const bem = createNamespace('button');
 const props = defineProps(buttonProps);
 const emits = defineEmits(buttonEmits);
 
+const waving = ref(false);
+const waveRef = ref<WaveExpose>();
+let waveId: number | undefined;
+
+function clearWave() {
+    if (waveId) {
+        clearTimeout(waveId);
+    }
+}
+
+function wave() {
+    clearWave();
+    waving.value = true;
+    nextTick(() => {
+        waveRef.value?.wave();
+    })
+    waveId = setTimeout(() => {
+        waving.value = false;
+    }, 1000);
+}
+
 function handleClick(event: MouseEvent) {
     if (props.loading) return;
+    wave();
     emits('click', event);
 }
 
