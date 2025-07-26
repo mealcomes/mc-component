@@ -21,6 +21,7 @@ $button-icon-span-gap: map.merge(
 }
 
 @include b(button) {
+    position: relative;
     display: inline-flex;
     justify-content: center;
     align-items: center;
