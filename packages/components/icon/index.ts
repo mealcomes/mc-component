@@ -16,6 +16,6 @@ declare module 'vue' {
     // GlobalComponents：Vue 类型系统中定义的一个接口，用于描述所有注册的全局组件
     export interface GlobalComponents {
         // MIcon: typeof Icon：将名为 MIcon 的组件注册进去，并绑定它的类型定义
-        MCIcon: typeof Icon;
+        McIcon: typeof Icon;
     }
 }

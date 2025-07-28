@@ -7,6 +7,6 @@ export default Virtual;
 
 declare module 'vue' {
     export interface GlobalComponents {
-        MCVirtual: typeof Virtual;
+        McVirtual: typeof Virtual;
     }
 }

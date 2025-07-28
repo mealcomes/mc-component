@@ -9,6 +9,6 @@ export * from './src/button';
 
 declare module 'vue' {
     export interface GlobalComponents {
-        MCButton: typeof Button
+        McButton: typeof Button
     }
 }

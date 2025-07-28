@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: 'MCNodeLoading',
+    name: 'mc-node-loading',
     render() {
         return (
             <svg

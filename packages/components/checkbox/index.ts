@@ -9,6 +9,6 @@ export * from './src/checkbox';
 
 declare module 'vue' {
     export interface GlobalComponents {
-        MCCheckbox: typeof CheckBox
+        McCheckbox: typeof CheckBox
     }
 }
