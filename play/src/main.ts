@@ -6,9 +6,10 @@ import Icon from '@mealcomes/components/icon';
 import Tree from '@mealcomes/components/tree';
 import CheckBox from '@mealcomes/components/checkbox';
 import Button from '@mealcomes/components/button';
-import Input from "@mealcomes/components/input"
+import Input from '@mealcomes/components/input';
+import { FormItem, Form } from '@mealcomes/components/form';
 
-const plugins = [Icon, Tree, CheckBox, Button, Input];
+const plugins = [Icon, Tree, CheckBox, Button, Input, FormItem, Form];
 
 const app = createApp(App);
 

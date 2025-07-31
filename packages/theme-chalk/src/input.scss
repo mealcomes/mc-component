@@ -141,7 +141,7 @@
             );
         }
 
-        // override edge default style
+        // 默认 password 展开密码图标
         &[type='password']::-ms-reveal {
             display: none;
         }

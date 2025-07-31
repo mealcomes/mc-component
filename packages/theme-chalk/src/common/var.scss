@@ -419,6 +419,16 @@ $input-padding-horizontal: map.merge(
     $input-padding-horizontal
 );
 
+// form
+$form: () !default;
+$form: map.merge(
+    (
+        'label-font-size': getCssVar('font-size-base'),
+        'inline-content-width': 220px
+    ),
+    $form
+);
+
 // transition
 $transition: () !default;
 $transition: map.merge(

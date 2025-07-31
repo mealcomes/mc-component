@@ -69,10 +69,19 @@
 <script setup lang="ts">
 import { createNamespace } from '@mealcomes/utils';
 import { inputEmits, inputProps } from './input';
-import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue';
+import {
+    computed,
+    inject,
+    nextTick,
+    onMounted,
+    ref,
+    useAttrs,
+    watch
+} from 'vue';
 import McEye from '@mealcomes/components/internal-icon/eye';
 import McEyeClosed from '@mealcomes/components/internal-icon/eye-closed';
 import McCloseCircle from '@mealcomes/components/internal-icon/close-circle';
+import { formItemContextKey } from '@mealcomes/components/form';
 
 defineOptions({
     name: 'mc-input',
@@ -83,11 +92,15 @@ const bem = createNamespace('input');
 const props = defineProps(inputProps);
 const emits = defineEmits(inputEmits);
 
+/* 表单校验 */
+const formItemContext = inject(formItemContextKey);
+
 const inputRef = ref<HTMLInputElement>();
 const isFocused = ref(false);
 watch(
     () => props.modelValue,
     () => {
+        formItemContext?.validate('change').catch(err => console.warn(err)); // 表单校验
         setNativeInputValue();
     }
 );
@@ -159,6 +172,7 @@ const handleFocus = (event: FocusEvent) => {
 };
 
 const handleBlur = (event: FocusEvent) => {
+    formItemContext?.validate('blur').catch(err => console.warn(err));
     isFocused.value = false;
     emits('blur', event);
 };

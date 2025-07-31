@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { FormInstance } from '@mealcomes/components/form';
 import type { Key, TreeOption } from '@mealcomes/components/tree';
 import { AddCircle } from '@vicons/ionicons5';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 /* tree 组件 */
 
@@ -149,6 +150,19 @@ const handleInputInput = (val: string) => {
 const handleInputClear = () => {
     console.log('clear');
 };
+
+/* form */
+
+const state = reactive({
+    username: '',
+    password: ''
+});
+const formRef = ref<FormInstance>();
+const validateForm = () => {
+    formRef.value?.validate((valid, errors) => {
+        console.log(valid, errors);
+    });
+};
 </script>
 <template>
     <mc-icon :color="'red'" :size="20">
@@ -224,7 +238,7 @@ const handleInputClear = () => {
         @focus="handleInputFocus"
         @input="handleInputInput"
         @clear="handleInputClear"
-        :show-password="true"
+        :show-password="false"
         clearable
     >
         <template #prepend>
@@ -235,14 +249,58 @@ const handleInputClear = () => {
                 <AddCircle> </AddCircle>
             </mc-icon>
         </template>
-        <template #suffix>
-            <!-- <mc-icon :size="20">
-                <AddCircle> </AddCircle>
-            </mc-icon> -->
-        </template>
+        <template #suffix> suffix </template>
         <template #append>
             <mc-button size="small">append</mc-button>
         </template>
     </mc-input>
     {{ username }}
+
+    <mc-form
+        ref="formRef"
+        :model="state"
+        :rules="{
+            username: {
+                min: 6,
+                max: 10,
+                message: '用户名6-10位',
+                trigger: ['change', 'blur']
+            }
+        }"
+    >
+        <mc-form-item
+            prop="username"
+            label="姓名"
+            size="large"
+            :rules="[
+                { required: true, message: '请输入用户名', trigger: 'blur' },
+                {
+                    min: 6,
+                    max: 10,
+                    message: '用户名6-10位',
+                    trigger: ['change', 'blur']
+                }
+            ]"
+        >
+            <mc-input
+                placeholder="请输入姓名"
+                v-model="state.username"
+            ></mc-input>
+            <template #label> 姓名 </template>
+        </mc-form-item>
+        <mc-form-item
+            prop="password"
+            label="密码"
+            size="large"
+            :rules="[
+                { required: true, message: '请输入密码', trigger: 'blur' }
+            ]"
+        >
+            <mc-input
+                placeholder="请输入密码"
+                v-model="state.password"
+            ></mc-input>
+        </mc-form-item>
+        <mc-button type="primary" @click="validateForm">提交</mc-button>
+    </mc-form>
 </template>
