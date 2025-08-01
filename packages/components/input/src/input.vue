@@ -6,7 +6,9 @@
                 [bem.b('group')]: $slots.prepend || $slots.append,
                 [bem.bm('group', 'append')]: $slots.append,
                 [bem.bm('group', 'prepend')]: $slots.prepend
-            }
+            },
+            bem.is('disabled', disabled),
+            bem.m(inputSize)
         ]"
     >
         <div v-if="$slots.prepend" :class="[bem.be('group', 'prepend')]">
@@ -31,6 +33,7 @@
                 :placeholder="placeholder"
                 :class="[bem.e('inner')]"
                 v-bind="attrs"
+                :disabled="disabled"
                 @input="handleInput"
                 @change="handleChange"
                 @blur="handleBlur"
@@ -93,7 +96,7 @@ const props = defineProps(inputProps);
 const emits = defineEmits(inputEmits);
 
 /* 表单校验 */
-const formItemContext = inject(formItemContextKey);
+const formItemContext = inject(formItemContextKey, undefined);
 
 const inputRef = ref<HTMLInputElement>();
 const isFocused = ref(false);
@@ -115,6 +118,10 @@ async function focus() {
     await nextTick(); // 重新获取焦点
     inputRef.value?.focus();
 }
+
+const inputSize = computed(() => {
+    return formItemContext?.size || props.size;
+});
 
 /* show-password */
 

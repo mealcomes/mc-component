@@ -1,4 +1,5 @@
 import { ExtractPropTypes, PropType } from 'vue';
+import { ComponentSize } from '../../../constants';
 
 /**
  * input 组件 props
@@ -59,6 +60,10 @@ export const inputProps = {
     label: {
         type: String,
         default: ''
+    },
+    size: {
+        type: String as PropType<ComponentSize>,
+        default: 'default'
     }
 } as const;
 
@@ -74,15 +79,15 @@ export const inputEmits = {
     /**
      * 输入框值变化时触发
      */
-    'update:modelValue': (value: string ) => typeof value === 'string',
+    'update:modelValue': (value: string) => typeof value === 'string',
     /**
      * 输入框输入时触发
      */
-    'input': (value: string ) => typeof value === 'string',
+    input: (value: string) => typeof value === 'string',
     /**
      * 输入框失焦时触发
      */
-    'change': (value: string ) => typeof value === 'string',
+    change: (value: string) => typeof value === 'string',
     /**
      * 输入框聚焦时触发
      */
@@ -94,8 +99,8 @@ export const inputEmits = {
     /**
      * 输入框清空时触发
      */
-    clear: () => true,
-}
+    clear: () => true
+};
 
 /**
  * input 组件 emits 类型
