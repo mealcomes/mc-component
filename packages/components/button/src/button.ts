@@ -1,6 +1,5 @@
 import { ExtractPropTypes, PropType } from 'vue';
-
-export type Size = 'small' | 'default' | 'large';
+import { ComponentSize } from '../../../constants';
 
 export type Type =
     | 'primary'
@@ -23,7 +22,7 @@ export const buttonProps = {
      * 按钮大小
      */
     size: {
-        type: String as PropType<Size>
+        type: String as PropType<ComponentSize>
     },
     /**
      * 按钮类型
@@ -93,7 +92,7 @@ export const buttonEmits = {
      * 鼠标按下事件
      */
     mousedown: (e: MouseEvent) => e instanceof MouseEvent
-}
+};
 
 /**
  * button 组件 emits 类型
