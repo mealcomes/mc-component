@@ -1,13 +1,18 @@
 <template>
-    <button :class="[
-        bem.b(),
-        bem.m(type),
-        bem.m(size),
-        bem.is('loading', loading),
-        bem.is('disabled', disabled),
-        bem.is('round', round),
-
-    ]" :type="nativeType" :disabled="disabled || loading" @click="handleClick" @mousedown="handleMouseDown">
+    <button
+        :class="[
+            bem.b(),
+            bem.m(type),
+            bem.m(size),
+            bem.is('loading', loading),
+            bem.is('disabled', disabled),
+            bem.is('round', round)
+        ]"
+        :type="nativeType"
+        :disabled="disabled || loading"
+        @click="handleClick"
+        @mousedown="handleMouseDown"
+    >
         <template v-if="loading && iconPlacement === 'left'">
             <slot v-if="$slots.loading" name="loading" />
             <mc-Icon v-else>
@@ -39,15 +44,15 @@
 import { createNamespace } from '@mealcomes/utils';
 import { buttonEmits, buttonProps } from './button';
 import Loading from '../../internal-icon/loading';
-import McIcon from '@mealcomes/components/icon'
+import McIcon from '@mealcomes/components/icon';
 import McWave from '@mealcomes/components/_util/wave/wave.vue';
-import { WaveExpose } from '@mealcomes/components/_util/wave/wave'
+import { WaveExpose } from '@mealcomes/components/_util/wave/wave';
 import { nextTick, ref } from 'vue';
 
 defineOptions({
     name: 'mc-button',
     inheritAttrs: false
-})
+});
 
 const bem = createNamespace('button');
 const props = defineProps(buttonProps);
@@ -68,7 +73,7 @@ function wave() {
     waving.value = true;
     nextTick(() => {
         waveRef.value?.wave();
-    })
+    });
     waveId = setTimeout(() => {
         waving.value = false;
     }, 1000);

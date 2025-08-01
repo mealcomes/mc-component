@@ -240,6 +240,8 @@ const validateForm = () => {
         @clear="handleInputClear"
         :show-password="false"
         clearable
+        disabled
+        size="default"
     >
         <template #prepend>
             <mc-button size="small">prepend</mc-button>
@@ -267,6 +269,7 @@ const validateForm = () => {
                 trigger: ['change', 'blur']
             }
         }"
+        @submit.prevent="validateForm"
     >
         <mc-form-item
             prop="username"
@@ -301,6 +304,8 @@ const validateForm = () => {
                 v-model="state.password"
             ></mc-input>
         </mc-form-item>
-        <mc-button type="primary" @click="validateForm">提交</mc-button>
+        <mc-button native-type="submit" type="primary" @click="validateForm"
+            >提交</mc-button
+        >
     </mc-form>
 </template>

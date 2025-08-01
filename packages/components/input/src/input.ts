@@ -99,7 +99,11 @@ export const inputEmits = {
     /**
      * 输入框清空时触发
      */
-    clear: () => true
+    clear: () => true,
+    /**
+     * 按键按下触发
+     */
+    keydown: (event: KeyboardEvent) => event instanceof KeyboardEvent
 };
 
 /**

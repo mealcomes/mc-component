@@ -38,6 +38,7 @@
                 @change="handleChange"
                 @blur="handleBlur"
                 @focus="handleFocus"
+                @keydown="handleKeyDown"
             />
             <span v-if="$slots.suffix" :class="[bem.e('suffix')]">
                 <span :class="[bem.e('suffix-inner')]">
@@ -182,5 +183,9 @@ const handleBlur = (event: FocusEvent) => {
     formItemContext?.validate('blur').catch(err => console.warn(err));
     isFocused.value = false;
     emits('blur', event);
+};
+
+const handleKeyDown = (event: KeyboardEvent) => {
+    emits('keydown', event);
 };
 </script>

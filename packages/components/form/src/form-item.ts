@@ -1,5 +1,6 @@
 import { ExtractPropTypes, InjectionKey, PropType } from 'vue';
 import type { RuleItem, ValidateFieldsError } from 'async-validator';
+import { ComponentSize } from '../../../constants';
 
 export type Arrayable<T> = T | T[];
 
@@ -66,6 +67,10 @@ export const formItemProps = {
     showMessage: {
         type: Boolean,
         default: true
+    },
+    size: {
+        type: String as PropType<ComponentSize>,
+        default: 'default'
     }
 } as const;
 
@@ -83,7 +88,10 @@ export interface FormItemContext extends FormItemProps {
      */
     validate: (
         trigger: string,
-        callback?: (idValid: boolean, invalidFields?: ValidateFieldsError) => void
+        callback?: (
+            idValid: boolean,
+            invalidFields?: ValidateFieldsError
+        ) => void
     ) => Promise<boolean>;
 }
 

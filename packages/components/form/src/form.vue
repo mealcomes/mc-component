@@ -1,7 +1,7 @@
 <template>
-    <div :class="[bem.b()]">
+    <form :class="[bem.b()]">
         <slot></slot>
-    </div>
+    </form>
 </template>
 
 <script setup lang="ts">
