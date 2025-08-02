@@ -34,6 +34,7 @@
                 :class="[bem.e('inner')]"
                 v-bind="attrs"
                 :disabled="disabled"
+                :readonly="readonly"
                 @input="handleInput"
                 @change="handleChange"
                 @blur="handleBlur"

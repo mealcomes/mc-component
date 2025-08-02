@@ -163,6 +163,13 @@ const validateForm = () => {
         console.log(valid, errors);
     });
 };
+
+/* upload */
+
+const handleBeforeUpload = () => {
+    return true;
+};
+const fileList = ref([]);
 </script>
 <template>
     <mc-icon :color="'red'" :size="20">
@@ -240,7 +247,8 @@ const validateForm = () => {
         @clear="handleInputClear"
         :show-password="false"
         clearable
-        disabled
+        :disabled="false"
+        :readonly="true"
         size="default"
     >
         <template #prepend>
@@ -308,4 +316,16 @@ const validateForm = () => {
             >提交</mc-button
         >
     </mc-form>
+    <mc-upload
+        v-model:file-list="fileList"
+        multiple
+        :before-upload="handleBeforeUpload"
+        list-type="picture-card"
+        action="http://localhost:4000/upload"
+        drag
+        directory
+    >
+        <mc-button size="small">上传</mc-button>
+    </mc-upload>
+    {{ fileList }}
 </template>

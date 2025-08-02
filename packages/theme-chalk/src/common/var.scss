@@ -429,6 +429,16 @@ $form: map.merge(
     $form
 );
 
+// upload
+$upload: () !default;
+$upload: map.merge(
+    (
+        'dragger-padding-horizontal': 40px,
+        'dragger-padding-vertical': 10px
+    ),
+    $upload
+);
+
 // transition
 $transition: () !default;
 $transition: map.merge(
