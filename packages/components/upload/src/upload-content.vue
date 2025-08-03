@@ -1,11 +1,16 @@
 <template>
     <div
-        :class="[bem.b()]"
+        :class="[bem.b(), bem.is('drag', drag), bem.is('disabled', disabled)]"
         @click="handleClick"
         @keydown.self.enter.space="handleKeydown"
     >
         <template v-if="drag">
-            <upload-dragger @file="uploadFiles" :directory="directory">
+            <upload-dragger
+                @file="uploadFiles"
+                :disabled="disabled"
+                :accept="accept"
+                :directory="directory"
+            >
                 <slot />
             </upload-dragger>
         </template>
@@ -19,6 +24,7 @@
             :name="name"
             :accept="accept"
             :multiple="multiple"
+            v-bind="dirProps"
             @change="handleChange"
         />
     </div>
@@ -31,11 +37,11 @@ import {
     UploadRawFile,
     UploadRequestOptions
 } from './upload';
-import { ref, shallowRef } from 'vue';
+import { computed, ref, shallowRef } from 'vue';
 import { UploadContentProps, uploadContentProps } from './upload-content';
 import UploadDragger from './upload-dragger.vue';
 import { httpRequest } from './ajax';
-import { readDirectory } from './utils';
+import attrAccept from './attr-accept';
 
 defineOptions({
     name: 'mc-upload-content',
@@ -46,6 +52,11 @@ const props = defineProps(uploadContentProps);
 const inputRef = ref<HTMLInputElement>();
 const requests = shallowRef<Record<string, XMLHttpRequest | Promise<unknown>>>(
     {}
+);
+const dirProps = computed(() =>
+    props.directory
+        ? { directory: 'directory', webkitdirectory: 'webkitdirectory' }
+        : {}
 );
 
 /**
@@ -67,34 +78,11 @@ const uploadFiles = (files: File[]) => {
 
     for (const file of files) {
         const rawFile = file as UploadRawFile;
-        if (rawFile.isDirectory) {
-            if (props.directory) {
-                uploadDirectory(rawFile);
-            }
-            continue;
-        }
         rawFile.uid = genFileId();
         // 在 upload 组件中对原始文件进行封装并存入 uploadFiles 列表中
         onStart(rawFile);
         if (autoUpload) upload(rawFile);
     }
-};
-
-const uploadDirectory = (dir: UploadRawFile) => {
-    const entry = dir.entry;
-    readDirectory(entry)
-        .then(files => {
-            for (const file of files) {
-                const rawFile = file as UploadRawFile;
-                rawFile.uid = genFileId();
-                // 在 upload 组件中对原始文件进行封装并存入 uploadFiles 列表中
-                props.onStart(rawFile);
-                if (props.autoUpload) upload(rawFile);
-            }
-        })
-        .catch((e: Error) => {
-            console.warn('read directory error: ', e.message);
-        });
 };
 
 const upload = async (rawFile: UploadRawFile): Promise<void> => {
@@ -165,12 +153,19 @@ const doUpload = async (rawFile: UploadRawFile) => {
 const handleChange = (e: Event) => {
     const files = (e.target as HTMLInputElement).files;
     if (!files) return;
-    uploadFiles(Array.from(files));
+    // 针对上传的目录进行 accept 过滤
+    const acceptedFiles = Array.from(files).filter(
+        (file: File) =>
+            !props.directory || attrAccept(file as UploadRawFile, props.accept)
+    );
+    uploadFiles(Array.from(acceptedFiles));
 };
 
 const handleClick = () => {
-    inputRef.value!.value = '';
-    inputRef.value!.click();
+    if (!props.disabled) {
+        inputRef.value!.value = '';
+        inputRef.value!.click();
+    }
 };
 
 const handleKeydown = () => {

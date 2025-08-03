@@ -6,7 +6,6 @@
     </div>
 </template>
 <script setup lang="ts">
-import { createNamespace } from '@mealcomes/utils';
 import { UploadFile, UploadFiles, uploadProps, UploadRawFile } from './upload';
 import { computed, ref, watch } from 'vue';
 import { UploadContentInstance, UploadContentProps } from './upload-content';
@@ -15,13 +14,15 @@ import McUploadContent from './upload-content.vue';
 defineOptions({
     name: 'mc-upload'
 });
-const bem = createNamespace('upload');
 const props = defineProps(uploadProps);
 const emits = defineEmits({
     'update:file-list': (files: UploadFiles) => files instanceof Array
 });
 const uploadRef = ref<UploadContentInstance>();
 
+/**
+ * 文件列表，在 onStart 钩子中加入待上传的文件
+ */
 const uploadFiles = ref<UploadFiles>(props.fileList);
 watch(uploadFiles, newVal => {
     emits('update:file-list', newVal);

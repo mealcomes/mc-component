@@ -1,4 +1,7 @@
-export function readDirectory(entry: FileSystemDirectoryEntry): Promise<File[]> {
+export function readDirectory(
+    entry: FileSystemDirectoryEntry
+): Promise<File[]> {
+    if (!entry) return Promise.reject();
     const reader = entry.createReader();
     const allFiles: File[] = [];
 

@@ -52,4 +52,7 @@ export const uploadContentProps = {
  */
 export type UploadContentProps = ExtractPropTypes<typeof uploadContentProps>;
 
+/**
+ * upload-contents 组件实例类型
+ */
 export type UploadContentInstance = InstanceType<typeof UploadContent> & unknown

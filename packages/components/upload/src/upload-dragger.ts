@@ -8,6 +8,14 @@ export const uploadDraggerProps = {
     directory: {
         type: Boolean,
         default: false
+    },
+    accept: {
+        type: String,
+        default: ''
+    },
+    disabled: {
+        type: Boolean,
+        default: false
     }
 };
 

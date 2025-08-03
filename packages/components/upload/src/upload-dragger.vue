@@ -14,6 +14,8 @@ import { createNamespace } from '@mealcomes/utils';
 import { ref } from 'vue';
 import { UploadRawFile } from './upload';
 import { uploadDraggerEmits, uploadDraggerProps } from './upload-dragger';
+import attrAccept from './attr-accept';
+import { readDirectory } from './utils';
 
 defineOptions({
     name: 'mc-upload-dragger'
@@ -23,26 +25,60 @@ const props = defineProps(uploadDraggerProps);
 const bem = createNamespace('upload');
 const dragover = ref(false);
 
-const onDrop = (e: DragEvent) => {
+const traverseFileTree = (entry: FileSystemDirectoryEntry): Promise<File[]> => {
+    return new Promise(resolve => {
+        readDirectory(entry)
+            .then(files => {
+                resolve(files);
+            })
+            .catch((e: Error) => {
+                console.warn('read directory error: ', e.message);
+            });
+    });
+};
+
+const onDrop = async (e: DragEvent) => {
+    if (props.disabled) return;
+
     dragover.value = false;
     e.stopPropagation();
+
     const files = Array.from(e.dataTransfer!.files) as UploadRawFile[];
-    const items = e.dataTransfer!.items || [];
-    files.forEach((file, index) => {
-        const item = items[index];
-        const entry = item?.webkitGetAsEntry?.();
-        if (entry) {
-            file.isDirectory = entry.isDirectory;
-            if (props.directory && entry.isDirectory) {
-                file.entry = entry as FileSystemDirectoryEntry;
+    const handledFiles: UploadRawFile[] = [];
+
+    // 允许拖拽文件夹的时候才进行文件夹处理
+    // 否则直接进行后续的 accept 过滤
+    if (props.directory) {
+        const items = e.dataTransfer!.items || [];
+        for (let i = 0; i < files.length; i++) {
+            const item = items[i];
+            const entry = item?.webkitGetAsEntry?.();
+            if (entry) {
+                const subFiles = await traverseFileTree(
+                    entry as FileSystemDirectoryEntry
+                );
+                handledFiles.push(...(subFiles as UploadRawFile[]));
+            } else {
+                console.warn(
+                    'API webkitGetAsEntry is unsupported in you Browser'
+                );
+                alert('当前浏览器不支持拖拽读取文件夹!');
             }
         }
-    });
-    emits('file', files);
+    } else {
+        handledFiles.push(...files);
+    }
+
+    // 对文件进行过滤(当不允许文件夹上传时文件夹会被过滤)
+    const acceptedFiles = handledFiles.filter((file: File) =>
+        attrAccept(file as UploadRawFile, props.accept)
+    );
+
+    emits('file', acceptedFiles);
 };
 
 const onDragover = () => {
-    dragover.value = true;
+    if (!props.disabled) dragover.value = true;
 };
 
 const onDragleave = (e: DragEvent) => {

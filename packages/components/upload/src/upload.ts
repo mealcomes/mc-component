@@ -1,5 +1,6 @@
 import { ExtractPropTypes, PropType } from 'vue';
 import { UploadAjaxError } from './ajax';
+import Upload from './upload.vue';
 
 export const uploadListTypes = ['text', 'picture', 'picture-card'] as const;
 
@@ -143,6 +144,13 @@ export const uploadBaseProps = {
     directory: {
         type: Boolean,
         default: false
+    },
+    /**
+     * 是否禁用
+     */
+    disabled: {
+        type: Boolean,
+        default: false
     }
 } as const;
 
@@ -151,8 +159,8 @@ export const uploadBaseProps = {
  */
 export type UploadRawFile = File & {
     uid: number;
-    isDirectory?: boolean;
-    entry: FileSystemDirectoryEntry;
+    // isDirectory?: boolean;
+    // entry: FileSystemDirectoryEntry;
 };
 
 /**
@@ -258,3 +266,8 @@ export const uploadProps = {
 } as const;
 
 export type UploadProps = ExtractPropTypes<typeof uploadProps>;
+
+/**
+ * upload 组件实例
+ */
+export type UploadInstance = InstanceType<typeof Upload> & unknown;

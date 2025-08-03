@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import type { FormInstance } from '@mealcomes/components/form';
+// import type { FormInstance } from '@mealcomes/components/form';
 import type { Key, TreeOption } from '@mealcomes/components/tree';
-import { AddCircle } from '@vicons/ionicons5';
-import { reactive, ref } from 'vue';
+import type { UploadInstance } from '@mealcomes/components/upload';
+// import { AddCircle } from '@vicons/ionicons5';
+import {
+    // reactive,
+    ref
+} from 'vue';
 
 /* tree 组件 */
 
@@ -120,49 +124,49 @@ const value = ref<Key[]>([]);
 
 /* checkbox 组件 */
 
-const check = ref(true);
-const disabled = ref(false);
-const handleChange = (val: boolean) => {
-    console.log(val);
-};
+// const check = ref(true);
+// const disabled = ref(false);
+// const handleChange = (val: boolean) => {
+//     console.log(val);
+// };
 
 /* button 组件 */
 
-const handleClick = () => {
-    console.log('click');
-};
+// const handleClick = () => {
+//     console.log('click');
+// };
 
 /* input 组件 */
 
-const username = ref<string>('MC-Component');
-const handleInputChange = (val: string) => {
-    console.log('change:', val);
-};
-const handleInputBlur = () => {
-    console.log('blur');
-};
-const handleInputFocus = () => {
-    console.log('focus');
-};
-const handleInputInput = (val: string) => {
-    console.log('input: ', val);
-};
-const handleInputClear = () => {
-    console.log('clear');
-};
+// const username = ref<string>('MC-Component');
+// const handleInputChange = (val: string) => {
+//     console.log('change:', val);
+// };
+// const handleInputBlur = () => {
+//     console.log('blur');
+// };
+// const handleInputFocus = () => {
+//     console.log('focus');
+// };
+// const handleInputInput = (val: string) => {
+//     console.log('input: ', val);
+// };
+// const handleInputClear = () => {
+//     console.log('clear');
+// };
 
 /* form */
 
-const state = reactive({
-    username: '',
-    password: ''
-});
-const formRef = ref<FormInstance>();
-const validateForm = () => {
-    formRef.value?.validate((valid, errors) => {
-        console.log(valid, errors);
-    });
-};
+// const state = reactive({
+//     username: '',
+//     password: ''
+// });
+// const formRef = ref<FormInstance>();
+// const validateForm = () => {
+//     formRef.value?.validate((valid, errors) => {
+//         console.log(valid, errors);
+//     });
+// };
 
 /* upload */
 
@@ -170,14 +174,18 @@ const handleBeforeUpload = () => {
     return true;
 };
 const fileList = ref([]);
+const mcUploadRef = ref<UploadInstance>();
+const submitFile = () => {
+    mcUploadRef.value?.submit();
+};
 </script>
 <template>
-    <mc-icon :color="'red'" :size="20">
+    <!-- <mc-icon :color="'red'" :size="20">
         <AddCircle> </AddCircle>
     </mc-icon>
     <mc-icon :color="'yellow'" :size="20">
         <AddCircle> </AddCircle>
-    </mc-icon>
+    </mc-icon> -->
 
     <!-- 在使用树组件的时候，会传递一个树形的结构 -->
     <mc-tree
@@ -211,7 +219,8 @@ const fileList = ref([]);
         </template>
     </mc-tree>
     {{ value }}
-    <mc-checkbox
+
+    <!-- <mc-checkbox
         v-model="check"
         :disabled="disabled"
         :indeterminate="false"
@@ -221,8 +230,9 @@ const fileList = ref([]);
         <mc-button @click="disabled = !disabled">
             {{ disabled ? `启用` : `禁用` }}
         </mc-button>
-    </mc-checkbox>
-    <mc-button
+    </mc-checkbox> -->
+
+    <!-- <mc-button
         size="default"
         type="success"
         :disabled="false"
@@ -235,9 +245,9 @@ const fileList = ref([]);
             <AddCircle> </AddCircle>
         </template>
         开始
-    </mc-button>
+    </mc-button> -->
 
-    <mc-input
+    <!-- <mc-input
         placeholder="请输入姓名"
         v-model="username"
         @change="handleInputChange"
@@ -264,9 +274,9 @@ const fileList = ref([]);
             <mc-button size="small">append</mc-button>
         </template>
     </mc-input>
-    {{ username }}
+    {{ username }} -->
 
-    <mc-form
+    <!-- <mc-form
         ref="formRef"
         :model="state"
         :rules="{
@@ -315,18 +325,23 @@ const fileList = ref([]);
         <mc-button native-type="submit" type="primary" @click="validateForm"
             >提交</mc-button
         >
-    </mc-form>
+    </mc-form> -->
+
     <mc-upload
+        ref="mcUploadRef"
         v-model:file-list="fileList"
         multiple
-        :before-upload="handleBeforeUpload"
         list-type="picture-card"
         action="http://localhost:4000/upload"
+        accept=".jpg"
+        :directory="true"
+        :before-upload="handleBeforeUpload"
         :drag="true"
-        accept=".png"
-        directory
+        :auto-upload="false"
+        :disabled="false"
     >
         <mc-button size="large">上传</mc-button>
     </mc-upload>
+    <mc-button type="primary" @click="submitFile">提交至服务器</mc-button>
     {{ fileList }}
 </template>
