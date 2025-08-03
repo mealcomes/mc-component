@@ -31,8 +31,20 @@ const getFile = (rawFile: UploadRawFile) => {
     return uploadFiles.value.find(file => file.uid === rawFile.uid);
 };
 
+/**
+ * 终止文件上传
+ */
 function abort(file: UploadFile) {
     uploadRef.value?.abort(file);
+}
+
+/**
+ * 上传文件
+ */
+function submit() {
+    uploadFiles.value
+        .filter(({ status }) => status === 'ready')
+        .forEach(({ raw }) => raw && uploadRef.value?.upload(raw));
 }
 
 const uploadContentProps = computed<UploadContentProps>(() => ({
@@ -112,4 +124,11 @@ const uploadContentProps = computed<UploadContentProps>(() => ({
         }
     }
 }));
+
+defineExpose({
+    /** 取消上传请求 */
+    abort,
+    /** 上传文件列表 */
+    submit
+});
 </script>

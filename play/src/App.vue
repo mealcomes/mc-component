@@ -322,10 +322,11 @@ const fileList = ref([]);
         :before-upload="handleBeforeUpload"
         list-type="picture-card"
         action="http://localhost:4000/upload"
-        drag
+        :drag="true"
+        accept=".png"
         directory
     >
-        <mc-button size="small">上传</mc-button>
+        <mc-button size="large">上传</mc-button>
     </mc-upload>
     {{ fileList }}
 </template>

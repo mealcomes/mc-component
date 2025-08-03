@@ -41,7 +41,7 @@ export interface UploadFile {
     name: string;
     url?: string;
     percentage?: number;
-    raw?: File;
+    raw?: UploadRawFile;
     size?: number;
     status: UploadStatus;
     response?: unknown;
