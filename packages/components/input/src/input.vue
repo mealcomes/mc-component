@@ -35,6 +35,7 @@
                 v-bind="attrs"
                 :disabled="disabled"
                 :readonly="readonly"
+                :aria-label="ariaLabel"
                 @input="handleInput"
                 @change="handleChange"
                 @blur="handleBlur"

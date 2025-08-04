@@ -55,9 +55,9 @@ export const inputProps = {
         default: false
     },
     /**
-     * 输入框标签内容
+     * 等价于原生 input aria-label 属性
      */
-    label: {
+    ariaLabel: {
         type: String,
         default: ''
     },
