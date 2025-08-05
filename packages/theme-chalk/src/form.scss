@@ -85,36 +85,36 @@ $form-item-label-top-margin-bottom: map.merge(
         margin-bottom: 0;
     }
 
-    // @each $size in (large, default, small) {
-    //     @include m($size) {
-    //         --font-size: #{map.get($input-font-size, $size)};
-    //         @include set-css-var-value(
-    //             ('form', 'label-font-size'),
-    //             var(--font-size)
-    //         );
+    @each $size in (large, default, small) {
+        @include m($size) {
+            --font-size: #{map.get($input-font-size, $size)};
+            @include set-css-var-value(
+                ('form', 'label-font-size'),
+                var(--font-size)
+            );
 
-    //         margin-bottom: #{map.get($form-item-margin-bottom, $size)};
+            margin-bottom: #{map.get($form-item-margin-bottom, $size)};
 
-    //         @include e(label) {
-    //             height: #{map.get($form-item-line-height, $size)};
-    //             line-height: #{map.get($form-item-line-height, $size)};
-    //         }
+            @include e(label) {
+                height: #{map.get($form-item-line-height, $size)};
+                line-height: #{map.get($form-item-line-height, $size)};
+            }
 
-    //         // @include e(content) {
-    //         //     line-height: #{map.get($form-item-line-height, $size)};
-    //         // }
-    //         .#{$namespace}-form-item__content {
-    //             line-height: #{map.get($form-item-line-height, $size)};
-    //         }
+            // @include e(content) {
+            //     line-height: #{map.get($form-item-line-height, $size)};
+            // }
+            .#{$namespace}-form-item__content {
+                line-height: #{map.get($form-item-line-height, $size)};
+            }
 
-    //         // @include e(error) {
-    //         //     padding-top: #{map.get($form-item-error-padding-top, $size)};
-    //         // }
-    //         .#{$namespace}-form-item__error {
-    //             padding-top: #{map.get($form-item-error-padding-top, $size)};
-    //         }
-    //     }
-    // }
+            // @include e(error) {
+            //     padding-top: #{map.get($form-item-error-padding-top, $size)};
+            // }
+            .#{$namespace}-form-item__error {
+                padding-top: #{map.get($form-item-error-padding-top, $size)};
+            }
+        }
+    }
 
     @include e(label-wrap) {
         display: flex;

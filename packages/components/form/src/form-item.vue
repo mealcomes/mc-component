@@ -4,17 +4,18 @@
             bem.b(),
             bem.is('error', validateState === 'error'),
             bem.is('validating', validateState === 'validating'),
-            bem.is('success', validateState === 'success')
+            bem.is('success', validateState === 'success'),
+            bem.m(size)
         ]"
     >
-        <div :class="[bem.e('label-wrap')]">
+        <div :class="[bem.e('label-wrap')]" v-if="hasLabel">
             <label :class="[bem.e('label')]" :style="labelStyle">
                 <slot name="label">
                     {{ label }}
                 </slot>
             </label>
         </div>
-        <div :class="[bem.e('content')]">
+        <div :class="[bem.e('content')]" :style="contentStyle">
             <slot></slot>
             <slot v-if="shouldShowError" name="error" :error="validateMessage">
                 <div :class="[bem.e('error')]">
@@ -27,7 +28,15 @@
 
 <script setup lang="ts">
 import { addUnit, createNamespace } from '@mealcomes/utils';
-import { computed, CSSProperties, inject, onMounted, provide, ref } from 'vue';
+import {
+    computed,
+    CSSProperties,
+    inject,
+    onMounted,
+    provide,
+    ref,
+    useSlots
+} from 'vue';
 import {
     FormItemContext,
     formItemContextKey,
@@ -46,6 +55,7 @@ defineOptions({
 });
 const props = defineProps(formItemProps);
 const formContext = inject(formContextKey);
+const slots = useSlots();
 
 const validateState = ref<FormItemValidateState>('error');
 const validateMessage = ref('');
@@ -71,6 +81,19 @@ const labelStyle = computed<CSSProperties>(() => {
 
     if (labelWidth) return { width: labelWidth };
     return {};
+});
+const contentStyle = computed<CSSProperties>(() => {
+    if (!props.label && !props.labelWidth) {
+        return {};
+    }
+    const labelWidth = addUnit(props.labelWidth || '');
+    if (!props.label && !slots.label) {
+        return { marginLeft: labelWidth };
+    }
+    return {};
+});
+const hasLabel = computed<boolean>(() => {
+    return !!(props.label || slots.label);
 });
 
 /**
