@@ -42,7 +42,7 @@
                 @focus="handleFocus"
                 @keydown="handleKeyDown"
             />
-            <span v-if="$slots.suffix" :class="[bem.e('suffix')]">
+            <span v-if="suffixVisible" :class="[bem.e('suffix')]">
                 <span :class="[bem.e('suffix-inner')]">
                     <template v-if="!showClear || !showPwdVisible">
                         <slot name="suffix"></slot>
@@ -82,6 +82,7 @@ import {
     onMounted,
     ref,
     useAttrs,
+    useSlots,
     watch
 } from 'vue';
 import McEye from '@mealcomes/components/internal-icon/eye';
@@ -97,9 +98,17 @@ const attrs = useAttrs(); // 获取非 props 的属性，将其绑定在 input �
 const bem = createNamespace('input');
 const props = defineProps(inputProps);
 const emits = defineEmits(inputEmits);
+const slots = useSlots()
 
 /* 表单校验 */
 const formItemContext = inject(formItemContextKey, undefined);
+
+const suffixVisible = computed(
+    () =>
+        !!slots.suffix ||
+        showClear.value ||
+        props.showPassword
+);
 
 const inputRef = ref<HTMLInputElement>();
 const isFocused = ref(false);
