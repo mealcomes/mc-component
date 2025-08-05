@@ -110,11 +110,18 @@ watch(
         setNativeInputValue();
     }
 );
+
+const nativeInputValue = computed(() =>
+    props.modelValue === undefined || props.modelValue === null
+        ? ''
+        : String(props.modelValue)
+);
+
 function setNativeInputValue() {
     const inputEle = inputRef.value;
-    if (!inputEle) return;
+    if (!inputEle || inputEle.value === nativeInputValue.value) return;
 
-    inputEle.value = String(props.modelValue);
+    inputEle.value = nativeInputValue.value;
 }
 
 async function focus() {
@@ -165,10 +172,19 @@ onMounted(() => {
     setNativeInputValue();
 });
 
-const handleInput = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    emits('input', target.value);
-    emits('update:modelValue', target.value);
+const handleInput = async (event: Event) => {
+    const { value } = event.target as HTMLInputElement;
+
+    if (value === nativeInputValue.value) {
+        setNativeInputValue();
+        return;
+    }
+
+    emits('input', value);
+    emits('update:modelValue', value);
+
+    await nextTick();
+    setNativeInputValue();
 };
 
 const handleChange = (event: Event) => {
