@@ -30,6 +30,7 @@
                             : 'password'
                         : type
                 "
+                :autocomplete="autocomplete"
                 :placeholder="placeholder"
                 :class="[bem.e('inner')]"
                 v-bind="attrs"

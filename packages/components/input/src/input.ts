@@ -64,6 +64,13 @@ export const inputProps = {
     size: {
         type: String as PropType<ComponentSize>,
         default: 'default'
+    },
+    /**
+     * 	原生 autocomplete 属性
+     */
+    autocomplete: {
+        type: String,
+        default: 'off'
     }
 } as const;
 
