@@ -55,6 +55,13 @@ export const formItemProps = {
         default: ''
     },
     /**
+     * label 宽度
+     */
+    labelWidth: {
+        type: [String, Number] as PropType<string | number>,
+        default: ''
+    },
+    /**
      * 表单校验规则
      */
     rules: {

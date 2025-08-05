@@ -8,7 +8,7 @@
         ]"
     >
         <div :class="[bem.e('label-wrap')]">
-            <label :class="[bem.e('label')]">
+            <label :class="[bem.e('label')]" :style="labelStyle">
                 <slot name="label">
                     {{ label }}
                 </slot>
@@ -26,8 +26,8 @@
 </template>
 
 <script setup lang="ts">
-import { createNamespace } from '@mealcomes/utils';
-import { computed, inject, onMounted, provide, ref } from 'vue';
+import { addUnit, createNamespace } from '@mealcomes/utils';
+import { computed, CSSProperties, inject, onMounted, provide, ref } from 'vue';
 import {
     FormItemContext,
     formItemContextKey,
@@ -65,6 +65,12 @@ const _rules = computed(() => {
         }
     }
     return thisRules;
+});
+const labelStyle = computed<CSSProperties>(() => {
+    const labelWidth = addUnit(props.labelWidth || '');
+
+    if (labelWidth) return { width: labelWidth };
+    return {};
 });
 
 /**
