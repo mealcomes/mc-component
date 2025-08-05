@@ -1,12 +1,6 @@
 <script setup lang="ts">
-// import type { FormInstance } from '@mealcomes/components/form';
 import type { Key, TreeOption } from '@mealcomes/components/tree';
-import type { UploadInstance } from '@mealcomes/components/upload';
-// import { AddCircle } from '@vicons/ionicons5';
-import {
-    // reactive,
-    ref
-} from 'vue';
+import { reactive, ref } from 'vue';
 
 /* tree 组件 */
 
@@ -168,16 +162,23 @@ const value = ref<Key[]>([]);
 //     });
 // };
 
+/* form-item-input */
+
+const state = reactive({
+    username: '',
+    password: ''
+});
+
 /* upload */
 
-const handleBeforeUpload = () => {
-    return true;
-};
-const fileList = ref([]);
-const mcUploadRef = ref<UploadInstance>();
-const submitFile = () => {
-    mcUploadRef.value?.submit();
-};
+// const handleBeforeUpload = () => {
+//     return true;
+// };
+// const fileList = ref([]);
+// const mcUploadRef = ref<UploadInstance>();
+// const submitFile = () => {
+//     mcUploadRef.value?.submit();
+// };
 </script>
 <template>
     <!-- <mc-icon :color="'red'" :size="20">
@@ -327,7 +328,7 @@ const submitFile = () => {
         >
     </mc-form> -->
 
-    <mc-upload
+    <!-- <mc-upload
         ref="mcUploadRef"
         v-model:file-list="fileList"
         multiple
@@ -343,5 +344,25 @@ const submitFile = () => {
         <mc-button size="large">上传</mc-button>
     </mc-upload>
     <mc-button type="primary" @click="submitFile">提交至服务器</mc-button>
-    {{ fileList }}
+    {{ fileList }} -->
+
+    <mc-form :model="state" @submit.prevent>
+        <mc-form-item-input
+            prop="username"
+            v-model="state.username"
+            placeholder="用户名"
+            :rules="[
+                { required: true, message: '请输入用户名', trigger: 'change' }
+            ]"
+        ></mc-form-item-input>
+        <mc-form-item-input
+            prop="password"
+            v-model="state.password"
+            placeholder="密码"
+            :rules="[
+                { required: true, message: '请输入密码', trigger: 'change' }
+            ]"
+        ></mc-form-item-input>
+    </mc-form>
+    <mc-input placeholder="密码"></mc-input>
 </template>
