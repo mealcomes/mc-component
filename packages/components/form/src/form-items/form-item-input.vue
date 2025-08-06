@@ -72,7 +72,7 @@ const placeholderLeft = computed(() =>
         : '7px'
 );
 const placeholderLineHeight = computed(() =>
-    props.size === 'default' || props.size === ''
+    props.size === 'default' || !props.size
         ? '32px'
         : props.size === 'large'
         ? '40px'
