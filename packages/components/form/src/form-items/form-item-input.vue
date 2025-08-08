@@ -2,11 +2,10 @@
     <div :class="bem.b()">
         <mc-form-item
             :prop="prop"
+            :label-width="labelWidth"
             :rules="rules"
             :show-message="showMessage"
             :size="size"
-            :label-width="labelWidth"
-            :label="label"
         >
             <mc-input
                 :type="type"
@@ -16,6 +15,7 @@
                 :disabled="disabled"
                 :readonly="readonly"
                 :aria-label="ariaLabel"
+                :autocomplete="autocomplete"
                 @input="handleInput"
                 @change="handleChange"
                 @blur="handleBlur"
@@ -65,7 +65,7 @@ const isLabelActive = computed(() => {
     return props.modelValue !== '';
 });
 const placeholderLeft = computed(() =>
-    props.size === 'default' || props.size === ''
+    props.size === 'default' || !props.size
         ? '11px'
         : props.size === 'large'
         ? '15px'
@@ -113,7 +113,7 @@ function setLabelRefStatus(isActive: boolean) {
     labelWidth.value = width;
 }
 
-function getLabelWidthAfterAnimation(targetClass: string): Promise<number> {
+function getLabelWidth(targetClass: string): Promise<number> {
     return new Promise(res => {
         const clone = labelRef.value!.cloneNode(true) as HTMLElement;
 
@@ -141,9 +141,9 @@ function getLabelWidthAfterAnimation(targetClass: string): Promise<number> {
 
 onMounted(async () => {
     if (props.labelWidth) {
-        if (props.labelWidth) labelActiveWidth = props.labelWidth;
+        labelActiveWidth = props.labelWidth;
     } else {
-        labelActiveWidth = await getLabelWidthAfterAnimation('active');
+        labelActiveWidth = await getLabelWidth('active');
         labelActiveWidth = `${labelActiveWidth + 10}px`;
     }
     watch(

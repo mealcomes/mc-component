@@ -1,13 +1,14 @@
 import { ExtractPropTypes, PropType } from 'vue';
 import { inputEmits, inputProps } from '../../../input/src/input';
 import { formItemProps } from '../form-item';
+import { omit } from '@mealcomes/utils/object';
 
 /**
  * form-item-input 组件 props
  */
 export const formItemInputProps = {
-    ...inputProps,
-    ...formItemProps,
+    ...omit(inputProps, 'size'),
+    ...omit(formItemProps, ['label', 'labelWidth']),
     /**
      * placeholder 为 label 时的宽度
      */
@@ -22,8 +23,14 @@ export const formItemInputProps = {
  */
 export type FormItemInputProps = ExtractPropTypes<typeof formItemInputProps>;
 
+/**
+ * form-item-input 组件 emits
+ */
 export const formItemInputEmits = {
     ...inputEmits
 };
 
+/**
+ * form-item-input 组件 emits 类型
+ */
 export type FormItemInputEmits = typeof formItemInputEmits;
