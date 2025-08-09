@@ -9,6 +9,7 @@ import Button from '@mealcomes/components/button';
 import Input from '@mealcomes/components/input';
 import { FormItem, Form, FormItemInput } from '@mealcomes/components/form';
 import Upload from '@mealcomes/components/upload';
+import Calendar from '@mealcomes/components/calendar';
 
 const plugins = [
     Icon,
@@ -19,7 +20,8 @@ const plugins = [
     FormItem,
     Form,
     Upload,
-    FormItemInput
+    FormItemInput,
+    Calendar
 ];
 
 const app = createApp(App);

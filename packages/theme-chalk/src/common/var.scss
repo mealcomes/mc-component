@@ -439,6 +439,22 @@ $upload: map.merge(
     $upload
 );
 
+// Calendar
+$calendar: () !default;
+$calendar: map.merge(
+    (
+        'border':
+            var(
+                #{getCssVarName('table-border')},
+                1px solid #{getCssVar('border-color-lighter')}
+            ),
+        'header-border-bottom': getCssVar('calendar-border'),
+        'selected-bg-color': getCssVar('color', 'primary', 'light-9'),
+        'cell-width': 85px
+    ),
+    $calendar
+);
+
 // transition
 $transition: () !default;
 $transition: map.merge(

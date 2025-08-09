@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Key, TreeOption } from '@mealcomes/components/tree';
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 
 /* tree 组件 */
 
@@ -164,10 +164,10 @@ const value = ref<Key[]>([]);
 
 /* form-item-input */
 
-const state = reactive({
-    username: '',
-    password: ''
-});
+// const state = reactive({
+//     username: '',
+//     password: ''
+// });
 
 /* upload */
 
@@ -179,6 +179,10 @@ const state = reactive({
 // const submitFile = () => {
 //     mcUploadRef.value?.submit();
 // };
+
+/* calendar */
+
+const currentDate = ref(new Date());
 </script>
 <template>
     <!-- <mc-icon :color="'red'" :size="20">
@@ -259,7 +263,7 @@ const state = reactive({
         :show-password="false"
         clearable
         :disabled="false"
-        :readonly="true"
+        :readonly="false"
         size="default"
     >
         <template #prepend>
@@ -346,11 +350,12 @@ const state = reactive({
     <mc-button type="primary" @click="submitFile">提交至服务器</mc-button>
     {{ fileList }} -->
 
-    <mc-form :model="state" @submit.prevent>
+    <!-- <mc-form :model="state" @submit.prevent>
         <mc-form-item-input
             prop="username"
             v-model="state.username"
             placeholder="用户名"
+            label-width="56.2px"
             :rules="[
                 { required: true, message: '请输入用户名', trigger: 'change' }
             ]"
@@ -359,10 +364,31 @@ const state = reactive({
             prop="password"
             v-model="state.password"
             placeholder="密码"
+            label-width="56.2px"
+            show-password
             :rules="[
                 { required: true, message: '请输入密码', trigger: 'change' }
             ]"
         ></mc-form-item-input>
-    </mc-form>
-    <mc-input placeholder="密码"></mc-input>
+    </mc-form> -->
+
+    <div>
+        <mc-calendar v-model="currentDate">
+            <template #date-cell="{ data }">
+                <p
+                    :class="data.isSelected ? 'is-selected' : ''"
+                    style="
+                        display: flex;
+                        margin: 0;
+                        height: 100%;
+                        justify-content: center;
+                        align-items: center;
+                    "
+                >
+                    {{ data.day.split('-').slice(1).join('-') }}
+                    {{ data.isSelected ? '✔️' : '' }}
+                </p>
+            </template>
+        </mc-calendar>
+    </div>
 </template>
