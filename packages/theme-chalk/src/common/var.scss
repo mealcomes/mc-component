@@ -450,7 +450,8 @@ $calendar: map.merge(
             ),
         'header-border-bottom': getCssVar('calendar-border'),
         'selected-bg-color': getCssVar('color', 'primary', 'light-9'),
-        'cell-width': 85px
+        'cell-width': 85px,
+        'border-radius': getCssVar('border-radius', 'base')
     ),
     $calendar
 );

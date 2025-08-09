@@ -372,8 +372,8 @@ const currentDate = ref(new Date());
         ></mc-form-item-input>
     </mc-form> -->
 
-    <div>
-        <mc-calendar v-model="currentDate">
+    <div style="width: 600px">
+        <mc-calendar v-model="currentDate" :mini="true">
             <template #date-cell="{ data }">
                 <p
                     :class="data.isSelected ? 'is-selected' : ''"

@@ -23,6 +23,38 @@
     @include e(body) {
         padding: 12px 20px 35px;
     }
+
+    @include when(mini) {
+        border: getCssVar('calendar', 'border');
+        border-radius: getCssVar('calendar', 'border-radius');
+
+        .#{$namespace}-calendar__header {
+            padding: 10px 10px;
+            flex-direction: column;
+
+            .#{$namespace}-button + .#{$namespace}-button {
+                margin-left: 3px;
+            }
+
+            .#{$namespace}-button {
+                width: 50px;
+            }
+        }
+
+        .#{$namespace}-calendar__title {
+            align-self: center;
+            margin-bottom: 10px;
+        }
+
+        .#{$namespace}-calendar__button-group {
+            display: flex;
+            justify-content: end;
+        }
+
+        .#{$namespace}-calendar__body {
+            padding: 8px 0;
+        }
+    }
 }
 
 @include b(calendar-table) {
@@ -47,7 +79,8 @@
         border-right: getCssVar('calendar', 'border');
         vertical-align: top;
         transition: background-color getCssVar('transition-duration', 'fast')
-            ease;
+                ease,
+            color getCssVar('transition-duration', 'fast') ease;
 
         @include when(selected) {
             background-color: getCssVar('calendar', 'selected-bg-color');
@@ -75,10 +108,45 @@
         box-sizing: border-box;
         padding: 8px;
         height: getCssVar('calendar', 'cell-width');
-        // height: 36px;
         &:hover {
             cursor: pointer;
             background-color: getCssVar('calendar', 'selected-bg-color');
+        }
+    }
+
+    @include when(mini) {
+        border-spacing: 5px;
+
+        thead th {
+            padding: 0;
+        }
+
+        td {
+            border: none !important;
+            border-radius: getCssVar('calendar', 'border-radius');
+
+            &:hover {
+                background-color: getCssVar('calendar', 'selected-bg-color');
+            }
+
+            @include when(selected) {
+                background-color: getCssVar('color-primary');
+                color: getCssVar('color-white');
+            }
+        }
+
+        .#{$namespace}-calendar-day {
+            height: 24px;
+            min-width: 24px;
+            line-height: 24px;
+            border-radius: getCssVar('calendar', 'border-radius');
+            padding: 0;
+            text-align: center;
+
+            &:hover {
+                cursor: pointer;
+                background-color: transparent;
+            }
         }
     }
 }

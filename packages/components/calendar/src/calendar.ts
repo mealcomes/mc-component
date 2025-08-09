@@ -22,6 +22,13 @@ export const calendarProps = {
      */
     range: {
         type: Array as unknown as PropType<[Date, Date]>
+    },
+    /**
+     * 是否为缩小版
+     */
+    mini: {
+        type: Boolean,
+        default: true
     }
 } as const;
 

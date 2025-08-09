@@ -1,5 +1,5 @@
 <template>
-    <div :class="bem.b()">
+    <div :class="[bem.b(), bem.is('mini', mini)]">
         <div :class="bem.e('header')">
             <slot name="header" :data="selectedMonth">
                 <div :class="bem.e('title')">
@@ -26,6 +26,7 @@
         </div>
         <div v-if="!range" :class="bem.e('body')">
             <date-table
+                :class="[bem.is('mini', mini)]"
                 :date="date"
                 :selected-day="realSelectedDay"
                 @pick="pickDay"
