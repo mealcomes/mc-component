@@ -95,7 +95,7 @@ export default defineComponent({
         return () => {
             return (
                 <div class={bem.b()} ref={wrapperRef} onScroll={handleScroll}>
-                    {/* 模拟总长度, 撑开滚动条 */}
+                    {/* 模拟总长度, 撑开滚动条 */} 
                     <div class={bem.e('scroll-bar')} ref={barRef}></div>
                     {/* 更新列表的显示区域, 由于向下滚动时整个会往下, 
                     所以 list 也需要往下偏移, 保证 list 始终处于可见视图 */}

@@ -9,9 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/mockjs": "^1.0.10",
     "@vicons/ionicons5": "^0.13.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "mockjs": "^1.1.0",
     "multer": "^2.0.2",
     "vue": "^3.5.17"
   },

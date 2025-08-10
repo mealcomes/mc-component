@@ -10,6 +10,7 @@ import Input from '@mealcomes/components/input';
 import { FormItem, Form, FormItemInput } from '@mealcomes/components/form';
 import Upload from '@mealcomes/components/upload';
 import Calendar from '@mealcomes/components/calendar';
+import VirtualList from '@mealcomes/components/virtual-scroll-list';
 
 const plugins = [
     Icon,
@@ -21,7 +22,8 @@ const plugins = [
     Form,
     Upload,
     FormItemInput,
-    Calendar
+    Calendar,
+    VirtualList
 ];
 
 const app = createApp(App);

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Key, TreeOption } from '@mealcomes/components/tree';
-import { ref } from 'vue';
+import { Random } from 'mockjs';
+import { ref, type DefineComponent } from 'vue';
+import VirtualListItem from './component/VirtualListItem.vue';
 
 /* tree 组件 */
 
@@ -182,7 +184,29 @@ const value = ref<Key[]>([]);
 
 /* calendar */
 
-const currentDate = ref(new Date());
+// const currentDate = ref(new Date());
+
+/* virtual-scroll-list */
+
+const totalCount = 100;
+
+interface DataType {
+    id: number;
+    name: string;
+    desc: string;
+    index: number;
+}
+
+const dataSource = ref<Array<DataType>>([]);
+let index = 0;
+while (index++ !== totalCount) {
+    dataSource.value.push({
+        id: index,
+        name: Random.name(),
+        desc: Random.csentence(20, 200),
+        index
+    });
+}
 </script>
 <template>
     <!-- <mc-icon :color="'red'" :size="20">
@@ -199,9 +223,9 @@ const currentDate = ref(new Date());
         :on-load="handleLoad"
         :default-expanded-keys="new Array(30).fill('4').map((v, k) => v + k)"
         v-model:selected-keys="value"
-        selectable
-        multiple
-        show-checkbox
+        :selectable="true"
+        :multiple="true"
+        :show-checkbox="true"
         :default-checked-keys="['40']"
     >
         <!-- 
@@ -372,7 +396,7 @@ const currentDate = ref(new Date());
         ></mc-form-item-input>
     </mc-form> -->
 
-    <div style="width: 600px">
+    <!-- <div style="width: 600px">
         <mc-calendar v-model="currentDate" :mini="true">
             <template #date-cell="{ data }">
                 <p
@@ -390,5 +414,23 @@ const currentDate = ref(new Date());
                 </p>
             </template>
         </mc-calendar>
-    </div>
+    </div> -->
+
+    <mc-virtual-scroll-list
+        class="virtual-list"
+        :data-source="dataSource"
+        :keeps="10"
+        :estimated-row-height="80"
+        :data-component="VirtualListItem as unknown as DefineComponent<object, object, unknown>"
+        :cache="2"
+        data-key="id"
+    ></mc-virtual-scroll-list>
 </template>
+
+<style lang="scss" scoped>
+.virtual-list {
+    width: 100%;
+    height: 200px;
+    border: 2px solid red;
+}
+</style>
