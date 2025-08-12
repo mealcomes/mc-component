@@ -31,7 +31,3 @@ defineExpose<WaveExpose>({
 })
 
 </script>
-
-<style lang="scss" scoped>
-@use './wave.scss';
-</style>
