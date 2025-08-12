@@ -64,20 +64,6 @@ let labelActiveWidth: number | string;
 const isLabelActive = computed(() => {
     return props.modelValue !== '';
 });
-const placeholderLeft = computed(() =>
-    props.size === 'default' || !props.size
-        ? '11px'
-        : props.size === 'large'
-        ? '15px'
-        : '7px'
-);
-const placeholderLineHeight = computed(() =>
-    props.size === 'default' || !props.size
-        ? '32px'
-        : props.size === 'large'
-        ? '40px'
-        : '24px'
-);
 
 const handleInput = (value: string) => {
     emits('input', value);
@@ -157,44 +143,3 @@ onMounted(async () => {
     );
 });
 </script>
-
-<style lang="scss">
-.mc-form-item {
-    position: relative;
-}
-
-.mc-form-item-input__form-label {
-    position: absolute;
-    font-size: inherit;
-    font-weight: inherit;
-    left: v-bind(placeholderLeft);
-    height: 100%;
-    line-height: v-bind(placeholderLineHeight);
-    color: var(--mc-text-color-placeholder);
-    transition: all 0.3s ease;
-    transform-origin: 0 50%;
-    user-select: none;
-    pointer-events: none;
-
-    &.active {
-        transform: translate(calc(0px - v-bind(placeholderLeft))) scale(1.1);
-        font-size: var(--mc-form-label-font-size);
-        color: var(--mc-text-color-primary);
-    }
-
-    &.inactive {
-        font-size: var(--font-size);
-        color: var(--mc-text-color-placeholder);
-    }
-}
-
-.mc-form-item__content {
-    position: static;
-    transition: all 0.3s ease;
-
-    .mc-form-item__error {
-        transition: left 0.3s ease;
-        left: auto;
-    }
-}
-</style>
