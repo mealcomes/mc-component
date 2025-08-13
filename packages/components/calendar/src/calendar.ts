@@ -1,4 +1,4 @@
-import { ExtractPropTypes, PropType } from 'vue';
+import type { ExtractPropTypes, PropType } from 'vue';
 
 /**
  * calendar 组件日期类型

@@ -1,4 +1,4 @@
-import { DefineComponent, ExtractPropTypes, PropType } from 'vue';
+import type { DefineComponent, ExtractPropTypes, PropType } from 'vue';
 
 /**
  * 滚动方向 (向上 / 向下)

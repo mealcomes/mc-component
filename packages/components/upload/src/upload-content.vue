@@ -31,14 +31,11 @@
 </template>
 <script setup lang="ts">
 import { createNamespace } from '@mealcomes/utils';
-import {
-    genFileId,
-    UploadFile,
-    UploadRawFile,
-    UploadRequestOptions
-} from './upload';
+import type { UploadFile, UploadRawFile, UploadRequestOptions } from './upload';
+import { genFileId } from './upload';
 import { computed, ref, shallowRef } from 'vue';
-import { UploadContentProps, uploadContentProps } from './upload-content';
+import type { UploadContentProps } from './upload-content';
+import { uploadContentProps } from './upload-content';
 import UploadDragger from './upload-dragger.vue';
 import { httpRequest } from './ajax';
 import attrAccept from './attr-accept';

@@ -1,14 +1,14 @@
 import { withInstall } from '@mealcomes/utils';
 import _CheckBox from './src/checkbox.vue';
 
-const CheckBox = withInstall(_CheckBox);
+export const McCheckbox = withInstall(_CheckBox);
 
-export default CheckBox;
+export default McCheckbox;
 
 export * from './src/checkbox';
 
 declare module 'vue' {
     export interface GlobalComponents {
-        McCheckbox: typeof CheckBox
+        McCheckbox: typeof McCheckbox;
     }
 }

@@ -1,4 +1,4 @@
-import { ExtractPropTypes, PropType } from 'vue';
+import type { ExtractPropTypes, PropType } from 'vue';
 
 /**
  * checkBox 组件 props

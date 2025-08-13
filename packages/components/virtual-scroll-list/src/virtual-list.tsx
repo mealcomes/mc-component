@@ -1,5 +1,6 @@
 import { defineComponent, h, onBeforeMount, ref } from 'vue';
-import { RangeOptions, virtualProps } from './props';
+import { virtualProps } from './props';
+import type { RangeOptions } from './props';
 import { initVirtual } from './virtual';
 import virtualItem from './virtual-item';
 
@@ -38,7 +39,7 @@ export default defineComponent({
         });
 
         function onItemResize(id: string | number, size: number) {
-            virtual.saveSize(id, size)
+            virtual.saveSize(id, size);
         }
 
         function genRenderComponent() {
@@ -77,7 +78,11 @@ export default defineComponent({
             };
 
             return (
-                <div onScroll={onScroll} ref={rootRef} style={{overflowY: 'scroll'}}>
+                <div
+                    onScroll={onScroll}
+                    ref={rootRef}
+                    style={{ overflowY: 'scroll' }}
+                >
                     <div style={paddingStyle}>{genRenderComponent()}</div>
                 </div>
             );

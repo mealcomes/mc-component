@@ -46,7 +46,7 @@ import { buttonEmits, buttonProps } from './button';
 import Loading from '../../internal-icon/loading';
 import McIcon from '@mealcomes/components/icon';
 import McWave from '@mealcomes/components/_util/wave/wave.vue';
-import { WaveExpose } from '@mealcomes/components/_util/wave/wave';
+import type { WaveExpose } from '@mealcomes/components/_util/wave/wave';
 import { nextTick, ref } from 'vue';
 
 defineOptions({
@@ -60,7 +60,8 @@ const emits = defineEmits(buttonEmits);
 
 const waving = ref(false);
 const waveRef = ref<WaveExpose>();
-let waveId: number | undefined;
+// eslint-disable-next-line no-undef
+let waveId: string | number | NodeJS.Timeout | undefined;
 
 function clearWave() {
     if (waveId) {

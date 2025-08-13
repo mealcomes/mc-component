@@ -1,4 +1,4 @@
-import { UploadRawFile } from './upload';
+import type { UploadRawFile } from './upload';
 
 export default (file: UploadRawFile, acceptedFiles: string | string[]) => {
     if (file && acceptedFiles) {

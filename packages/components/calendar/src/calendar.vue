@@ -42,7 +42,8 @@
 <script setup lang="ts">
 import { createNamespace } from '@mealcomes/utils';
 import McButton from '@mealcomes/components/button';
-import { CalendarDateType, calendarEmits, calendarProps } from './calendar';
+import { calendarEmits, calendarProps } from './calendar';
+import type { CalendarDateType } from './calendar';
 import { computed, ref } from 'vue';
 import DateTable from './date-table.vue';
 import dayjs, { Dayjs } from 'dayjs';

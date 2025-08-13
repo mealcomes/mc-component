@@ -6,9 +6,13 @@
     </div>
 </template>
 <script setup lang="ts">
-import { UploadFile, UploadFiles, uploadProps, UploadRawFile } from './upload';
+import type { UploadFile, UploadFiles, UploadRawFile } from './upload';
+import { uploadProps } from './upload';
 import { computed, ref, watch } from 'vue';
-import { UploadContentInstance, UploadContentProps } from './upload-content';
+import type {
+    UploadContentInstance,
+    UploadContentProps
+} from './upload-content';
 import McUploadContent from './upload-content.vue';
 
 defineOptions({

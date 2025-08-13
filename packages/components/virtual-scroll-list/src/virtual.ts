@@ -1,4 +1,4 @@
-import {
+import type {
     RangeOptions,
     UpdateType,
     VirtualOptions,
@@ -14,7 +14,7 @@ import {
 // 当开始滚动时, 固定高度直接采用 偏移量 / 每项高度 计算数据在视口的起始位置
 // 动态高度则采用二分查找, 取已经加载的数据项的偏移量和当前偏移量最接近的那一项
 
-const enum CALC_TYPE {
+enum CALC_TYPE {
     /**
      * 初始高度
      */

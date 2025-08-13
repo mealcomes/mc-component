@@ -4,9 +4,9 @@ import { withInstall } from '@mealcomes/utils';
 import _Icon from './src/icon.vue';
 
 // 给组件添加 install 函数，用于在 vue 中安装组件
-const Icon = withInstall(_Icon);
+export const McIcon = withInstall(_Icon);
 
-export default Icon; // 此时可以通过 app.use 来使用，也可以通过 import 方式单独使用
+export default McIcon; // 此时可以通过 app.use 来使用，也可以通过 import 方式单独使用
 
 export * from './src/icon';
 
@@ -16,6 +16,6 @@ declare module 'vue' {
     // GlobalComponents：Vue 类型系统中定义的一个接口，用于描述所有注册的全局组件
     export interface GlobalComponents {
         // MIcon: typeof Icon：将名为 MIcon 的组件注册进去，并绑定它的类型定义
-        McIcon: typeof Icon;
+        McIcon: typeof McIcon;
     }
 }

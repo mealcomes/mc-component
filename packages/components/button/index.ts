@@ -1,14 +1,14 @@
 import { withInstall } from '@mealcomes/utils';
 import _Button from './src/button.vue';
 
-const Button = withInstall(_Button);
+export const McButton = withInstall(_Button);
 
-export default Button;
+export default McButton;
 
 export * from './src/button';
 
 declare module 'vue' {
     export interface GlobalComponents {
-        McButton: typeof Button
+        McButton: typeof McButton
     }
 }

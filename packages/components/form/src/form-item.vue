@@ -30,24 +30,26 @@
 import { addUnit, createNamespace } from '@mealcomes/utils';
 import {
     computed,
-    CSSProperties,
     inject,
     onMounted,
     provide,
     ref,
     useSlots
 } from 'vue';
+import type { CSSProperties } from 'vue';
 import {
-    FormItemContext,
     formItemContextKey,
     formItemProps,
+} from './form-item';
+import type {
+    FormItemContext,
     FormItemRule,
     FormItemValidateState
 } from './form-item';
 import { formContextKey } from './form';
 import { convertArray } from './utils';
 import AsyncValidator from 'async-validator';
-import { FormValidateFailure } from './error';
+import type { FormValidateFailure } from './error';
 
 const bem = createNamespace('form-item');
 defineOptions({

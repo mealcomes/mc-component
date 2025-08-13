@@ -1,5 +1,5 @@
-import { ExtractPropTypes, InjectionKey, PropType } from 'vue';
-import { Arrayable, FormItemContext, FormItemRule } from './form-item';
+import type { ExtractPropTypes, InjectionKey, PropType } from 'vue';
+import type { Arrayable, FormItemContext, FormItemRule } from './form-item';
 
 /**
  * form 组件 props

@@ -1,4 +1,4 @@
-import { ExtractPropTypes, InjectionKey, PropType, SetupContext } from 'vue';
+import type { ExtractPropTypes, InjectionKey, PropType, SetupContext } from 'vue';
 
 export type Key = string | number;
 
@@ -185,7 +185,7 @@ export const treeNodeEmits = {
      * 节点选择
      */
     select: (node: TreeNode, canMulti: boolean = false) => node || canMulti,
-    check: (node: TreeNode, val: boolean) => typeof val === 'boolean'
+    check: (node: TreeNode, val: boolean) => typeof val === 'boolean' && node 
 };
 
 /**

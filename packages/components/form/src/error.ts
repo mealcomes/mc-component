@@ -1,4 +1,4 @@
-import { ValidateError, ValidateFieldsError } from "async-validator";
+import type { ValidateError, ValidateFieldsError } from "async-validator";
 
 export interface FormValidateFailure {
     errors: ValidateError[] | null;

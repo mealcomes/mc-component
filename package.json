@@ -6,7 +6,17 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "pnpm -C play dev"
+        "dev": "pnpm -C play dev",
+        "build": "run-s build-only  build:rollup",
+        "build-only": "run-p build:es build:umd build:style cp:global cp:package cp:readme",
+        "build:es": "vite build --config scripts/vite.es.config.ts",
+        "build:umd": "vite build --config scripts/vite.umd.config.ts",
+        "build:style": "ts-node scripts/build-style.cjs",
+        "build:rollup": "rollup -c scripts/rollup.config.dts.js",
+        "cp:global": "copyfiles -u 1 typings/global.d.ts dist/mealcomes/",
+        "cp:package": "copyfiles -u 2 packages/mealcomes/package.json dist/mealcomes/",
+        "cp:readme": "copyfiles README.md dist/mealcomes/",
+        "pub": "cd dist/mealcomes & npm publish"
     },
     "keywords": [],
     "author": "",
@@ -14,9 +24,9 @@
     "packageManager": "pnpm@10.11.0",
     "dependencies": {
         "@mealcomes/components": "workspace:*",
+        "@mealcomes/constants": "workspace:*",
         "@mealcomes/theme-chalk": "workspace:*",
         "@mealcomes/utils": "workspace:*",
-        "@mealcomes/constants": "workspace:*",
         "async-validator": "^4.2.5",
         "dayjs": "^1.11.13",
         "typescript": "^5.8.3",
@@ -24,11 +34,16 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.31.0",
+        "@types/node": "^24.2.1",
         "@vitejs/plugin-vue-jsx": "^5.0.1",
         "eslint": "^9.31.0",
         "eslint-plugin-vue": "^10.3.0",
         "globals": "^16.3.0",
+        "move-file-cli": "^3.0.0",
+        "npm-run-all": "^4.1.5",
+        "rollup-plugin-dts": "^6.2.1",
         "sass": "^1.89.2",
-        "typescript-eslint": "^8.36.0"
+        "typescript-eslint": "^8.36.0",
+        "vite-plugin-dts": "^4.5.4"
     }
 }

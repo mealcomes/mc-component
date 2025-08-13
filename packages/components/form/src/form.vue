@@ -6,10 +6,11 @@
 
 <script setup lang="ts">
 import { createNamespace } from '@mealcomes/utils';
-import { FormContext, formContextKey, formProps } from './form';
+import { formContextKey, formProps } from './form';
+import type { FormContext } from './form';
 import { provide } from 'vue';
-import { FormItemContext } from './form-item';
-import { ValidateFieldsError } from 'async-validator';
+import type { FormItemContext } from './form-item';
+import type { ValidateFieldsError } from 'async-validator';
 
 defineOptions({
     name: 'mc-form'

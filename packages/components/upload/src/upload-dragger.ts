@@ -1,4 +1,4 @@
-import { ExtractPropTypes } from 'vue';
+import type { ExtractPropTypes } from 'vue';
 import type UploadDragger from './upload-dragger.vue';
 
 /**

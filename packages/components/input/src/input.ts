@@ -1,5 +1,5 @@
-import { ExtractPropTypes, PropType } from 'vue';
-import { ComponentSize } from '../../../constants';
+import type { ExtractPropTypes, PropType } from 'vue';
+import type { ComponentSize } from '@mealcomes/constants';
 
 /**
  * input 组件 props

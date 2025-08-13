@@ -1,0 +1,46 @@
+{
+    "name": "mealcomes",
+    "version": "0.0.12",
+    "description": "MealComes 用于学习前端的组件库",
+    "main": "./dist/umd/index.umd.js",
+    "module": "./dist/es/index.es.js",
+    "types": "./dist/es/index.d.ts",
+    "type": "module",
+    "files": [
+        "dist/**.*",
+        "dist/*"
+    ],
+    "exports": {
+        ".": {
+            "types": "./dist/es/index.d.ts",
+            "import": "./dist/es/index.es.js",
+            "require": "./dist/umd/index.umd.js",
+            "default": "./dist/es/index.es.js"
+        },
+        "./dist/": {
+            "import": "./dist/",
+            "require": "./dist/"
+        },
+        "./global": {
+            "types": "./global.d.ts"
+        }
+    },
+    "keywords": [
+        "vue",
+        "components",
+        "前端"
+    ],
+    "license": "ISC",
+    "packageManager": "pnpm@10.11.0",
+    "peerDependencies": {
+        "vue": "^3.5.0"
+    },
+    "dependencies": {
+        "async-validator": "^4.2.5",
+        "dayjs": "^1.11.13"
+    },
+    "devDependencies": {
+        "@types/node": "^24.2.1",
+        "vue": "^3.5.17"
+    }
+}

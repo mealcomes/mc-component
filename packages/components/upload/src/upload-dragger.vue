@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { createNamespace } from '@mealcomes/utils';
 import { ref } from 'vue';
-import { UploadRawFile } from './upload';
+import type { UploadRawFile } from './upload';
 import { uploadDraggerEmits, uploadDraggerProps } from './upload-dragger';
 import attrAccept from './attr-accept';
 import { readDirectory } from './utils';

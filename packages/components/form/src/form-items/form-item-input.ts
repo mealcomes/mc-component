@@ -1,4 +1,4 @@
-import { ExtractPropTypes, PropType } from 'vue';
+import type { ExtractPropTypes, PropType } from 'vue';
 import { inputEmits, inputProps } from '../../../input/src/input';
 import { formItemProps } from '../form-item';
 import { omit } from '@mealcomes/utils/object';

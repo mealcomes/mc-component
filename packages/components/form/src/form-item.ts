@@ -1,6 +1,6 @@
-import { ExtractPropTypes, InjectionKey, PropType } from 'vue';
+import type { ExtractPropTypes, InjectionKey, PropType } from 'vue';
 import type { RuleItem, ValidateFieldsError } from 'async-validator';
-import { ComponentSize } from '../../../constants';
+import type { ComponentSize } from '@mealcomes/constants';
 
 export type Arrayable<T> = T | T[];
 

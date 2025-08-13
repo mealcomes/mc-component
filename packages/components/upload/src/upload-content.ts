@@ -1,12 +1,7 @@
-import { ExtractPropTypes, PropType } from 'vue';
-import {
-    uploadBaseProps,
-    UploadFile,
-    UploadProgressEvent,
-    uploadProps,
-    UploadRawFile
-} from './upload';
-import UploadContent from './upload-content.vue'
+import type { ExtractPropTypes, PropType } from 'vue';
+import { uploadBaseProps, uploadProps } from './upload';
+import type { UploadFile, UploadProgressEvent, UploadRawFile } from './upload';
+import UploadContent from './upload-content.vue';
 
 /**
  * upload-content 组件 props
@@ -55,4 +50,5 @@ export type UploadContentProps = ExtractPropTypes<typeof uploadContentProps>;
 /**
  * upload-contents 组件实例类型
  */
-export type UploadContentInstance = InstanceType<typeof UploadContent> & unknown
+export type UploadContentInstance = InstanceType<typeof UploadContent> &
+    unknown;

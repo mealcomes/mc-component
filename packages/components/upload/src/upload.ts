@@ -1,4 +1,4 @@
-import { ExtractPropTypes, PropType } from 'vue';
+import type { ExtractPropTypes, PropType } from 'vue';
 import { UploadAjaxError } from './ajax';
 import Upload from './upload.vue';
 

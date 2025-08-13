@@ -5,16 +5,16 @@
 <script setup lang="ts">
 import { createNamespace } from '@mealcomes/utils';
 import { ref } from 'vue';
-import { WaveExpose } from './wave';
+import type { WaveExpose } from './wave';
 
 defineOptions({
-    name: 'mc-wave',
-})
+    name: 'mc-wave'
+});
 
 const bem = createNamespace('wave');
 
 const waveRef = ref<HTMLElement>();
-let waveId: number | undefined;
+let waveId: string | number | NodeJS.Timeout | undefined;
 function wave() {
     if (waveId) {
         clearTimeout(waveId);
@@ -28,6 +28,5 @@ function wave() {
 }
 defineExpose<WaveExpose>({
     wave
-})
-
+});
 </script>

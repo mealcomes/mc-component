@@ -7,10 +7,17 @@ import Tree from '@mealcomes/components/tree';
 import CheckBox from '@mealcomes/components/checkbox';
 import Button from '@mealcomes/components/button';
 import Input from '@mealcomes/components/input';
-import { FormItem, Form, FormItemInput } from '@mealcomes/components/form';
+import {
+    McFormItem,
+    McForm,
+    McFormItemInput
+} from '@mealcomes/components/form';
 import Upload from '@mealcomes/components/upload';
 import Calendar from '@mealcomes/components/calendar';
 import VirtualList from '@mealcomes/components/virtual-scroll-list';
+
+// import MealComes from 'mealcomes';
+// console.log(MealComes);
 
 const plugins = [
     Icon,
@@ -18,10 +25,10 @@ const plugins = [
     CheckBox,
     Button,
     Input,
-    FormItem,
-    Form,
+    McFormItem,
+    McForm,
     Upload,
-    FormItemInput,
+    McFormItemInput,
     Calendar,
     VirtualList
 ];
@@ -29,5 +36,6 @@ const plugins = [
 const app = createApp(App);
 
 plugins.forEach(plugin => app.use(plugin)); // 将组件注册成全局组件
+// app.use(MealComes);
 
 app.mount('#app');

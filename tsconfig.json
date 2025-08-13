@@ -1,10 +1,11 @@
 {
     "compilerOptions": {
         "module": "esnext", // 打包模块类型
-        "declaration": false, // 默认不要生命文件
+        "declaration": true, // 默认不要声明文件
         "noImplicitAny": true, // 支持类型不标注可以默认any
         "removeComments": true, // 删掉注释
-        "moduleResolution": "node", // 按照 node 模块来解析
+        "moduleResolution": "bundler", // 按照 node 模块来解析
+        "types": ["node"],
         "esModuleInterop": true, // 支持 es6, commonjs 模块
         "jsx": "preserve", // jsx 不转
         "jsxImportSource": "vue",
@@ -21,12 +22,32 @@
         "forceConsistentCasingInFileNames": true, // 强制区分大小写
         "resolveJsonModule": true, // 解析 json 模块
         "strict": true, // 启动严格模式
-        "skipLibCheck": true // 跳过类库检测
+        "skipLibCheck": true, // 跳过类库检测
+        "emitDeclarationOnly": true,
+        "baseUrl": ".",
+        "paths": {
+            "@mealcomes/components": ["packages/components"],
+            "@mealcomes/components/*": ["packages/components/*"],
+            "@mealcomes/utils": ["packages/utils"],
+            "@mealcomes/utils/*": ["packages/utils/*"],
+            "@mealcomes/constants": ["packages/constants"],
+            "mealcomes": ["packages/mealcomes"],
+            "/": ["./"]
+        }
     },
     "exclude": [
         // 排除的类库
         "node_modules",
         "**/__tests__",
-        "dist/**"
+        "dist/**",
+        "**/*.config.ts"
+    ],
+    "include": [
+        "packages/components/index.ts",
+        "packages/components/**/*.ts",
+        "packages/components/**/*.vue",
+        "packages/mealcomes/**/*",
+        "packages/utils/**/*.ts",
+        "packages/constants/**/*.ts"
     ]
 }

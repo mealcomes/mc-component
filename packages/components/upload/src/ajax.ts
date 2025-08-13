@@ -1,4 +1,4 @@
-import { UploadProgressEvent, UploadRequestOptions } from './upload';
+import type { UploadProgressEvent, UploadRequestOptions } from './upload';
 
 export class UploadAjaxError extends Error {
     name = 'UploadAjaxError';

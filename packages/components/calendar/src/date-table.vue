@@ -42,14 +42,13 @@
 <script setup lang="ts">
 import { createNamespace } from '@mealcomes/utils';
 import {
-    CalendarDateCell,
-    CalendarDateCellType,
     dateTableEmits,
     dateTableProps,
     getMonthDays,
     getPrevMonthLastDays,
     toNestedArr
 } from './date-table';
+import type { CalendarDateCell, CalendarDateCellType } from './date-table';
 import { computed } from 'vue';
 import dayjs, { Dayjs } from 'dayjs';
 import localeData from 'dayjs/plugin/localeData.js';

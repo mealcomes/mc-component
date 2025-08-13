@@ -15,7 +15,8 @@
 
 <script setup lang="ts">
 import { computed, onMounted, provide, ref, useSlots, watch } from 'vue';
-import { Key, treeEmits, treeInjectKey, TreeNode, TreeOption, treeProps } from './tree';
+import { treeEmits, treeInjectKey, treeProps } from './tree';
+import type { Key, TreeNode, TreeOption } from './tree';
 import { createNamespace } from '@mealcomes/utils';
 import MCTreeNode from './treeNode.vue'
 import MCVirtualList from '@mealcomes/components/virtual-list'
