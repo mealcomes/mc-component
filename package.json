@@ -16,7 +16,10 @@
         "cp:global": "copyfiles -u 1 typings/global.d.ts dist/mealcomes/",
         "cp:package": "copyfiles -u 2 packages/mealcomes/package.json dist/mealcomes/",
         "cp:readme": "copyfiles README.md dist/mealcomes/",
-        "pub": "cd dist/mealcomes & npm publish"
+        "pub": "cd dist/mealcomes & npm publish",
+        "docs:dev": "pnpm --filter @mealcomes/docs docs:dev",
+        "docs:build": "pnpm --filter @mealcomes/docs docs:build",
+        "docs:preview": "pnpm --filter @mealcomes/docs docs:preview"
     },
     "keywords": [],
     "author": "",
@@ -44,6 +47,7 @@
         "rollup-plugin-dts": "^6.2.1",
         "sass": "^1.89.2",
         "typescript-eslint": "^8.36.0",
-        "vite-plugin-dts": "^4.5.4"
+        "vite-plugin-dts": "^4.5.4",
+        "vitepress": "^1.6.4"
     }
 }
