@@ -42,7 +42,7 @@ export const buttonProps = {
         }
     },
     /**
-     * 圆角
+     * 圆角按钮
      */
     round: {
         type: Boolean,
@@ -72,6 +72,20 @@ export const buttonProps = {
     iconPlacement: {
         type: String as PropType<Placement>,
         default: 'left'
+    },
+    /**
+     * 圆形按钮
+     */
+    circle: {
+        type: Boolean,
+        default: false
+    },
+    /**
+     * 幽灵按钮
+     */
+    plain: {
+        type: Boolean,
+        default: false
     }
 } as const;
 

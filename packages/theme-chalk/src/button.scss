@@ -101,6 +101,21 @@ $button-icon-span-gap: map.merge(
         outline: none;
     }
 
+    @include when(plain) {
+        @include css-var-from-global(
+            ('button', 'hover', 'text-color'),
+            ('color', 'primary')
+        );
+        @include css-var-from-global(
+            ('button', 'hover', 'bg-color'),
+            ('fill-color', 'blank')
+        );
+        @include css-var-from-global(
+            ('button', 'hover', 'border-color'),
+            ('color', 'primary')
+        );
+    }
+
     @include when(disabled) {
         &,
         &:hover {
@@ -131,6 +146,13 @@ $button-icon-span-gap: map.merge(
     }
     @include when(round) {
         border-radius: getCssVar('border-radius', 'round');
+    }
+
+    @include when(circle) {
+        width: map.get($input-height, 'default');
+        border-radius: 50%;
+        padding: map.get($button-padding-vertical, 'default') -
+            $button-border-width;
     }
 
     // button 指定类型的样式(区别于theme-chalk)

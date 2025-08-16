@@ -6,7 +6,9 @@
             bem.m(size),
             bem.is('loading', loading),
             bem.is('disabled', disabled),
-            bem.is('round', round)
+            bem.is('round', round),
+            bem.is('circle', circle),
+            bem.is('plain', plain)
         ]"
         :type="nativeType"
         :disabled="disabled || loading"
