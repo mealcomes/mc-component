@@ -4,5 +4,9 @@
         "docs:dev": "vitepress dev",
         "docs:build": "vitepress build",
         "docs:preview": "vitepress preview"
+    },
+    "dependencies": {
+        "@vicons/ionicons5": "^0.13.0",
+        "nprogress": "^0.2.0"
     }
 }

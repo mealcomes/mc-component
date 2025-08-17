@@ -1,15 +1,11 @@
 {
     "name": "mealcomes",
-    "version": "0.0.12",
+    "version": "0.0.15",
     "description": "MealComes 用于学习前端的组件库",
     "main": "./dist/umd/index.umd.js",
     "module": "./dist/es/index.es.js",
     "types": "./dist/es/index.d.ts",
     "type": "module",
-    "files": [
-        "dist/**.*",
-        "dist/*"
-    ],
     "exports": {
         ".": {
             "types": "./dist/es/index.d.ts",
@@ -23,8 +19,14 @@
         },
         "./global": {
             "types": "./global.d.ts"
-        }
+        },
+        "./*": "./*"
     },
+    "sideEffects": [
+        "dist/*",
+        "theme-chalk/**/*.css",
+        "theme-chalk/src/**/*.scss"
+    ],
     "keywords": [
         "vue",
         "components",

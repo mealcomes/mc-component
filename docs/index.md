@@ -8,17 +8,20 @@ hero:
     tagline: 最接近用户的开发者
     actions:
         - theme: brand
-          text: Markdown Examples
+          text: 快速开始
           link: /markdown-examples
         - theme: alt
-          text: API Examples
+          text: 指南
           link: /api-examples
+        - theme: alt
+          text: Github
+          link: https://www.github.com/mealcomes/mc-component
 
 features:
-    - title: Feature A
-      details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-    - title: Feature B
-      details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-    - title: Feature C
-      details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+    - title: 💡 TypeScript 支持
+      details: 全量使用 TypeScript 编写，完善的类型声明，带来更好的开发体验与智能提示。
+    - title: 🧩 工程化体系
+      details: 借鉴 Element Plus 的工程体系，结构清晰，易于维护与扩展，适合团队协作与二次开发。
+    - title: 🎨 学习与成长
+      details: 源码结构清晰，适合作为 Vue3+Vite+TS 组件库开发的学习和实践项目。
 ---

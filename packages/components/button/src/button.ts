@@ -69,6 +69,9 @@ export const buttonProps = {
         type: String as PropType<NativeType>,
         default: 'button'
     },
+    /**
+     * 图标位置
+     */
     iconPlacement: {
         type: String as PropType<Placement>,
         default: 'left'

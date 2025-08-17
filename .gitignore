@@ -192,3 +192,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
+packages/mealcomes/theme-chalk
+packages/mealcomes/*.d.ts
+packages/mealcomes/*.md

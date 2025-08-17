@@ -268,6 +268,7 @@ while (index++ !== totalCount) {
         round
         :loading="false"
         iconPlacement="right"
+        :circle="false"
         @click="handleClick"
     >
         <template #icon>

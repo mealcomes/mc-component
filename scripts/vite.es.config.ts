@@ -1,6 +1,7 @@
 import dts from 'vite-plugin-dts';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 import path from 'path';
 
 const pathPrefix = '../dist/mealcomes';
@@ -8,6 +9,7 @@ const pathPrefix = '../dist/mealcomes';
 export default defineConfig({
     plugins: [
         vue(),
+        vueJsx(),
         dts({
             outDir: path.resolve(__dirname, `${pathPrefix}/dist/types`),
             tsconfigPath: path.resolve(__dirname, '../tsconfig.json')
