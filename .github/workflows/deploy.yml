@@ -39,14 +39,14 @@ jobs:
               run: pnpm install
             - name: Build mc-component
               run: pnpm build
-            - name: Remove old mealcomes
-              run: pnpm remove mealcomes
-            - name: Add new mealcomes
-              run: pnpm add mealcomes@workspace:* -w
+            # - name: Remove old mealcomes
+            #   run: pnpm remove mealcomes
+            # - name: Add new mealcomes
+            #   run: pnpm add mealcomes@workspace:* -w
             - name: Debug mealcomes-1
-              run: ls node_modules/
-            - name: Debug mealcomes-2
               run: ls dist/mealcomes
+            - name: Debug mealcomes-2
+              run: ls packages/mealcomes
             - name: Build with VitePress
               run: pnpm docs:build
             - name: Upload artifact
