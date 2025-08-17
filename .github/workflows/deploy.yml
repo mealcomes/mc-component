@@ -39,6 +39,8 @@ jobs:
               run: pnpm install
             - name: Build mc-component
               run: pnpm build
+            - name: Debug mealcomes dist
+              run: ls node_modules/
             - name: Build with VitePress
               run: pnpm docs:build
             - name: Upload artifact
