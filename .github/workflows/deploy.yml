@@ -42,7 +42,7 @@ jobs:
             - name: Remove old mealcomes
               run: pnpm remove mealcomes
             - name: Add new mealcomes
-              run: pnpm add mealcomes@workspace:*
+              run: pnpm add mealcomes@workspace:* -w
             - name: Debug mealcomes-1
               run: ls node_modules/
             - name: Debug mealcomes-2
