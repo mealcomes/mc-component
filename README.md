@@ -18,6 +18,25 @@ npm install mealcomes
 pnpm add mealcomes
 ```
 
+## 完整引入
+
+```ts
+// main.ts
+import { createApp } from 'vue';
+import App from './App.vue';
+import Mealcomes from 'mealcomes';
+import 'mealcomes/theme-chalk/index.css';
+
+const app = createApp(App);
+
+app.use(Mealcomes);
+app.mount('#app');
+```
+
+## 文档 (完善中)
+
+见 [https://mealcomes.github.io/mc-component](https://mealcomes.github.io/mc-component/)
+
 ## 目录结构
 
 ```
