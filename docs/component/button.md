@@ -55,3 +55,31 @@ demo-preview=@/button/loading.vue
 demo-preview=@/button/size.vue
 
 :::
+
+## Button API
+
+### Button Attributes
+
+| 属性名        | 说明                     | 类型                                                                           | 默认值   |
+| ------------- | ------------------------ | ------------------------------------------------------------------------------ | -------- |
+| size          | 按钮大小                 | `large` \| `default` \| `small`                                                | —        |
+| type          | 按钮类型                 | `default` \| `primary` \| `success` \| `warning` \| `danger` \| `info` \| `''` | —        |
+| plain         | 是否为朴素按钮           | boolean                                                                        | `false`  |
+| round         | 是否为圆角按钮 button    | boolean                                                                        | `false`  |
+| circle        | 是否为圆形按钮 button    | boolean                                                                        | `false`  |
+| loading       | 是否为加载中状态 loading | boolean                                                                        | `false`  |
+| disabled      | 是否为禁用状态           | boolean                                                                        | `false`  |
+| native-type   | 原生 `type` 属性         | `button` \| `submit` \| `reset`                                                | `button` |
+| iconPlacement | 图标位置                 | `left` \| `right`                                                              | `left`   |
+
+### Events
+
+支持原生 `button` 的所有事件
+
+### Button Slots
+
+| 插槽名  | 说明             |
+| ------- | ---------------- |
+| default | 自定义默认内容   |
+| loading | 自定义加载中组件 |
+| icon    | 自定义图标组件   |

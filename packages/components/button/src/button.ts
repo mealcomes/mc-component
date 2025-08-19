@@ -84,7 +84,7 @@ export const buttonProps = {
         default: false
     },
     /**
-     * 幽灵按钮
+     * 朴素按钮
      */
     plain: {
         type: Boolean,
