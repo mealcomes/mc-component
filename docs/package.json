@@ -10,6 +10,7 @@
         "nprogress": "^0.2.0"
     },
     "devDependencies": {
-        "@types/nprogress": "^0.2.3"
+        "@types/nprogress": "^0.2.3",
+        "postcss": "^8.5.6"
     }
 }

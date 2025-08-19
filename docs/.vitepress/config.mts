@@ -17,8 +17,8 @@ export default defineConfig({
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-            { text: '指南', link: '/quickstart' },
-            { text: '组件', link: '/overview' }
+            { text: '指南', link: '/guide/quickstart' },
+            { text: '组件', link: '/component/button' }
         ],
 
         sidebar: [
@@ -30,8 +30,16 @@ export default defineConfig({
                 ]
             },
             {
+                text: '指南',
+                items: [{ text: '快速开始', link: '/guide/quickstart' }]
+            },
+            {
                 text: '基础组件',
-                items: [{ text: '按钮', link: '/component/button' }]
+                items: [{ text: 'Button 按钮', link: '/component/button' }]
+            },
+            {
+                text: '数据展示',
+                items: [{ text: 'Calendar 日历', link: '/component/calendar' }]
             }
         ],
 
@@ -40,7 +48,16 @@ export default defineConfig({
                 icon: 'github',
                 link: 'https://github.com/mealcomes/mc-component'
             }
-        ]
+        ],
+
+        docFooter: {
+            prev: '上一页',
+            next: '下一页'
+        },
+
+        search: {
+            provider: 'local'
+        }
     },
     cleanUrls: true,
     markdown: {

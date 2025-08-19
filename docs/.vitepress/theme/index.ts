@@ -21,7 +21,11 @@ export default {
         app.component('demo-preview', ElementPlusContainer);
         const nprogress = await import('nprogress');
 
-        router.onBeforeRouteChange = nprogress.start as unknown as (to: string) => Awaitable<void | boolean>;
-        router.onAfterRouteChange = nprogress.done as unknown as  (to: string) => Awaitable<void>;
+        router.onBeforeRouteChange = nprogress.start as unknown as (
+            to: string
+        ) => Awaitable<void | boolean>;
+        router.onAfterRouteChange = nprogress.done as unknown as (
+            to: string
+        ) => Awaitable<void>;
     }
 } satisfies Theme;

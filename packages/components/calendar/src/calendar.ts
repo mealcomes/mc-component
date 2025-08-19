@@ -28,7 +28,7 @@ export const calendarProps = {
      */
     mini: {
         type: Boolean,
-        default: true
+        default: false
     }
 } as const;
 
