@@ -8,6 +8,8 @@ export default McCalendar;
 export type * from './src/calendar';
 export * from './src/calendar';
 
+export type CalendarInstance = InstanceType<typeof McCalendar>;
+
 declare module 'vue' {
     export interface GlobalComponents {
         McCalendar: typeof McCalendar;
