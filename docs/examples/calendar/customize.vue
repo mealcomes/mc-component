@@ -1,6 +1,6 @@
 <template>
     <div class="vp-raw">
-        <mc-calendar class="vp-raw" v-model="value">
+        <mc-calendar>
             <template #date-cell="{ data }">
                 <p
                     :class="data.isSelected ? 'is-selected' : ''"
@@ -18,7 +18,7 @@
             </template>
         </mc-calendar>
 
-        <mc-calendar class="vp-raw" v-model="value" mini>
+        <mc-calendar mini>
             <template #date-cell="{ data }">
                 <p
                     :class="data.isSelected ? 'is-selected' : ''"
@@ -31,12 +31,6 @@
         </mc-calendar>
     </div>
 </template>
-
-<script lang="ts" setup>
-import { ref } from 'vue';
-
-const value = ref(new Date());
-</script>
 
 <style scoped>
 .is-selected {
