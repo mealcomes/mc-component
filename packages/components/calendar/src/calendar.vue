@@ -58,9 +58,9 @@ const emits = defineEmits(calendarEmits);
 
 const now = dayjs();
 const selectedDay = ref<Dayjs>();
-const date = computed(() => {
+const date = computed((): Dayjs => {
     if (!props.modelValue) {
-        return now;
+        return realSelectedDay.value || now;
     } else {
         return dayjs(props.modelValue);
     }
