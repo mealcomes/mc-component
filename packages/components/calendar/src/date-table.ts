@@ -47,23 +47,11 @@ export const dateTableProps = {
         type: Object as PropType<Dayjs>
     },
     /**
-     * 日期范围
-     */
-    range: {
-        type: Array as unknown as PropType<[Dayjs, Dayjs]>
-    },
-    /**
      * 当前的日期
      */
     date: {
         type: Object as PropType<Dayjs>,
         required: true
-    },
-    /**
-     * 隐藏头部
-     */
-    hideHeader: {
-        type: Boolean
     }
 } as const;
 

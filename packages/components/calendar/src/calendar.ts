@@ -1,4 +1,4 @@
-import type { ExtractPropTypes, PropType } from 'vue';
+import type { ExtractPropTypes } from 'vue';
 
 /**
  * calendar 组件日期类型
@@ -16,12 +16,6 @@ export type CalendarDateType =
 export const calendarProps = {
     modelValue: {
         type: Date
-    },
-    /**
-     * 时间范围
-     */
-    range: {
-        type: Array as unknown as PropType<[Date, Date]>
     },
     /**
      * 是否为缩小版

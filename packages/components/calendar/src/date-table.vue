@@ -1,10 +1,6 @@
 <template>
-    <table
-        :class="[bemTable.b(), bemTable.is('range', isInRange)]"
-        cellspacing="0"
-        cellpadding="0"
-    >
-        <thead v-if="!hideHeader">
+    <table :class="[bemTable.b()]" cellspacing="0" cellpadding="0">
+        <thead>
             <tr>
                 <th v-for="day in weekDays" :key="day" scope="col">
                     {{ day }}
@@ -17,9 +13,7 @@
                 v-for="(row, index) in rows"
                 :key="index"
                 :class="{
-                    [bemTable.e('row')]: true,
-                    [bemTable.em('row', 'hide-border')]:
-                        index === 0 && hideHeader
+                    [bemTable.e('row')]: true
                 }"
             >
                 <td
@@ -86,58 +80,38 @@ const weekDays = computed(() => {
  */
 const rows = computed(() => {
     let days: CalendarDateCell[] = [];
-    if (isInRange.value) {
-        const [start, end] = props.range!;
-        const currentMonthRange: CalendarDateCell[] = Array.from({
-            length: end.date() - start.date() + 1
-        }).map((_, index) => ({
-            text: start.date() + index,
-            type: 'current'
-        }));
 
-        let remaining = currentMonthRange.length % 7;
-        remaining = remaining === 0 ? 0 : 7 - remaining;
-        const nextMonthRange: CalendarDateCell[] = Array.from({
-            length: remaining
-        }).map((_, index) => ({
-            text: index + 1,
-            type: 'next'
-        }));
-        days = currentMonthRange.concat(nextMonthRange);
-    } else {
-        const firstDay = props.date.startOf('month').day();
-        // 前一月的天数
-        const prevMonthDays: CalendarDateCell[] = getPrevMonthLastDays(
-            props.date,
-            (firstDay - firstDayOfWeek + 7) % 7
-        ).map(day => ({
-            text: day,
-            type: 'prev'
-        }));
-        // 当前月的天数
-        const currentMonthDays: CalendarDateCell[] = getMonthDays(
-            props.date
-        ).map(day => ({
+    const firstDay = props.date.startOf('month').day();
+    // 前一月的天数
+    const prevMonthDays: CalendarDateCell[] = getPrevMonthLastDays(
+        props.date,
+        (firstDay - firstDayOfWeek + 7) % 7
+    ).map(day => ({
+        text: day,
+        type: 'prev'
+    }));
+    // 当前月的天数
+    const currentMonthDays: CalendarDateCell[] = getMonthDays(props.date).map(
+        day => ({
             text: day,
             type: 'current'
-        }));
-        days = [...prevMonthDays, ...currentMonthDays];
+        })
+    );
+    days = [...prevMonthDays, ...currentMonthDays];
 
-        // 7 * 6
-        const remaining = 42 - days.length;
-        // 下一个月的天数
-        const nextMonthDays: CalendarDateCell[] = Array.from({
-            length: remaining
-        }).map((_, index) => ({
-            text: index + 1,
-            type: 'next'
-        }));
-        days = days.concat(nextMonthDays);
-    }
+    // 7 * 6
+    const remaining = 42 - days.length;
+    // 下一个月的天数
+    const nextMonthDays: CalendarDateCell[] = Array.from({
+        length: remaining
+    }).map((_, index) => ({
+        text: index + 1,
+        type: 'next'
+    }));
+    days = days.concat(nextMonthDays);
+
     return toNestedArr(days);
 });
-
-const isInRange = computed(() => !!props.range && !!props.range.length);
 
 const getFormattedDate = (day: number, type: CalendarDateCellType): Dayjs => {
     switch (type) {

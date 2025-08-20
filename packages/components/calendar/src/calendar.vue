@@ -24,7 +24,7 @@
                 </div>
             </slot>
         </div>
-        <div v-if="!range" :class="bem.e('body')">
+        <div :class="bem.e('body')">
             <date-table
                 :class="[bem.is('mini', mini)]"
                 :date="date"
