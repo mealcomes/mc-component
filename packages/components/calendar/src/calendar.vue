@@ -1,7 +1,7 @@
 <template>
     <div :class="[bem.b(), bem.is('mini', mini)]">
         <div :class="bem.e('header')">
-            <slot name="header" :data="selectedMonth">
+            <slot name="header" :date="selectedMonth">
                 <div :class="bem.e('title')">
                     {{ selectedMonth }}
                 </div>
