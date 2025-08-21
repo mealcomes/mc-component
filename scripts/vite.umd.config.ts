@@ -22,12 +22,7 @@ export default defineConfig({
                 globals: {
                     vue: 'Vue'
                 },
-                exports: 'named',
-                assetFileNames(chunkInfo) {
-                    if (chunkInfo.names[0] === 'mealcomes.css')
-                        return 'index.css';
-                    return chunkInfo.names[0];
-                }
+                exports: 'named'
             }
         }
     }

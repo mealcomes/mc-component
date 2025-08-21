@@ -3,8 +3,18 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import path from 'path';
+import { readdirSync } from 'fs';
+import { map, filter } from 'lodash';
 
 const pathPrefix = '../dist/mealcomes';
+
+function getDirectoriesSync(basePath: string) {
+    const entries = readdirSync(basePath, { withFileTypes: true });
+    return map(
+        filter(entries, entry => entry.isDirectory()),
+        entry => entry.name
+    );
+}
 
 export default defineConfig({
     plugins: [
@@ -31,6 +41,21 @@ export default defineConfig({
                     if (chunkInfo.names[0] === 'mealcomes.css')
                         return 'index.css';
                     return chunkInfo.names[0];
+                },
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        return 'vendor';
+                    }
+                    if (id.includes('/packages/utils')) {
+                        return 'utils';
+                    }
+                    for (const dirName of getDirectoriesSync(
+                        './packages/components'
+                    )) {
+                        if (id.includes(`/packages/components/${dirName}`)) {
+                            return dirName;
+                        }
+                    }
                 }
             }
         }
