@@ -1,15 +1,50 @@
 <template>
     <div :class="bem.b()">
-        <!-- 展示8条, 每一条高度为35px -->
-        <MCVirtualList :items="flattenTree" :remain="8" :size="27">
+        <MCVirtualList
+            v-if="!!height"
+            :items="flattenTree"
+            :size="itemSize"
+            :height="height"
+        >
             <template #default="{ node }">
-                <MCTreeNode :key="node.key" :node="node" :expanded="isExpanded(node)" @toggle="toggleExpand"
-                    :loadingKeys="loadingKeysRef" :selectedKeys="selectKeysRef" @select="handleSelect"
-                    :show-checkbox="showCheckbox" :checked="isChecked(node)" :disabled="isDisabled(node)"
-                    :indeterminate="isIndeterminate(node)" @check="toggleCheck">
+                <MCTreeNode
+                    :class="bem.is('multiple', multiple)"
+                    :key="node.key"
+                    :node="node"
+                    :expanded="isExpanded(node)"
+                    :loadingKeys="loadingKeysRef"
+                    :selectedKeys="selectKeysRef"
+                    :show-checkbox="showCheckbox"
+                    :checked="isChecked(node)"
+                    :disabled="isDisabled(node)"
+                    :indeterminate="isIndeterminate(node)"
+                    :size="itemSize"
+                    @toggle="toggleExpand"
+                    @check="toggleCheck"
+                    @select="handleSelect"
+                >
                 </MCTreeNode>
             </template>
         </MCVirtualList>
+        <MCTreeNode
+            v-else
+            v-for="node in flattenTree"
+            :class="bem.is('multiple', multiple)"
+            :key="treeOptions.getKey(node)"
+            :node="node"
+            :expanded="isExpanded(node)"
+            :loadingKeys="loadingKeysRef"
+            :selectedKeys="selectKeysRef"
+            :show-checkbox="showCheckbox"
+            :checked="isChecked(node)"
+            :disabled="isDisabled(node)"
+            :indeterminate="isIndeterminate(node)"
+            :size="itemSize"
+            @toggle="toggleExpand"
+            @check="toggleCheck"
+            @select="handleSelect"
+        >
+        </MCTreeNode>
     </div>
 </template>
 
@@ -18,34 +53,34 @@ import { computed, onMounted, provide, ref, useSlots, watch } from 'vue';
 import { treeEmits, treeInjectKey, treeProps } from './tree';
 import type { Key, TreeNode, TreeOption } from './tree';
 import { createNamespace } from '@mealcomes/utils';
-import MCTreeNode from './treeNode.vue'
-import MCVirtualList from '@mealcomes/components/virtual-list'
+import MCTreeNode from './treeNode.vue';
+import MCVirtualList from '@mealcomes/components/virtual-list';
 
 const bem = createNamespace('tree');
 
 defineOptions({
     name: 'mc-tree'
-})
+});
 const props = defineProps(treeProps);
 const emit = defineEmits(treeEmits);
 
 // 需要对用户传入的 props 进行格式化
 
 // 将 props.data 格式化后放到 tree 中
-const tree = ref<TreeNode[]>([])
+const tree = ref<TreeNode[]>([]);
 
 function createOptions(key: string, label: string, children: string) {
     return {
         getKey(node: TreeOption) {
-            return node[key] as string;   // 用户传递的 key
+            return node[key] as string; // 用户传递的 key
         },
         getLabel(node: TreeOption) {
             return node[label] as string; // 用户传递的 label
         },
         getChildren(node: TreeOption) {
-            return node[children] as TreeOption[];  // 用户传递的 children 获取孩子
+            return node[children] as TreeOption[]; // 用户传递的 children 获取孩子
         }
-    }
+    };
 }
 
 const treeOptions = createOptions(
@@ -54,14 +89,20 @@ const treeOptions = createOptions(
     props.childrenField
 );
 
-function createTree(data: TreeOption[], parent: TreeNode | null = null): TreeNode[] {
-    function traversal(data: TreeOption[], parent: TreeNode | null = null): TreeNode[] {
+function createTree(
+    data: TreeOption[],
+    parent: TreeNode | null = null
+): TreeNode[] {
+    function traversal(
+        data: TreeOption[],
+        parent: TreeNode | null = null
+    ): TreeNode[] {
         return data.map((node: TreeOption) => {
             const children = treeOptions.getChildren(node) || [];
             const treeNode: TreeNode = {
                 key: treeOptions.getKey(node),
                 label: treeOptions.getLabel(node),
-                children: [],   // 默认为空
+                children: [], // 默认为空
                 rawNode: node,
                 level: parent ? parent.level + 1 : 0,
                 disabled: !!node.disabled,
@@ -69,13 +110,13 @@ function createTree(data: TreeOption[], parent: TreeNode | null = null): TreeNod
                 // ?? 是对 || 的增强, 即只有 node.isLeaf 不存在的时候, 才会走到后面, 而不是为 false 时
                 isLeaf: node.isLeaf ?? children.length == 0,
                 parentKey: parent?.key
-            }
+            };
             if (children.length > 0) {
                 // 有孩子则递归孩子，将孩子也格式化成 treeNode 类型
                 treeNode.children = traversal(children, treeNode);
             }
             return treeNode;
-        })
+        });
     }
 
     const result: TreeNode[] = traversal(data, parent);
@@ -91,7 +132,8 @@ watch(
     },
     {
         immediate: true
-    });
+    }
+);
 
 // 需要将树展开，点击实现展开操作
 // 会有默认展开项
@@ -101,7 +143,7 @@ const expandedKeysSet = ref(new Set(props.defaultExpandedKeys));
 
 /**
  *  根据 expandedKeySet 对树进行展开
- *  例如: expandedKeySet 是 40(代表需要将 key 为 40 的子树展开), 
+ *  例如: expandedKeySet 是 40(代表需要将 key 为 40 的子树展开),
  *  - 40
  *      - 4010
  *      - 4020
@@ -114,10 +156,10 @@ const expandedKeysSet = ref(new Set(props.defaultExpandedKeys));
  */
 const flattenTree = computed(() => {
     let expandedKeys = expandedKeysSet.value; // 所有要展开的 key
-    let flattenNodes: TreeNode[] = [];  // 拍平后的结果
-    const nodes = tree.value || [];  // 被格式化后的节点
+    let flattenNodes: TreeNode[] = []; // 拍平后的结果
+    const nodes = tree.value || []; // 被格式化后的节点
 
-    const stack: TreeNode[] = [];  // 用于遍历树的栈
+    const stack: TreeNode[] = []; // 用于遍历树的栈
     // 将 nodes 倒序插入到栈中(因为最外层的节点肯定是拍平的)
     for (let i = nodes.length - 1; i >= 0; i--) {
         stack.push(nodes[i]);
@@ -146,14 +188,14 @@ const flattenTree = computed(() => {
  * 从 flattenTree 中找到指定 key 的 node
  */
 function findNode(key: Key) {
-    return flattenTree.value.find(node => node.key === key)
+    return flattenTree.value.find(node => node.key === key);
 }
 
 function isExpanded(node: TreeNode): boolean {
     return expandedKeysSet.value.has(node.key);
 }
 
-/** 
+/**
  * 折叠子树
  */
 function collapse(node: TreeNode) {
@@ -185,7 +227,7 @@ function triggerLoading(node: TreeNode) {
                     })
                     .catch(() => {
                         node.isLeaf = true;
-                    })
+                    });
             }
         }
     }
@@ -195,7 +237,6 @@ function triggerLoading(node: TreeNode) {
  * 展开子树
  */
 function expand(node: TreeNode) {
-
     // 触发懒加载
     triggerLoading(node);
     expandedKeysSet.value.add(node.key);
@@ -206,8 +247,9 @@ function expand(node: TreeNode) {
  */
 function toggleExpand(node: TreeNode) {
     const expandKeys = expandedKeysSet.value;
-    if (expandKeys.has(node.key)
-        && !loadingKeysRef.value.has(node.key)  // 如果当前节点正处于加载中, 则不能收起
+    if (
+        expandKeys.has(node.key) &&
+        !loadingKeysRef.value.has(node.key) // 如果当前节点正处于加载中, 则不能收起
     ) {
         collapse(node);
     } else {
@@ -226,7 +268,7 @@ watch(
     {
         immediate: true
     }
-)
+);
 
 /**
  * 处理选中的节点
@@ -258,7 +300,7 @@ function handleSelect(node: TreeNode, canMulti: boolean | undefined) {
 
 provide(treeInjectKey, {
     slots: useSlots()
-})
+});
 
 const checkedKeysRef = ref(new Set(props.defaultCheckedKeys));
 
@@ -283,7 +325,8 @@ function updateCheckToBottom(node: TreeNode, checked: boolean) {
     if (!node) return;
     const checkedKeys = checkedKeysRef.value;
 
-    if (checked) { // 选中的时候去掉半选状态
+    if (checked) {
+        // 选中的时候去掉半选状态
         indeterminateRefs.value.delete(node.key);
     }
 
@@ -293,21 +336,22 @@ function updateCheckToBottom(node: TreeNode, checked: boolean) {
     if (children) {
         children.forEach(child => {
             if (!child.disabled) {
-                updateCheckToBottom(child, checked)
+                updateCheckToBottom(child, checked);
             }
-        })
+        });
     }
 }
 
 /**
- * 自下而上的更新选中 
+ * 自下而上的更新选中
  */
 function updateCheckToTop(node: TreeNode) {
     const parent = node.parentKey;
     if (parent) {
         const parenNode = findNode(node.parentKey!);
         if (parenNode) {
-            let allChecked = true, hasChecked = false;
+            let allChecked = true,
+                hasChecked = false;
             const children = parenNode.children;
             for (let child of children) {
                 if (checkedKeysRef.value.has(child.key)) {
@@ -348,6 +392,6 @@ onMounted(() => {
         if (node) {
             toggleCheck(node, true);
         }
-    })
-})
+    });
+});
 </script>

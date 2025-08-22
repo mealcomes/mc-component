@@ -20,14 +20,7 @@ export const virtualProps = {
      */
     size: {
         type: Number,
-        default: 27
-    },
-    /**
-     * 可视窗口展示的数据条数
-     */
-    remain: {
-        type: Number,
-        default: 8
+        required: true
     },
     /**
      * 数据
@@ -35,6 +28,13 @@ export const virtualProps = {
     items: {
         type: Array as PropType<TreeNode[]>,
         default: () => []
+    },
+    /**
+     * 高度
+     */
+    height: {
+        type: Number,
+        required: true
     }
 } as const;
 
@@ -50,15 +50,18 @@ export default defineComponent({
         const bem = createNamespace('virtual-list');
         const wrapperRef = ref<HTMLElement>();
         const barRef = ref<HTMLElement>();
+        const remain = computed(() => {
+            return Math.ceil(props.height / props.size);
+        });
         const state = reactive({
             start: 0,
-            end: props.remain
+            end: remain.value
         });
         const prev = computed(() => {
-            return Math.min(state.start, props.remain);
+            return Math.min(state.start, remain.value, 4);
         });
         const next = computed(() => {
-            return Math.min(props.items.length - state.end, props.remain);
+            return Math.min(props.items.length - state.end, remain.value, 4);
         });
         const visibleData = computed(() =>
             props.items.slice(state.start - prev.value, state.end! + next.value)
@@ -72,7 +75,7 @@ export default defineComponent({
                 requestAnimationFrame(() => {
                     const scrollTop = wrapperRef.value!.scrollTop;
                     state.start = Math.floor(scrollTop / props.size);
-                    state.end = state.start + props.remain;
+                    state.end = state.start + remain.value;
                     offset.value =
                         state.start * props.size - props.size * prev.value;
                     ticking = false;
@@ -82,7 +85,7 @@ export default defineComponent({
         };
 
         const setHeight = () => {
-            wrapperRef.value!.style.height = props.remain * props.size + 'px';
+            wrapperRef.value!.style.height = remain.value * props.size + 'px';
             barRef.value!.style.height = props.items.length * props.size + 'px';
         };
 

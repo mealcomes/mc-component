@@ -1,4 +1,9 @@
-import type { ExtractPropTypes, InjectionKey, PropType, SetupContext } from 'vue';
+import type {
+    ExtractPropTypes,
+    InjectionKey,
+    PropType,
+    SetupContext
+} from 'vue';
 
 export type Key = string | number;
 
@@ -27,14 +32,14 @@ export interface TreeOption {
  */
 export const treeProps = {
     /**
-     * 传入的数据
+     * @description 传入的数据
      */
     data: {
         type: Array as PropType<TreeOption[]>,
         default: () => []
     },
     /**
-     * 默认展开的 keys
+     * @description 默认展开的 keys
      */
     defaultExpandedKeys: {
         // 默认展开的 key
@@ -42,7 +47,7 @@ export const treeProps = {
         default: () => []
     },
     /**
-     * label 字段名
+     * @description label 字段名
      */
     labelField: {
         // data 属性中 label 字段名
@@ -50,7 +55,7 @@ export const treeProps = {
         default: 'label'
     },
     /**
-     * key 字段名
+     * @description key 字段名
      */
     keyField: {
         // data 属性中 key 字段名
@@ -58,7 +63,7 @@ export const treeProps = {
         default: 'key'
     },
     /**
-     * 子树
+     * @description 子树
      */
     childrenField: {
         // // data 属性中 children 字段名
@@ -66,42 +71,55 @@ export const treeProps = {
         default: 'children'
     },
     /**
-     * 懒加载处理函数
+     * @description 懒加载处理函数
      */
     onLoad: Function as PropType<(node: TreeOption) => Promise<TreeOption[]>>,
     /**
-     * 被选中的 key
+     * @description 被选中的 key
      */
     selectedKeys: {
         type: Array as PropType<Key[]>
     },
     /**
-     * 是否可选
+     * @description 是否可选
      */
     selectable: {
         type: Boolean,
         default: false
     },
     /**
-     * 是否可多选
+     * @description 是否可多选
      */
     multiple: {
         type: Boolean,
         default: false
     },
     /**
-     * 默认选中的选项
+     * @description 默认选中的选项
      */
     defaultCheckedKeys: {
         type: Array as PropType<Key[]>,
         default: () => []
     },
     /**
-     * 是否展示 checkbox
+     * @description 是否展示 checkbox
      */
     showCheckbox: {
         type: Boolean,
         default: false
+    },
+    /**
+     * @description 虚拟滚动容器高度
+     */
+    height: {
+        type: Number
+    },
+    /**
+     * @description 树节点高度
+     */
+    itemSize: {
+        type: Number,
+        default: 27
     }
 } as const;
 
@@ -125,52 +143,58 @@ export type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>;
  */
 export const treeNodeProps = {
     /**
-     * 节点
+     * @description 节点
      */
     node: {
         type: Object as PropType<TreeNode>,
         required: true
     },
     /**
-     * 是否展开
+     * @description 是否展开
      */
     expanded: {
         type: Boolean,
         required: true
     },
     /**
-     * 处于加载中的 keys
+     * @description 处于加载中的 keys
      */
     loadingKeys: {
         type: Object as PropType<Set<Key>>,
         required: true
     },
     /**
-     * 被选中的 keys
+     * @description 被选中的 keys
      */
     selectedKeys: {
         type: Array as PropType<Key[]>,
         default: () => []
     },
     /**
-     * 是否展示 checkbox
+     * @description 是否展示 checkbox
      */
     showCheckbox: {
         type: Boolean,
         default: false
     },
     /**
-     * 是否选中
+     * @description 是否选中
      */
     checked: Boolean,
     /**
-     * 是否禁用
+     * @description 是否禁用
      */
     disabled: Boolean,
     /**
-     * 是否半选
+     * @description 是否半选
      */
-    indeterminate: Boolean
+    indeterminate: Boolean,
+    /**
+     * @description 树节点高度
+     */
+    size: {
+        type: Number
+    }
 } as const;
 
 /**
@@ -185,7 +209,7 @@ export const treeNodeEmits = {
      * 节点选择
      */
     select: (node: TreeNode, canMulti: boolean = false) => node || canMulti,
-    check: (node: TreeNode, val: boolean) => typeof val === 'boolean' && node 
+    check: (node: TreeNode, val: boolean) => typeof val === 'boolean' && node
 };
 
 /**

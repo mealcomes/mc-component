@@ -1,10 +1,19 @@
 @use 'mixins/mixins.scss' as *;
+@use 'common/var.scss' as *;
+@use 'mixins/function.scss' as *;
+@use 'mixins/_var' as *;
+
+@include b(tree) {
+    @include set-component-css-var('tree', $tree);
+}
 
 @include b(tree) {
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    background: getCssVar('fill-color', 'blank');
+    color: getCssVar('tree-text-color');
+    font-size: getCssVar('font-size', 'base');
     cursor: default;
 }
 
@@ -12,7 +21,7 @@
     display: flex;
     padding-bottom: 4px;
     background-clip: content-box;
-    transition: background-color 0.1s ease-in;
+    transition: background-color getCssVar('transition-duration-fast') ease-in;
 
     @include e('expand-icon') {
         display: inline-block;
@@ -20,6 +29,7 @@
         text-align: center;
         position: relative;
         cursor: pointer;
+        color: getCssVar('tree-expand-icon-color');
 
         &.expanded {
             .#{$namespace}-tree-node__switcher {
@@ -31,7 +41,7 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transition: transform 0.3s ease-in-out;
+            transition: transform getCssVar('transition-duration') ease-in-out;
             transform: translate(-50%, -50%);
         }
 
@@ -47,25 +57,40 @@
         border-radius: 5px;
         width: 100%;
         cursor: not-allowed;
+        transition: background-color getCssVar('transition-duration-fast')
+            ease-in;
 
         .#{$namespace}-tree-node:not(.is-disabled) & {
             cursor: pointer;
         }
 
-        .#{$namespace}-tree-node:not(.is-selected) & {
+        .#{$namespace}-tree-node:not(.is-selected, .is-multiple) & {
             &:hover {
-                background-color: #f5f5f5;
+                background-color: getCssVar('tree-node-hover-bg-color');
             }
         }
     }
 
     @include when(selected) {
-        background-color: #1677ff;
+        &:not(.is-multiple) {
+            .#{$namespace}-tree-node__content {
+                background-color: getCssVar('tree-selected-bg-color');
+            }
+        }
+    }
+
+    @include when(multiple) {
+        &:hover {
+            background-color: getCssVar('tree-node-hover-bg-color');
+        }
+        @include when(selected) {
+            background-color: getCssVar('tree-multiple-selected-bg-color');
+        }
     }
 
     @include when(disabled) {
         .#{$namespace}-tree-node__content {
-            color: gray;
+            color: getCssVar('tree-node-disabled-text-color');
             &:hover {
                 background: none;
             }

@@ -17,7 +17,8 @@ function createData(level = 4, parentKey = ''): TreeOption[] {
         return {
             label: createLabel(level), // 显示的内容
             key, // 为了唯一性
-            children: createData(level - 1, key) // 孩子
+            children: createData(level - 1, key), // 孩子
+            disabled: false
         } as unknown as TreeOption;
     });
 }
@@ -225,8 +226,9 @@ while (index++ !== totalCount) {
         v-model:selected-keys="value"
         :selectable="true"
         :multiple="true"
-        :show-checkbox="true"
         :default-checked-keys="['40']"
+        :height="200"
+        :show-checkbox="false"
     >
         <!-- 
             selectable - 可选节点

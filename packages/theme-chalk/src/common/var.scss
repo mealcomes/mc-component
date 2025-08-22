@@ -259,6 +259,21 @@ $checkbox: map.merge(
     $checkbox
 );
 
+// Tree
+$tree: () !default;
+$tree: map.merge(
+    (
+        'node-content-height': 26px,
+        'node-hover-bg-color': getCssVar('fill-color', 'light'),
+        'text-color': getCssVar('text-color-regular'),
+        'disabled-text-color': getCssVar('text-color-disabled'),
+        'expand-icon-color': getCssVar('text-color-placeholder'),
+        'selected-bg-color': getCssVar('color-primary-light-9'),
+        'multiple-selected-bg-color': getCssVar('color-primary')
+    ),
+    $tree
+);
+
 // button 默认样式(区别于 button.css 内部定义的样式)
 $button: () !default;
 $button: map.merge(
