@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import type { Key, TreeOption } from '@mealcomes/components/tree';
+import type {
+    ExpandInfo,
+    TreeKey,
+    TreeOption
+} from '@mealcomes/components/tree';
 import { Random } from 'mockjs';
 import { ref, type DefineComponent } from 'vue';
 import VirtualListItem from './component/VirtualListItem.vue';
@@ -9,52 +13,52 @@ import VirtualListItem from './component/VirtualListItem.vue';
 /**
  * 同步创建数据
  */
-function createData(level = 4, parentKey = ''): TreeOption[] {
-    if (!level) return [];
-    const arr = new Array(6 - level).fill(0);
-    return arr.map((_, idx: number) => {
-        const key = parentKey + level + idx;
-        return {
-            label: createLabel(level), // 显示的内容
-            key, // 为了唯一性
-            children: createData(level - 1, key), // 孩子
-            disabled: false
-        } as unknown as TreeOption;
-    });
-}
+// function createData(level = 4, parentKey = ''): TreeOption[] {
+//     if (!level) return [];
+//     const arr = new Array(6 - level).fill(0);
+//     return arr.map((_, idx: number) => {
+//         const key = parentKey + level + idx;
+//         return {
+//             label: createLabel(level), // 显示的内容
+//             key, // 为了唯一性
+//             children: createData(level - 1, key), // 孩子
+//             disabled: false
+//         } as unknown as TreeOption;
+//     });
+// }
 
-function createLabel(level: number): string {
-    switch (level) {
-        case 4:
-            return '道生一';
-        case 3:
-            return '一生二';
-        case 2:
-            return '二生三';
-        case 1:
-            return '三生万物';
-        default:
-            return '';
-    }
-}
+// function createLabel(level: number): string {
+//     switch (level) {
+//         case 4:
+//             return '道生一';
+//         case 3:
+//             return '一生二';
+//         case 2:
+//             return '二生三';
+//         case 1:
+//             return '三生万物';
+//         default:
+//             return '';
+//     }
+// }
 
 /**
  * 异步创建数据
  */
-// function createDataAsync(): TreeOption[] {
-//     return [
-//         {
-//             label: nextLabel(),
-//             key: 1,
-//             isLeaf: false,  // isLeaf 为 false, 但没有 children, 表示是动态加载节点
-//         },
-//         {
-//             label: nextLabel(),
-//             key: 2,
-//             isLeaf: false,
-//         }
-//     ]
-// }
+function createDataAsync(): TreeOption[] {
+    return [
+        {
+            label: nextLabel(),
+            key: 1,
+            isLeaf: false // isLeaf 为 false, 但没有 children, 表示是动态加载节点
+        },
+        {
+            label: nextLabel(),
+            key: 2,
+            isLeaf: false
+        }
+    ];
+}
 
 function nextLabel(currentLabel?: string | number | undefined): string {
     if (!currentLabel) return 'Out of Tao, One is bore';
@@ -68,7 +72,7 @@ function nextLabel(currentLabel?: string | number | undefined): string {
     return '';
 }
 
-const data = ref<TreeOption[]>(createData());
+const data = ref<TreeOption[]>(createDataAsync());
 // const data = ref<TreeOption[]>([
 //     {
 //         key: '0',
@@ -117,7 +121,7 @@ const handleLoad = (node: TreeOption) => {
     });
 };
 
-const value = ref<Key[]>([]);
+const value = ref<TreeKey[]>([]);
 
 /* checkbox 组件 */
 
@@ -221,14 +225,21 @@ while (index++ !== totalCount) {
     <mc-tree
         :data="data"
         label-field="label"
-        :on-load="handleLoad"
+        :load="handleLoad"
         :default-expanded-keys="new Array(30).fill('4').map((v, k) => v + k)"
         v-model:selected-keys="value"
         :selectable="true"
         :multiple="true"
         :default-checked-keys="['40']"
         :height="200"
-        :show-checkbox="false"
+        :show-checkbox="true"
+        @check="
+            (...args) => {
+                console.log(...args);
+            }
+        "
+        @expand="(data: TreeOption, expandInfo: ExpandInfo) => console.log(data, expandInfo)"
+        @loaded="(loadedData, node) => console.log(loadedData, node)"
     >
         <!-- 
             selectable - 可选节点

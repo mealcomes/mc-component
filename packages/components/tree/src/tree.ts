@@ -5,26 +5,52 @@ import type {
     SetupContext
 } from 'vue';
 
-export type Key = string | number;
+export type TreeKey = string | number;
 
 export interface TreeNode extends Required<TreeOption> {
     level: number;
     rawNode: TreeOption;
     children: TreeNode[];
     isLeaf: boolean; // 是否为叶子节点
-    parentKey: Key | undefined;
+    parentKey: TreeKey | undefined;
 }
 
 /**
  * 用户传入的 data 类型
  */
 export interface TreeOption {
-    label?: Key;
-    key?: Key;
+    label?: TreeKey;
+    key?: TreeKey;
     children?: TreeOption[];
     isLeaf?: boolean;
     disabled?: boolean;
     [key: string]: unknown; // 除了上面的属性，也可以传其他的
+}
+
+/**
+ * 复选框按钮点击事件参数
+ */
+export interface CheckedInfo {
+    checkedKeys: TreeKey[];
+    checkedNodes: TreeOption[];
+    halfCheckedKeys: TreeKey[];
+    halfCheckedNodes: TreeOption[];
+    checked: boolean;
+}
+
+export interface ExpandInfo {
+    expanded: boolean;
+    node: TreeNode;
+}
+
+/**
+ * 树结构
+ */
+export interface Tree {
+    /** key 到 node 的映射 */
+    treeNodeMap: Map<TreeKey, TreeNode>;
+    /** 树节点 */
+    treeNodes: TreeNode[];
 }
 
 /**
@@ -43,7 +69,7 @@ export const treeProps = {
      */
     defaultExpandedKeys: {
         // 默认展开的 key
-        type: Array as PropType<Key[]>,
+        type: Array as PropType<TreeKey[]>,
         default: () => []
     },
     /**
@@ -73,12 +99,12 @@ export const treeProps = {
     /**
      * @description 懒加载处理函数
      */
-    onLoad: Function as PropType<(node: TreeOption) => Promise<TreeOption[]>>,
+    load: Function as PropType<(node: TreeOption) => Promise<TreeOption[]>>,
     /**
      * @description 被选中的 key
      */
     selectedKeys: {
-        type: Array as PropType<Key[]>
+        type: Array as PropType<TreeKey[]>
     },
     /**
      * @description 是否可选
@@ -98,7 +124,7 @@ export const treeProps = {
      * @description 默认选中的选项
      */
     defaultCheckedKeys: {
-        type: Array as PropType<Key[]>,
+        type: Array as PropType<TreeKey[]>,
         default: () => []
     },
     /**
@@ -128,9 +154,21 @@ export const treeProps = {
  */
 export const treeEmits = {
     /**
-     * 选择了的 key 更新
+     * @description 选择了的 `key` 更新
      */
-    'update:selectedKeys': (keys: Key[]) => keys
+    'update:selectedKeys': (keys: TreeKey[]) => keys,
+    /**
+     * @description 点击节点复选框之后触发
+     */
+    check: (data: TreeOption, checkInfo: CheckedInfo) => data && checkInfo,
+    /**
+     * @description 节点被展开或关闭时触发
+     */
+    expand: (data: TreeOption, expandInfo: ExpandInfo) => data && expandInfo,
+    /**
+     * @description 异步加载成功时触发
+     */
+    loaded: (loadedData: TreeOption[], node: TreeNode) => loadedData && node
 };
 
 /**
@@ -160,14 +198,14 @@ export const treeNodeProps = {
      * @description 处于加载中的 keys
      */
     loadingKeys: {
-        type: Object as PropType<Set<Key>>,
+        type: Object as PropType<Set<TreeKey>>,
         required: true
     },
     /**
      * @description 被选中的 keys
      */
     selectedKeys: {
-        type: Array as PropType<Key[]>,
+        type: Array as PropType<TreeKey[]>,
         default: () => []
     },
     /**
@@ -178,7 +216,7 @@ export const treeNodeProps = {
         default: false
     },
     /**
-     * @description 是否选中
+     * @description 是否选中复选框
      */
     checked: Boolean,
     /**
@@ -202,13 +240,16 @@ export const treeNodeProps = {
  */
 export const treeNodeEmits = {
     /**
-     * 展开/折叠
+     * @description 展开/折叠
      */
     toggle: (node: TreeNode) => node,
     /**
-     * 节点选择
+     * @description 节点选择
      */
     select: (node: TreeNode, canMulti: boolean = false) => node || canMulti,
+    /**
+     * @description 复选框状态改变
+     */
     check: (node: TreeNode, val: boolean) => typeof val === 'boolean' && node
 };
 

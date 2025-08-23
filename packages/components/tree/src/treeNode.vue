@@ -25,8 +25,8 @@
             </MCIcon>
         </span>
         <mc-checkbox
-            style="margin: 0 3px"
             v-if="showCheckbox"
+            style="margin: 0 3px"
             :model-value="checked"
             :disabled="disabled"
             :indeterminate="indeterminate"
