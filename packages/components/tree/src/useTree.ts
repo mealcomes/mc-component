@@ -59,7 +59,7 @@ export function useTree(
             if (!node) continue;
             flattenNodes.push(node);
 
-            if (expandedKeys?.has(node.key)) {
+            if (expandedKeys?.has(treeOptions.getKey(node))) {
                 const children = node.children;
                 if (children) {
                     for (let i = children.length - 1; i >= 0; i--) {
@@ -134,18 +134,18 @@ export function useTree(
      * 从 flattenTree 中找到指定 key 的 node
      */
     function findNode(key: TreeKey) {
-        return flattenTree.value.find(node => node.key === key);
+        return flattenTree.value.find(node => treeOptions.getKey(node) === key);
     }
 
     function isExpanded(node: TreeNode): boolean {
-        return expandedKeysSet.value!.has(node.key);
+        return expandedKeysSet.value!.has(treeOptions.getKey(node));
     }
 
     /**
      * 折叠子树
      */
     function collapse(node: TreeNode) {
-        expandedKeysSet.value!.delete(node.key);
+        expandedKeysSet.value!.delete(treeOptions.getKey(node));
     }
 
     /**
@@ -156,8 +156,8 @@ export function useTree(
             // 不是叶子节点但孩子长度为 0, 则说明需要异步加载
             if (!node.children.length && !node.isLeaf) {
                 const loadingKeys = loadingKeysRef.value;
-                if (!loadingKeys.has(node.key)) {
-                    loadingKeys.add(node.key);
+                if (!loadingKeys.has(treeOptions.getKey(node))) {
+                    loadingKeys.add(treeOptions.getKey(node));
                     const onLoad = props.load!;
                     onLoad(node.rawNode)
                         .then(childNode => {
@@ -172,6 +172,7 @@ export function useTree(
                                 children.treeNodeMap.forEach((val, key) => {
                                     tree.value?.treeNodeMap.set(key, val);
                                 });
+                                updateCheckToBottom(node, isChecked(node));
                                 emit('loaded', childNode);
                                 res();
                             }
@@ -181,7 +182,7 @@ export function useTree(
                             rej();
                         })
                         .finally(() => {
-                            loadingKeys.delete(node.key);
+                            loadingKeys.delete(treeOptions.getKey(node));
                         });
                 }
             }
@@ -196,7 +197,7 @@ export function useTree(
         if (props.load) {
             await triggerLoading(node); // 若状态为 reject，则后续不会操作 expandedKeySet
         }
-        expandedKeysSet.value!.add(node.key);
+        expandedKeysSet.value!.add(treeOptions.getKey(node));
     }
 
     /**
@@ -205,8 +206,8 @@ export function useTree(
     function toggleExpand(node: TreeNode) {
         const expandKeys = expandedKeysSet.value!;
         if (
-            expandKeys.has(node.key) &&
-            !loadingKeysRef.value.has(node.key) // 如果当前节点正处于加载中, 则不能收起
+            expandKeys.has(treeOptions.getKey(node)) &&
+            !loadingKeysRef.value.has(treeOptions.getKey(node)) // 如果当前节点正处于加载中, 则不能收起
         ) {
             collapse(node);
             afterNodeExpand(node, false);
@@ -245,20 +246,22 @@ export function useTree(
         let selected = false;
 
         if (props.multiple && canMulti) {
-            const index = keys.findIndex(key => key === node.key);
+            const index = keys.findIndex(
+                key => key === treeOptions.getKey(node)
+            );
             if (index > -1) {
                 // 已选中则删除
                 keys.splice(index, 1);
             } else {
                 // 未选中则添加
-                keys.push(node.key);
+                keys.push(treeOptions.getKey(node));
                 selected = true;
             }
         } else {
-            if (keys.includes(node.key)) {
+            if (keys.includes(treeOptions.getKey(node))) {
                 keys = [];
             } else {
-                keys = [node.key];
+                keys = [treeOptions.getKey(node)];
                 selected = true;
             }
         }
@@ -272,7 +275,7 @@ export function useTree(
     }
 
     function isChecked(node: TreeNode) {
-        return checkedKeysRef.value.has(node.key);
+        return checkedKeysRef.value.has(treeOptions.getKey(node));
     }
 
     function isDisabled(node: TreeNode) {
@@ -280,7 +283,7 @@ export function useTree(
     }
 
     function isIndeterminate(node: TreeNode) {
-        return indeterminateRefs.value.has(node.key);
+        return indeterminateRefs.value.has(treeOptions.getKey(node));
     }
 
     /**
@@ -292,10 +295,10 @@ export function useTree(
 
         if (checked) {
             // 选中的时候去掉半选状态
-            indeterminateRefs.value.delete(node.key);
+            indeterminateRefs.value.delete(treeOptions.getKey(node));
         }
 
-        checkedKeys[checked ? 'add' : 'delete'](node.key);
+        checkedKeys[checked ? 'add' : 'delete'](treeOptions.getKey(node));
 
         const children = node.children;
         if (children) {
@@ -332,14 +335,14 @@ export function useTree(
                     }
                 }
                 if (allChecked) {
-                    checkedKeysRef.value.add(parenNode.key);
-                    indeterminateRefs.value.delete(parenNode.key);
+                    checkedKeysRef.value.add(treeOptions.getKey(parenNode));
+                    indeterminateRefs.value.delete(treeOptions.getKey(parenNode));
                 } else if (hasChecked) {
-                    checkedKeysRef.value.delete(parenNode.key);
-                    indeterminateRefs.value.add(parenNode.key);
+                    checkedKeysRef.value.delete(treeOptions.getKey(parenNode));
+                    indeterminateRefs.value.add(treeOptions.getKey(parenNode));
                 } else {
-                    checkedKeysRef.value.delete(parenNode.key);
-                    indeterminateRefs.value.delete(parenNode.key);
+                    checkedKeysRef.value.delete(treeOptions.getKey(parenNode));
+                    indeterminateRefs.value.delete(treeOptions.getKey(parenNode));
                 }
                 updateCheckToTop(parenNode);
             }
