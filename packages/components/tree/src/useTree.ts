@@ -17,13 +17,18 @@ export function useTree(
     // 半选的key
     const indeterminateRefs = ref<Set<TreeKey>>(new Set());
     // 需要展开的 key
-    const expandedKeysSet = ref(new Set(props.defaultExpandedKeys));
+    const expandedKeysSet = ref<Set<TreeKey>>();
     //正处于加载中的 key, 用于防止用户多次点击同一个 key
     const loadingKeysRef = ref(new Set<TreeKey>());
     // 复选框选中的key
     const checkedKeysRef = ref(new Set(props.defaultCheckedKeys));
     // 选中的key
     const selectKeysRef = ref<TreeKey[]>([]);
+    const refsMap = {
+        expand: expandedKeysSet,
+        select: selectKeysRef,
+        indeterminate: indeterminateRefs
+    };
     /**
      *  根据 expandedKeySet 对树进行展开
      *  例如: expandedKeySet 是 40(代表需要将 key 为 40 的子树展开),
@@ -54,7 +59,7 @@ export function useTree(
             if (!node) continue;
             flattenNodes.push(node);
 
-            if (expandedKeys.has(node.key)) {
+            if (expandedKeys?.has(node.key)) {
                 const children = node.children;
                 if (children) {
                     for (let i = children.length - 1; i >= 0; i--) {
@@ -133,73 +138,99 @@ export function useTree(
     }
 
     function isExpanded(node: TreeNode): boolean {
-        return expandedKeysSet.value.has(node.key);
+        return expandedKeysSet.value!.has(node.key);
     }
 
     /**
      * 折叠子树
      */
     function collapse(node: TreeNode) {
-        expandedKeysSet.value.delete(node.key);
+        expandedKeysSet.value!.delete(node.key);
     }
 
     /**
      * 触发 children 加载
      */
-    function triggerLoading(node: TreeNode) {
-        // 不是叶子节点但孩子长度为 0, 则说明需要异步加载
-        if (!node.children.length && !node.isLeaf) {
-            const loadingKeys = loadingKeysRef.value;
-            if (!loadingKeys.has(node.key)) {
-                loadingKeys.add(node.key);
-                const onLoad = props.load;
-                if (onLoad) {
+    function triggerLoading(node: TreeNode): Promise<void> {
+        return new Promise((res, rej) => {
+            // 不是叶子节点但孩子长度为 0, 则说明需要异步加载
+            if (!node.children.length && !node.isLeaf) {
+                const loadingKeys = loadingKeysRef.value;
+                if (!loadingKeys.has(node.key)) {
+                    loadingKeys.add(node.key);
+                    const onLoad = props.load!;
                     onLoad(node.rawNode)
-                        .then(children => {
-                            // 修改节点的原始 children(即用户传入的 children)
-                            node.rawNode.children = children;
-                            // 对 children 进行规范化
-                            node.children = createTree(
-                                children,
-                                node
-                            ).treeNodes;
-                            loadingKeys.delete(node.key);
-                            emit('loaded', children, node);
+                        .then(childNode => {
+                            if (childNode.length === 0) {
+                                throw new Error();
+                            } else {
+                                // 修改节点的原始 children(即用户传入的 children)
+                                node.rawNode.children = childNode;
+                                // 对 children 进行规范化
+                                const children = createTree(childNode, node);
+                                node.children = children.treeNodes;
+                                children.treeNodeMap.forEach((val, key) => {
+                                    tree.value?.treeNodeMap.set(key, val);
+                                });
+                                emit('loaded', childNode);
+                                res();
+                            }
                         })
                         .catch(() => {
                             node.isLeaf = true;
+                            rej();
+                        })
+                        .finally(() => {
+                            loadingKeys.delete(node.key);
                         });
                 }
             }
-        }
+        });
     }
 
     /**
      * 展开子树
      */
-    function expand(node: TreeNode) {
+    async function expand(node: TreeNode) {
         // 触发懒加载
-        triggerLoading(node);
-        expandedKeysSet.value.add(node.key);
+        if (props.load) {
+            await triggerLoading(node); // 若状态为 reject，则后续不会操作 expandedKeySet
+        }
+        expandedKeysSet.value!.add(node.key);
     }
 
     /**
      * 切换展开状态
      */
     function toggleExpand(node: TreeNode) {
-        const expandKeys = expandedKeysSet.value;
-        let expanded: boolean;
+        const expandKeys = expandedKeysSet.value!;
         if (
             expandKeys.has(node.key) &&
             !loadingKeysRef.value.has(node.key) // 如果当前节点正处于加载中, 则不能收起
         ) {
             collapse(node);
-            expanded = false;
+            afterNodeExpand(node, false);
         } else {
-            expand(node);
-            expanded = true;
+            expand(node)
+                .then(() => {
+                    // 展开成功
+                    afterNodeExpand(node, true);
+                })
+                .catch(() => {
+                    //
+                });
         }
-        emit('expand', node.rawNode, { expanded, node });
+    }
+
+    function afterNodeExpand(node: TreeNode, expanded: boolean) {
+        const { nodes, keys } = getKeysAndNodes('expand');
+
+        emit('update:expandedKeys', keys);
+        emit('expand', node.rawNode, {
+            expanded,
+            expandKeys: keys,
+            expandNodes: nodes
+        });
     }
 
     /**
@@ -211,6 +242,8 @@ export function useTree(
         // 不能选择
         if (!props.selectable) return;
 
+        let selected = false;
+
         if (props.multiple && canMulti) {
             const index = keys.findIndex(key => key === node.key);
             if (index > -1) {
@@ -219,15 +252,23 @@ export function useTree(
             } else {
                 // 未选中则添加
                 keys.push(node.key);
+                selected = true;
             }
         } else {
             if (keys.includes(node.key)) {
                 keys = [];
             } else {
                 keys = [node.key];
+                selected = true;
             }
         }
+        selectKeysRef.value = keys;
         emit('update:selectedKeys', keys);
+        emit('select', node.rawNode, {
+            selected,
+            selectedKeys: keys,
+            selectedNodes: getSelectedNodes()
+        });
     }
 
     function isChecked(node: TreeNode) {
@@ -317,7 +358,8 @@ export function useTree(
 
     const afterNodeCheck = (node: TreeNode, checked: boolean) => {
         const { checkedNodes, checkedKeys } = getChecked();
-        const { halfCheckedNodes, halfCheckedKeys } = getHalfChecked();
+        const { nodes: halfCheckedNodes, keys: halfCheckedKeys } =
+            getKeysAndNodes('indeterminate');
         emit('check', node.rawNode, {
             checkedKeys,
             checkedNodes,
@@ -336,11 +378,13 @@ export function useTree(
     }
 
     function getHalfCheckedKeys(): TreeKey[] {
-        return getHalfChecked().halfCheckedKeys;
+        return getKeysAndNodes('indeterminate').keys;
+        // return getHalfChecked().halfCheckedKeys;
     }
 
     function getHalfCheckedNodes(): TreeOption[] {
-        return getHalfChecked().halfCheckedNodes;
+        return getKeysAndNodes('indeterminate').nodes;
+        // return getHalfChecked().halfCheckedNodes;
     }
 
     function getChecked(leafOnly = false): {
@@ -365,25 +409,108 @@ export function useTree(
         };
     }
 
-    function getHalfChecked(): {
-        halfCheckedKeys: TreeKey[];
-        halfCheckedNodes: TreeOption[];
+    // function getHalfChecked(): {
+    //     halfCheckedKeys: TreeKey[];
+    //     halfCheckedNodes: TreeOption[];
+    // } {
+    //     const halfCheckedNodes: TreeOption[] = [];
+    //     const halfCheckedKeys: TreeKey[] = [];
+    //     if (tree?.value && props.showCheckbox) {
+    //         const { treeNodeMap } = tree.value;
+    //         indeterminateRefs.value.forEach(key => {
+    //             const node = treeNodeMap.get(key);
+    //             if (node) {
+    //                 halfCheckedKeys.push(key);
+    //                 halfCheckedNodes.push(node.rawNode);
+    //             }
+    //         });
+    //     }
+    //     return {
+    //         halfCheckedNodes,
+    //         halfCheckedKeys
+    //     };
+    // }
+
+    // function getSelected(): {
+    //     selectedKeys: TreeKey[];
+    //     selectedNodes: TreeOption[];
+    // } {
+    //     const selectedNodes: TreeOption[] = [];
+    //     const keys: TreeKey[] = [];
+    //     if (tree?.value && props.showCheckbox) {
+    //         const { treeNodeMap } = tree.value;
+    //         selectKeysRef.value.forEach(key => {
+    //             const node = treeNodeMap.get(key);
+    //             if (node) {
+    //                 keys.push(key);
+    //                 selectedNodes.push(node.rawNode);
+    //             }
+    //         });
+    //     }
+    //     return {
+    //         selectedKeys: keys,
+    //         selectedNodes: selectedNodes
+    //     };
+    // }
+
+    // function getExpanded(): {
+    //     expandedKeys: TreeKey[];
+    //     expandedNodes: TreeOption[];
+    // } {
+    //     const expandedNodes: TreeOption[] = [];
+    //     const keys: TreeKey[] = [];
+    //     if (tree?.value && props.showCheckbox) {
+    //         const { treeNodeMap } = tree.value;
+    //         expandedKeysSet.value.forEach(key => {
+    //             const node = treeNodeMap.get(key);
+    //             if (node) {
+    //                 keys.push(key);
+    //                 expandedNodes.push(node.rawNode);
+    //             }
+    //         });
+    //     }
+    //     return {
+    //         expandedKeys: keys,
+    //         expandedNodes: expandedNodes
+    //     };
+    // }
+
+    function getSelectedKeys(): TreeKey[] {
+        return getKeysAndNodes('select').keys;
+    }
+
+    function getSelectedNodes(): TreeOption[] {
+        return getKeysAndNodes('select').nodes;
+    }
+
+    function getExpandedKeys(): TreeKey[] {
+        return getKeysAndNodes('expand').keys;
+    }
+
+    function getExpandedNodes(): TreeOption[] {
+        return getKeysAndNodes('expand').nodes;
+    }
+
+    function getKeysAndNodes(target: keyof typeof refsMap): {
+        keys: TreeKey[];
+        nodes: TreeOption[];
     } {
-        const halfCheckedNodes: TreeOption[] = [];
-        const halfCheckedKeys: TreeKey[] = [];
-        if (tree?.value && props.showCheckbox) {
+        const dataSource = refsMap[target];
+        const nodes: TreeOption[] = [];
+        const keys: TreeKey[] = [];
+        if (tree.value) {
             const { treeNodeMap } = tree.value;
-            indeterminateRefs.value.forEach(key => {
+            dataSource.value!.forEach(key => {
                 const node = treeNodeMap.get(key);
                 if (node) {
-                    halfCheckedKeys.push(key);
-                    halfCheckedNodes.push(node.rawNode);
+                    keys.push(key);
+                    nodes.push(node);
                 }
             });
         }
         return {
-            halfCheckedNodes,
-            halfCheckedKeys
+            keys,
+            nodes
         };
     }
 
@@ -410,9 +537,22 @@ export function useTree(
         }
     );
 
+    watch(
+        () => props.expandedKeys,
+        value => {
+            if (value) {
+                expandedKeysSet.value = new Set(value);
+            }
+        },
+        {
+            immediate: true
+        }
+    );
+
     return {
         flattenTree,
         loadingKeysRef,
+        checkedKeysRef,
         selectKeysRef,
         treeOptions,
         isExpanded,
@@ -422,9 +562,14 @@ export function useTree(
         isDisabled,
         isIndeterminate,
         toggleCheck,
+        findNode,
         getCheckedKeys,
         getCheckedNodes,
         getHalfCheckedKeys,
-        getHalfCheckedNodes
+        getHalfCheckedNodes,
+        getSelectedKeys,
+        getSelectedNodes,
+        getExpandedKeys,
+        getExpandedNodes
     };
 }

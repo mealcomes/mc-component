@@ -13,34 +13,35 @@ import VirtualListItem from './component/VirtualListItem.vue';
 /**
  * 同步创建数据
  */
-// function createData(level = 4, parentKey = ''): TreeOption[] {
-//     if (!level) return [];
-//     const arr = new Array(6 - level).fill(0);
-//     return arr.map((_, idx: number) => {
-//         const key = parentKey + level + idx;
-//         return {
-//             label: createLabel(level), // 显示的内容
-//             key, // 为了唯一性
-//             children: createData(level - 1, key), // 孩子
-//             disabled: false
-//         } as unknown as TreeOption;
-//     });
-// }
+function createData(level = 4, parentKey = ''): TreeOption[] {
+    if (!level) return [];
+    const arr = new Array(6 - level).fill(0);
+    return arr.map((_, idx: number) => {
+        const key = parentKey + level + idx;
+        return {
+            label: createLabel(level), // 显示的内容
+            key, // 为了唯一性
+            children: createData(level - 1, key), // 孩子
+            disabled: false
+        } as unknown as TreeOption;
+    });
+}
+createData();
 
-// function createLabel(level: number): string {
-//     switch (level) {
-//         case 4:
-//             return '道生一';
-//         case 3:
-//             return '一生二';
-//         case 2:
-//             return '二生三';
-//         case 1:
-//             return '三生万物';
-//         default:
-//             return '';
-//     }
-// }
+function createLabel(level: number): string {
+    switch (level) {
+        case 4:
+            return '道生一';
+        case 3:
+            return '一生二';
+        case 2:
+            return '二生三';
+        case 1:
+            return '三生万物';
+        default:
+            return '';
+    }
+}
 
 /**
  * 异步创建数据
@@ -59,6 +60,7 @@ function createDataAsync(): TreeOption[] {
         }
     ];
 }
+createDataAsync();
 
 function nextLabel(currentLabel?: string | number | undefined): string {
     if (!currentLabel) return 'Out of Tao, One is bore';
@@ -121,7 +123,8 @@ const handleLoad = (node: TreeOption) => {
     });
 };
 
-const value = ref<TreeKey[]>([]);
+const selectedKeys = ref<TreeKey[]>([]);
+const expandKeys = ref(new Array(30).fill('4').map((v, k) => v + k));
 
 /* checkbox 组件 */
 
@@ -226,8 +229,8 @@ while (index++ !== totalCount) {
         :data="data"
         label-field="label"
         :load="handleLoad"
-        :default-expanded-keys="new Array(30).fill('4').map((v, k) => v + k)"
-        v-model:selected-keys="value"
+        v-model:expandedKeys="expandKeys"
+        v-model::selected-keys="selectedKeys"
         :selectable="true"
         :multiple="true"
         :default-checked-keys="['40']"
@@ -238,8 +241,9 @@ while (index++ !== totalCount) {
                 console.log(...args);
             }
         "
+        @select="(data, selectInfo) => console.log(data, selectInfo)"
         @expand="(data: TreeOption, expandInfo: ExpandInfo) => console.log(data, expandInfo)"
-        @loaded="(loadedData, node) => console.log(loadedData, node)"
+        @loaded="loadedData => console.log(loadedData)"
     >
         <!-- 
             selectable - 可选节点
@@ -260,7 +264,7 @@ while (index++ !== totalCount) {
             </div>
         </template>
     </mc-tree>
-    {{ value }}
+    selected: {{ selectedKeys }} expanded: {{ expandKeys }}
 
     <!-- <mc-checkbox
         v-model="check"

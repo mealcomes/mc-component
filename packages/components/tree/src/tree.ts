@@ -38,9 +38,19 @@ export interface CheckedInfo {
     checked: boolean;
 }
 
+/**
+ * 树节点 展开/折叠 事件参数
+ */
 export interface ExpandInfo {
+    expandKeys: TreeKey[];
+    expandNodes: TreeOption[];
     expanded: boolean;
-    node: TreeNode;
+}
+
+export interface SelectInfo {
+    selectedKeys: TreeKey[];
+    selectedNodes: TreeOption[];
+    selected: boolean;
 }
 
 /**
@@ -67,7 +77,7 @@ export const treeProps = {
     /**
      * @description 默认展开的 keys
      */
-    defaultExpandedKeys: {
+    expandedKeys: {
         // 默认展开的 key
         type: Array as PropType<TreeKey[]>,
         default: () => []
@@ -158,17 +168,27 @@ export const treeEmits = {
      */
     'update:selectedKeys': (keys: TreeKey[]) => keys,
     /**
+     * @description 展开了的 `key` 更新
+     */
+    'update:expandedKeys': (keys: TreeKey[]) => keys,
+    /**
      * @description 点击节点复选框之后触发
      */
-    check: (data: TreeOption, checkInfo: CheckedInfo) => data && checkInfo,
+    check: (target: TreeOption, checkInfo: CheckedInfo) => target && checkInfo,
     /**
      * @description 节点被展开或关闭时触发
      */
-    expand: (data: TreeOption, expandInfo: ExpandInfo) => data && expandInfo,
+    expand: (target: TreeOption, expandInfo: ExpandInfo) =>
+        target && expandInfo,
+    /**
+     * @description 节点被选择时触发
+     */
+    select: (target: TreeOption, selectInfo: SelectInfo) =>
+        target && selectInfo,
     /**
      * @description 异步加载成功时触发
      */
-    loaded: (loadedData: TreeOption[], node: TreeNode) => loadedData && node
+    loaded: (loadedData: TreeOption[]) => loadedData
 };
 
 /**

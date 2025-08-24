@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, useSlots } from 'vue';
+import { onMounted, provide, useSlots } from 'vue';
 import { treeEmits, treeInjectKey, treeProps } from './tree';
 import { createNamespace } from '@mealcomes/utils';
 import MCTreeNode from './treeNode.vue';
@@ -67,6 +67,7 @@ const emit = defineEmits(treeEmits);
 const {
     flattenTree,
     loadingKeysRef,
+    checkedKeysRef,
     selectKeysRef,
     treeOptions,
     isExpanded,
@@ -76,6 +77,7 @@ const {
     isDisabled,
     isIndeterminate,
     toggleCheck,
+    findNode,
     getCheckedKeys,
     getCheckedNodes,
     getHalfCheckedKeys,
@@ -84,6 +86,15 @@ const {
 
 provide(treeInjectKey, {
     slots: useSlots()
+});
+
+onMounted(() => {
+    checkedKeysRef.value.forEach(key => {
+        const node = findNode(key);
+        if (node) {
+            toggleCheck(node, true);
+        }
+    });
 });
 
 defineExpose({
