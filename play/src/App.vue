@@ -74,7 +74,7 @@ function nextLabel(currentLabel?: string | number | undefined): string {
     return '';
 }
 
-const data = ref<TreeOption[]>(createDataAsync());
+const data = ref<TreeOption[]>(createData());
 // const data = ref<TreeOption[]>([
 //     {
 //         key: '0',

@@ -96,6 +96,7 @@ export function useTree(
         data: TreeOption[],
         parent: TreeNode | null = null
     ): Tree {
+        // key 到 node 的映射
         const treeNodeMap: Map<TreeKey, TreeNode> = new Map();
         function traversal(
             data: TreeOption[],
@@ -169,9 +170,11 @@ export function useTree(
                                 // 对 children 进行规范化
                                 const children = createTree(childNode, node);
                                 node.children = children.treeNodes;
+                                // 更新 treeNodeMap
                                 children.treeNodeMap.forEach((val, key) => {
                                     tree.value?.treeNodeMap.set(key, val);
                                 });
+                                // 更新节点选中状态
                                 updateCheckToBottom(node, isChecked(node));
                                 emit('loaded', childNode);
                                 res();
@@ -195,8 +198,8 @@ export function useTree(
      * 展开子树
      */
     async function expand(node: TreeNode) {
-        // 触发懒加载
         if (props.load) {
+            // 触发懒加载
             await triggerLoading(node); // 若状态为 reject，则后续不会操作 expandedKeySet
         }
         expandedKeysSet.value!.add(treeOptions.getKey(node));
@@ -338,13 +341,17 @@ export function useTree(
                 }
                 if (allChecked) {
                     checkedKeysRef.value.add(treeOptions.getKey(parenNode));
-                    indeterminateRefs.value.delete(treeOptions.getKey(parenNode));
+                    indeterminateRefs.value.delete(
+                        treeOptions.getKey(parenNode)
+                    );
                 } else if (hasChecked) {
                     checkedKeysRef.value.delete(treeOptions.getKey(parenNode));
                     indeterminateRefs.value.add(treeOptions.getKey(parenNode));
                 } else {
                     checkedKeysRef.value.delete(treeOptions.getKey(parenNode));
-                    indeterminateRefs.value.delete(treeOptions.getKey(parenNode));
+                    indeterminateRefs.value.delete(
+                        treeOptions.getKey(parenNode)
+                    );
                 }
                 updateCheckToTop(parenNode);
             }
@@ -384,12 +391,10 @@ export function useTree(
 
     function getHalfCheckedKeys(): TreeKey[] {
         return getKeysAndNodes('indeterminate').keys;
-        // return getHalfChecked().halfCheckedKeys;
     }
 
     function getHalfCheckedNodes(): TreeOption[] {
         return getKeysAndNodes('indeterminate').nodes;
-        // return getHalfChecked().halfCheckedNodes;
     }
 
     function getChecked(leafOnly = false): {
@@ -413,72 +418,6 @@ export function useTree(
             checkedNodes
         };
     }
-
-    // function getHalfChecked(): {
-    //     halfCheckedKeys: TreeKey[];
-    //     halfCheckedNodes: TreeOption[];
-    // } {
-    //     const halfCheckedNodes: TreeOption[] = [];
-    //     const halfCheckedKeys: TreeKey[] = [];
-    //     if (tree?.value && props.showCheckbox) {
-    //         const { treeNodeMap } = tree.value;
-    //         indeterminateRefs.value.forEach(key => {
-    //             const node = treeNodeMap.get(key);
-    //             if (node) {
-    //                 halfCheckedKeys.push(key);
-    //                 halfCheckedNodes.push(node.rawNode);
-    //             }
-    //         });
-    //     }
-    //     return {
-    //         halfCheckedNodes,
-    //         halfCheckedKeys
-    //     };
-    // }
-
-    // function getSelected(): {
-    //     selectedKeys: TreeKey[];
-    //     selectedNodes: TreeOption[];
-    // } {
-    //     const selectedNodes: TreeOption[] = [];
-    //     const keys: TreeKey[] = [];
-    //     if (tree?.value && props.showCheckbox) {
-    //         const { treeNodeMap } = tree.value;
-    //         selectKeysRef.value.forEach(key => {
-    //             const node = treeNodeMap.get(key);
-    //             if (node) {
-    //                 keys.push(key);
-    //                 selectedNodes.push(node.rawNode);
-    //             }
-    //         });
-    //     }
-    //     return {
-    //         selectedKeys: keys,
-    //         selectedNodes: selectedNodes
-    //     };
-    // }
-
-    // function getExpanded(): {
-    //     expandedKeys: TreeKey[];
-    //     expandedNodes: TreeOption[];
-    // } {
-    //     const expandedNodes: TreeOption[] = [];
-    //     const keys: TreeKey[] = [];
-    //     if (tree?.value && props.showCheckbox) {
-    //         const { treeNodeMap } = tree.value;
-    //         expandedKeysSet.value.forEach(key => {
-    //             const node = treeNodeMap.get(key);
-    //             if (node) {
-    //                 keys.push(key);
-    //                 expandedNodes.push(node.rawNode);
-    //             }
-    //         });
-    //     }
-    //     return {
-    //         expandedKeys: keys,
-    //         expandedNodes: expandedNodes
-    //     };
-    // }
 
     function getSelectedKeys(): TreeKey[] {
         return getKeysAndNodes('select').keys;

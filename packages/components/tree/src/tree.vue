@@ -81,7 +81,11 @@ const {
     getCheckedKeys,
     getCheckedNodes,
     getHalfCheckedKeys,
-    getHalfCheckedNodes
+    getHalfCheckedNodes,
+    getSelectedKeys,
+    getSelectedNodes,
+    getExpandedKeys,
+    getExpandedNodes
 } = useTree(props, emit);
 
 provide(treeInjectKey, {
@@ -98,13 +102,21 @@ onMounted(() => {
 });
 
 defineExpose({
-    /** @description 当前选中节点 `key` 的数组 */
+    /** @description 当前 checkbox 选中节点的 `key` 数组 */
     getCheckedKeys,
-    /** @description 当前选中节点的数组 */
+    /** @description 当前 checkbox 选中节点的数组 */
     getCheckedNodes,
-    /** @description 当前半选中的节点的 `key` 所组成的数组 */
+    /** @description 当前 checkbox 半选中的节点的 `key` 所组成的数组 */
     getHalfCheckedKeys,
-    /** @description 当前半选中的节点组成的数组 */
-    getHalfCheckedNodes
+    /** @description 当前 checkbox 半选中的节点组成的数组 */
+    getHalfCheckedNodes,
+    /** @description 当前选中节点的 `key` 数组 */
+    getSelectedKeys,
+    /** @description 当前选中节点的数组 */
+    getSelectedNodes,
+    /** @description 当前展开节点的 `key` 数组 */
+    getExpandedKeys,
+    /** @description 当前展开节点的数组 */
+    getExpandedNodes
 });
 </script>
