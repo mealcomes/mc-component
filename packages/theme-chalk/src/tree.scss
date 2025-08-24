@@ -80,7 +80,7 @@
     }
 
     @include when(multiple) {
-        &:hover {
+        &:not(.is-disabled):hover {
             background-color: getCssVar('tree-node-hover-bg-color');
         }
         @include when(selected) {
@@ -90,7 +90,7 @@
 
     @include when(disabled) {
         .#{$namespace}-tree-node__content {
-            color: getCssVar('tree-node-disabled-text-color');
+            color: getCssVar('tree-disabled-text-color');
             &:hover {
                 background: none;
             }
