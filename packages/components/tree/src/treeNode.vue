@@ -19,7 +19,7 @@
             ]"
             @click="handleExpand"
         >
-            <MCIcon :class="bem.e('switcher')" size="16" color="#1F1F1F">
+            <MCIcon :class="bem.e('switcher')" size="16">
                 <Switcher v-if="!loading" />
                 <Loading v-else />
             </MCIcon>

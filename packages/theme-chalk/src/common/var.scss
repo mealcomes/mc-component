@@ -267,7 +267,7 @@ $tree: map.merge(
         'node-hover-bg-color': getCssVar('fill-color', 'light'),
         'text-color': getCssVar('text-color-regular'),
         'disabled-text-color': getCssVar('text-color-disabled'),
-        'expand-icon-color': getCssVar('text-color-placeholder'),
+        'expand-icon-color': getCssVar('text-color-primary'),
         'selected-bg-color': getCssVar('color-primary-light-9'),
         'multiple-selected-bg-color': getCssVar('color-primary')
     ),
