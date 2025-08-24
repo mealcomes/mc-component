@@ -59,7 +59,9 @@ function handleExpand() {
 
 const loading = computed(() => props.loadingKeys.has(props.node.key));
 
-const selected = computed(() => props.selectedKeys.includes(props.node.key));
+const selected = computed(
+    () => !props.showCheckbox && props.selectedKeys.includes(props.node.key)
+);
 
 function handleSelected(e: MouseEvent) {
     if (props.node.disabled || props.showCheckbox) return;
