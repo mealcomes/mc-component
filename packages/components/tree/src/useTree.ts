@@ -185,6 +185,8 @@ export function useTree(
                             loadingKeys.delete(treeOptions.getKey(node));
                         });
                 }
+            } else {
+                res();
             }
         });
     }
