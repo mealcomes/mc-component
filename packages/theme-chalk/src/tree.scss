@@ -80,7 +80,7 @@
     }
 
     @include when(multiple) {
-        &:not(.is-disabled):hover {
+        &:not(.is-disabled, .is-selected):hover {
             background-color: getCssVar('tree-node-hover-bg-color');
         }
         @include when(selected) {
