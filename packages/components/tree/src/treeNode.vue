@@ -3,7 +3,8 @@
         :class="[
             bem.b(),
             bem.is('selected', selected),
-            bem.is('disabled', node.disabled)
+            bem.is('disabled', node.disabled),
+            bem.is('show-checkbox', showCheckbox)
         ]"
         :style="{ height: `${size}px`, lineHeight: `${size}px` }"
     >
@@ -60,14 +61,11 @@ function handleExpand() {
 const loading = computed(() => props.loadingKeys.has(props.node.key));
 
 const selected = computed(
-    () =>
-        !props.node.disabled &&
-        !props.showCheckbox &&
-        props.selectedKeys.includes(props.node.key)
+    () => !props.node.disabled && props.selectedKeys.includes(props.node.key)
 );
 
 function handleSelected(e: MouseEvent) {
-    if (props.node.disabled || props.showCheckbox) return;
+    if (props.node.disabled) return;
     emit('select', props.node, e.ctrlKey);
 }
 

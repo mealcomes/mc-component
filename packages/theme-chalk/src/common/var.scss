@@ -251,8 +251,8 @@ $checkbox: map.merge(
         'hover-border-color': getCssVar('color-primary'),
         'checked-icon-color': getCssVar('color', 'white'),
         'checked-bg-color': getCssVar('color', 'primary'),
+        'checked-border-color': getCssVar('color', 'primary'),
         'indeterminate-icon-color': getCssVar('color-primary'),
-        'indeterminate-bg-color': getCssVar('color', 'white'),
         'disabled-checked-icon-color': getCssVar('text-color-placeholder'),
         'disabled-indeterminate-icon-color': getCssVar('text-color-placeholder')
     ),
@@ -267,7 +267,9 @@ $tree: map.merge(
         'node-hover-bg-color': getCssVar('fill-color', 'light'),
         'text-color': getCssVar('text-color-regular'),
         'disabled-text-color': getCssVar('text-color-disabled'),
+        'multiple-selected-text-color': $color-white,
         'expand-icon-color': getCssVar('text-color-primary'),
+        'multiple-selected-expand-icon-color': $color-white,
         'selected-bg-color': getCssVar('color-primary-light-9'),
         'multiple-selected-bg-color': getCssVar('color-primary')
     ),

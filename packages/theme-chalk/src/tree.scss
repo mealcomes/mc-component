@@ -21,7 +21,8 @@
     display: flex;
     padding-bottom: 4px;
     background-clip: content-box;
-    transition: background-color getCssVar('transition-duration-fast') ease-in;
+    transition: background-color getCssVar('transition-duration-fast') ease-in,
+        color getCssVar('transition-duration-fast') ease-in;
 
     @include e('expand-icon') {
         display: inline-block;
@@ -56,15 +57,12 @@
         padding: 0 5px;
         border-radius: 5px;
         width: 100%;
-        cursor: not-allowed;
+        cursor: pointer;
         transition: background-color getCssVar('transition-duration-fast')
             ease-in;
 
-        .#{$namespace}-tree-node:not(.is-disabled) & {
-            cursor: pointer;
-        }
-
-        .#{$namespace}-tree-node:not(.is-selected, .is-multiple) & {
+        .#{$namespace}-tree-node:not(.is-selected, .is-multiple, .is-disabled)
+            & {
             &:hover {
                 background-color: getCssVar('tree-node-hover-bg-color');
             }
@@ -72,28 +70,31 @@
     }
 
     @include when(selected) {
-        &:not(.is-multiple) {
+        &:not(.is-multiple),
+        &:where(.is-show-checkbox) {
             .#{$namespace}-tree-node__content {
                 background-color: getCssVar('tree-selected-bg-color');
             }
         }
+        &:where(.is-multiple):not(.is-show-checkbox) {
+            .#{$namespace}-tree-node__expand-icon {
+                color: getCssVar('tree-multiple-selected-expand-icon-color');
+            }
+            background-color: getCssVar('tree-multiple-selected-bg-color');
+            color: getCssVar('tree-multiple-selected-text-color');
+        }
     }
 
     @include when(multiple) {
-        &:not(.is-disabled, .is-selected):hover {
+        &:not(.is-disabled, .is-selected, .is-show-checkbox):hover {
             background-color: getCssVar('tree-node-hover-bg-color');
-        }
-        @include when(selected) {
-            background-color: getCssVar('tree-multiple-selected-bg-color');
         }
     }
 
     @include when(disabled) {
         .#{$namespace}-tree-node__content {
+            cursor: not-allowed;
             color: getCssVar('tree-disabled-text-color');
-            &:hover {
-                background: none;
-            }
         }
     }
 }

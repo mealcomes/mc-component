@@ -49,7 +49,7 @@
         }
 
         @include when(checked) {
-            border-color: getCssVar('color-primary');
+            border-color: getCssVar('checkbox-checked-border-color');
             background-color: getCssVar('checkbox-checked-bg-color');
             &::before {
                 content: '';
@@ -85,7 +85,6 @@
         }
 
         @include when(indeterminate) {
-            background-color: getCssVar('checkbox-indeterminate-bg-color');
             border: getCssVar('border');
             .#{$namespace}-checkbox#{$modifier-separator}inner {
                 opacity: 1;

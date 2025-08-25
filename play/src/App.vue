@@ -13,7 +13,7 @@ import VirtualListItem from './component/VirtualListItem.vue';
 /**
  * 同步创建数据
  */
-function createData(level = 4, parentKey = ''): TreeOption[] {
+function createData(disabled = false, level = 4, parentKey = ''): TreeOption[] {
     if (!level) return [];
     const arr = new Array(6 - level).fill(0);
     return arr.map((_, idx: number) => {
@@ -21,8 +21,8 @@ function createData(level = 4, parentKey = ''): TreeOption[] {
         return {
             label: createLabel(level), // 显示的内容
             key, // 为了唯一性
-            children: createData(level - 1, key), // 孩子
-            disabled: false
+            children: createData(disabled, level - 1, key), // 孩子
+            disabled: disabled
         } as unknown as TreeOption;
     });
 }
@@ -116,15 +116,32 @@ const handleLoad = (node: TreeOption) => {
                 {
                     label: nextLabel(node.label),
                     key: node.key + nextLabel(node.label),
-                    isLeaf: false
+                    isLeaf: true
                 }
             ]);
         }, 1000);
     });
 };
 
-const selectedKeys = ref<TreeKey[]>([]);
+const selectedKeys = ref<TreeKey[]>(['40']);
 const expandKeys = ref(new Array(30).fill('4').map((v, k) => v + k));
+
+const multiple = ref(true);
+const showCheckbox = ref(true);
+const isDisabled = ref(false);
+const isAsync = ref(false);
+const disableData = () => {
+    isDisabled.value = !isDisabled.value;
+    data.value = createData(isDisabled.value);
+};
+const asyncData = () => {
+    isAsync.value = !isAsync.value;
+    if (isAsync.value) {
+        data.value = createDataAsync();
+    } else {
+        data.value = createData();
+    }
+};
 
 /* checkbox 组件 */
 
@@ -225,17 +242,29 @@ while (index++ !== totalCount) {
     </mc-icon> -->
 
     <!-- 在使用树组件的时候，会传递一个树形的结构 -->
+    <mc-button @click="multiple = !multiple">{{
+        multiple ? '点击单选' : '点击多选'
+    }}</mc-button>
+    <mc-button @click="showCheckbox = !showCheckbox">{{
+        showCheckbox ? '隐藏复选框' : '显示复选框'
+    }}</mc-button>
+    <mc-button @click="disableData">{{
+        isDisabled ? '启用' : '禁用'
+    }}</mc-button>
+    <mc-button @click="asyncData">{{
+        isAsync ? '关闭懒加载' : '启用懒加载'
+    }}</mc-button>
     <mc-tree
         :data="data"
         label-field="label"
         :load="handleLoad"
         v-model:expandedKeys="expandKeys"
-        v-model::selected-keys="selectedKeys"
+        v-model:selected-keys="selectedKeys"
         :selectable="true"
-        :multiple="true"
+        :multiple="multiple"
         :default-checked-keys="['40']"
         :height="200"
-        :show-checkbox="true"
+        :show-checkbox="showCheckbox"
         @check="
             (...args) => {
                 console.log(...args);
@@ -254,11 +283,11 @@ while (index++ !== totalCount) {
             <div class="content" style="display: flex">
                 <div
                     class="label"
-                    style="color: aqua; border-radius: 5px; margin-right: 20px"
+                    style="border-radius: 5px; margin-right: 20px"
                 >
                     {{ node.label }}
                 </div>
-                <div class="key" style="color: red; border-radius: 5px">
+                <div class="key" style="border-radius: 5px">
                     {{ node.key }}
                 </div>
             </div>
