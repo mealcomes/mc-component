@@ -77,6 +77,10 @@ export default defineConfig({
             }
         },
 
+        logo: '/mealcomes-logo.svg',
+
+        siteTitle: false,
+
         sidebarMenuLabel: '菜单',
 
         outline: {
@@ -92,6 +96,12 @@ export default defineConfig({
         darkModeSwitchLabel: '主题'
     },
     cleanUrls: true,
+    head: [
+        [
+            'link',
+            { rel: 'icon', href: '/mc-component/mealcomes-small-logo.svg' }
+        ]
+    ],
     markdown: {
         config(md) {
             md.use(containerPreview, { alias });
