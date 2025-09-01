@@ -106,9 +106,9 @@ defineExpose({
     getCheckedKeys,
     /** @description 当前 checkbox 选中节点的数组 */
     getCheckedNodes,
-    /** @description 当前 checkbox 半选中的节点的 `key` 所组成的数组 */
+    /** @description 当前 checkbox 半选节点的 `key` 数组 */
     getHalfCheckedKeys,
-    /** @description 当前 checkbox 半选中的节点组成的数组 */
+    /** @description 当前 checkbox 半选节点的数组 */
     getHalfCheckedNodes,
     /** @description 当前选中节点的 `key` 数组 */
     getSelectedKeys,

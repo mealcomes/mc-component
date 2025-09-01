@@ -252,7 +252,7 @@ while (index++ !== totalCount) {
         isDisabled ? '启用' : '禁用'
     }}</mc-button>
     <mc-button @click="asyncData">{{
-        isAsync ? '关闭懒加载' : '启用懒加载'
+        isAsync ? '关闭懒加载' : '启动懒加载'
     }}</mc-button>
     <mc-tree
         :data="data"

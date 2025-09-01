@@ -39,7 +39,10 @@ export default defineConfig({
             },
             {
                 text: '数据展示',
-                items: [{ text: 'Calendar 日历', link: '/component/calendar' }]
+                items: [
+                    { text: 'Calendar 日历', link: '/component/calendar' },
+                    { text: 'Tree 树形控件', link: '/component/tree' }
+                ]
             }
         ],
 
@@ -84,7 +87,8 @@ export default defineConfig({
         sidebarMenuLabel: '菜单',
 
         outline: {
-            label: '本页目录'
+            label: '本页目录',
+            level: 'deep'
         },
 
         returnToTopLabel: '返回顶部',

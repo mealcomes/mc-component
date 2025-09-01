@@ -9,10 +9,10 @@ hero:
     actions:
         - theme: brand
           text: 快速开始
-          link: /markdown-examples
+          link: /guide/quickstart
         - theme: alt
-          text: 指南
-          link: /api-examples
+          text: 组件
+          link: /component/button
         - theme: alt
           text: Github
           link: https://www.github.com/mealcomes/mc-component
