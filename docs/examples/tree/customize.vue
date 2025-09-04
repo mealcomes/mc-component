@@ -1,5 +1,5 @@
 <template>
-    <mc-tree class="vp-raw" :data="data" selectable :item-size="50">
+    <mc-tree class="vp-raw" :data="data" selectable>
         <template #default="{ node }">
             <mc-icon>
                 <component v-if="!node.isLeaf" :is="Folder" />
